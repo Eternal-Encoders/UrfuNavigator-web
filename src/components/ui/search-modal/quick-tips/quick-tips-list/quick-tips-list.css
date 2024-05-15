@@ -1,0 +1,35 @@
+.quick-tips-text {
+    margin: 0;
+    margin-bottom: 20px;
+    align-self: flex-start;
+    font-size: 14px;
+    font-weight: 500; 
+    color: #6D6D6D;
+}
+
+.quick-tips-list {
+    display: flex;
+    width: 100%;
+    display: grid;
+}
+
+.quick-tips-list-item {
+    display: flex;
+    justify-content: center;
+}
+
+.quick-tips-list {
+    grid-template-columns: 25% 25% 25% 25%;
+}
+
+@media (max-width: 1200px){
+    .quick-tips-list {
+        grid-template-columns: 20% 20% 20% 20% 20%;
+    }
+}
+
+@media (max-width: 460px) {
+    .quick-tips-list {
+        grid-template-columns: 25% 25% 25% 25%;
+    }
+}

@@ -1,0 +1,50 @@
+.change-language-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.change-language-title {
+    margin: 0;
+    margin-bottom: 10px;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6D6D6D;
+}
+
+.change-language-div {
+    border-radius: 12px;
+    background: #EEE;
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.10);
+}
+
+.change-language-button {
+    width: 50%;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6D6D6D;
+    transition: all 0.3s ease-in-out;
+}
+
+.active-russian {
+    width: 50%;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 500;
+    color: #EEE;
+    border-radius: 12px;
+    background: #0039A6;
+    transition: all 0.3s ease-in-out;
+}
+
+.active-english {
+    width: 50%;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 500;
+    color: #EEE;
+    border-radius: 12px;
+    background: #CF142B;
+    transition: all 0.3s ease-in-out;
+}

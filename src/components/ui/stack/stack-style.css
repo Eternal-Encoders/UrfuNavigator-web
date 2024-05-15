@@ -1,0 +1,36 @@
+.hinit-text-div {
+    margin-bottom: 10px;
+    width: calc(100% - 20px);
+    padding: 12px 10px;
+    background-color: #EEEEEE;
+    border-radius: 10px;
+}
+
+.hinit-text {
+    margin: 0;
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: #6D6D6D;
+}
+
+.hinit-buttons {
+    width: 100%;
+}
+
+.hinit-back {
+    margin-right: 10px;
+    height: 40px;
+    width: calc((100% - 10px) / 2);
+    border-radius: 10px;
+    background-color: #EEEEEE;
+}
+
+.hinit-ahead {
+    height: 40px;
+    width: calc((100% - 10px) / 2);
+    border-radius: 10px;
+    background-color: #EEEEEE;
+}

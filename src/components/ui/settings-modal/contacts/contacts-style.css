@@ -1,0 +1,40 @@
+.contacts-container {
+    position: absolute;
+    bottom: 40px;
+    left: 20px;
+}
+
+.contacts-title {
+    margin: 0;
+    margin-bottom: 10px;
+    font-family: Roboto;
+    color: #6D6D6D;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.contacts-list-container {
+    display: flex;
+}
+
+.contacts-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 5px;
+}
+
+.contacts-img {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 8px;
+}
+
+.contacts-text {
+    margin: 0;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6D6D6D;
+}
