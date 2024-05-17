@@ -10,7 +10,7 @@ jobs:
             - uses: actions/checkout@v3
             - name: Build an push an image
               run: |
-                docker login --username Eternal-Encoders --password ${{ secrets.GITHUB_TOKEN }}
+                docker login --username Roaoch --password ${{ secrets.CONTAINER_REGESTRY_KEY }}
                 docker build . --tag ghrc.io/Eternal-Encoders/UrfuNavigator-web:latest
                 docker push ghrc.io/Eternal-Encoders/UrfuNavigator-web:latest
               env:
