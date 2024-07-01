@@ -11,12 +11,11 @@ import {
 } from "./interfaces";
 
 async function httpConnect<Type>(address: string, query: string): Promise<Type> {
-    //const urlOrigin = window.location.hostname !== 'localhost' ? window.location.origin: 'http://localhost:5000'
-    const urlOrigin = import.meta.env.VITE_ORIGIN ? import.meta.env.VITE_ORIGIN as string: 'http://localhost:5000'
+    const urlOrigin = import.meta.env.VITE_BACKEND_ORIGIN
     const origin = axios.create({
         baseURL: `${urlOrigin}/api/graphql`,
         headers: {
-          Authorization: `JWT 4c2182c841eba6b8d0bd9fda`
+          Authorization: `JWT ${import.meta.env.VITE_BACKEND_JWT}`
         }
     });
     const response = await origin.post(address, {
