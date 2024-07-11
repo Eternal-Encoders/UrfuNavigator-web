@@ -1,17 +1,14 @@
 import axios from "axios";
 import { 
-  IAuditorium,
   IGraphPoint, 
   IGraphQLRes, 
-  IInstituteIcon, 
   IMapObject, 
-  IService, 
   IStair,
   PointTypes 
 } from "./interfaces";
 
 async function httpConnect<Type>(address: string, query: string): Promise<Type> {
-  const urlOrigin = import.meta.env.VITE_BACKEND_ORIGIN
+  const urlOrigin = import.meta.env.VITE_BACKEND_ORIGIN ? import.meta.env.VITE_BACKEND_ORIGIN : 'https://how-to-navigate.ru:2083'
   const origin = axios.create({
       baseURL: `${urlOrigin}/api/graphql`,
       headers: {
@@ -86,79 +83,6 @@ async function findDataByType(type: PointTypes, institute?: string, floor?: numb
   .then((e) => e.data.Graph_points.docs);
 }
 
-async function findPointById(id: string) : Promise<IGraphPoint> {
-    return httpConnect<{ data: { Graph_point: IGraphPoint } }>('', `
-    query {
-        Graph_point (id:"${id}") {
-          id 
-          x
-          y
-          links
-          types
-          names
-          floor
-          institute
-          time
-          menuId
-          isPassFree
-          stairId
-        }
-      }
-    `)
-    .then((e) => e.data.Graph_point);
-}
-
-async function findAudiences(institute: string, floor: number) : Promise<{
-  width: number, 
-  height:number, 
-  audiences: IAuditorium[], 
-  service: IService[]
-}> {
-    return httpConnect<IGraphQLRes<{
-      width: number, 
-      height:number, 
-      audiences: IAuditorium[], 
-      service: IService[]
-    }>>('',
-        `
-        query {
-            Floors(where: { institute: { equals: "${institute}" }, floor: { equals: ${floor} } }) {
-                docs {
-                    width
-                    height
-                    audiences,
-                    service
-                }
-            }
-        }
-        `
-        )
-        .then((e) => e.data.Floors.docs[0]);
-}
-
-async function findSearchResults(name: string, length: number) : Promise<IGraphPoint[]> {
-    return httpConnect<IGraphQLRes<IGraphPoint>>('', `
-    query {
-        Graph_points (where: { names: {like:"${name}"} }, limit: ${length}) {
-          docs {
-            id 
-            x
-            y
-            links
-            types
-            names
-            floor
-            institute
-            time
-            menuId
-            isPassFree
-            stairId
-          }
-        }
-    }
-    `)
-    .then((e) => e.data.Graph_points.docs);
-}
 
 async function findStairs(institute: string) : Promise<IStair[]> {
     return httpConnect<IGraphQLRes<IStair>>('', `
@@ -181,70 +105,9 @@ async function findStairs(institute: string) : Promise<IStair[]> {
     .then((e) => e.data.Stairs.docs);
 }
 
-async function findInstituteIcon(page?: number) : Promise<IInstituteIcon[]> {
-  return httpConnect<IGraphQLRes<IInstituteIcon>>('', `
-  query {
-    Insitutes(page: ${page ? page: 1}) {
-      docs {
-        name
-        displayableName
-        minFloor
-        maxFloor
-        url
-        latitude
-        longitude
-        icon {
-          url
-          alt
-          filename
-          mimeType
-          filesize
-        }
-      }
-    }
-  }
-  `)
-  .then((e) => e.data.Insitutes.docs);
-}
-
-async function findInstituteByUrl(url: string) : Promise<IInstituteIcon> {
-  return httpConnect<IGraphQLRes<IInstituteIcon>>('', `
-  query {
-    Insitutes(where: { url: { equals: "${url}" } }) {
-      docs {
-        name
-        displayableName
-        minFloor
-        maxFloor
-        url
-        icon {
-          url
-          alt
-          filename
-          mimeType
-          filesize
-        }
-      }
-    }
-  }
-  `)
-  .then((e) => e.data.Insitutes.docs)
-  .then((e) => {
-    if (e.length !== 0) {
-      return e[0];
-    } else {
-      throw new Error("Not Correct url")
-    }
-  });
-}
 
 export { 
-    findAudiences, 
     findStairs,
-    findSearchResults,
     findGraph,
-    findPointById,
     findDataByType,
-    findInstituteIcon,
-    findInstituteByUrl
 };

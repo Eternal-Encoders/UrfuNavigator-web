@@ -1,47 +1,63 @@
-import { useContext } from "react";
-import { GlobalContext } from "../../../contextes/GlobalContext";
-import { RouteContext } from "../../../contextes/RouteContext";
-import { InstColors, PointSearchTyping } from "../../../utils/const";
+import { InstColors } from "../../../utils/const";
 
-import "./open-search-btn-style.css";
+import style from "./open-search-btn-style.module.css";
+import { useAppDispatch, useAppSelector } from "../../../store/hook";
+import { selectLang } from "../../../features/lang/langSlice";
+import { toggleSearchModal } from "../../../features/modals/modalsSlice";
+import { Languages } from "../../../utils/interfaces";
+import { selectSearchPoints } from "../../../features/pointsSearch/pointsSearchSlice";
 
 interface OpenSearchBtnProps {
-    value: PointSearchTyping,
-    isHomePage: boolean
+    isEnd: boolean,
+    isHomePage?: boolean,
+    setIsStartPressed?: (isStartPressed: boolean) => void 
 }
 
-const valueEng = new Map<string, string>();
-valueEng.set("Откуда", "From");
-valueEng.set("Куда", "To");
-valueEng.set("Поиск аудиторий и мест", "Search for audiences and places");
+function OpenSearchBtn({ isEnd, isHomePage, setIsStartPressed }: OpenSearchBtnProps) {
+    const dispatch = useAppDispatch()
+    const currentLanguage = useAppSelector(selectLang)
+    const points = useAppSelector(selectSearchPoints)
 
-function OpenSearchBtn({ value, isHomePage }: OpenSearchBtnProps) {
-    const { setIsSearchModal, currentLanguage } = useContext(GlobalContext);
-    const { setIsStartPoint,  points } = useContext(RouteContext)
-    const currentPoint = points[value];
+    const currentPoint = isEnd || isHomePage ? points.to: points.from;
+    const color = currentPoint ? InstColors.get(currentPoint.institute) : "#CCCCCC";
 
-    function onClickHandler() {
-        setIsSearchModal(true);
-        if (value === PointSearchTyping.end || isHomePage) {
-            setIsStartPoint(false)
-        } else {
-            setIsStartPoint(true)
-        }
+    let text = ''
+    if (isHomePage) {
+        text = currentLanguage === Languages.English ? "Search for audiences and places": "Поиск аудиторий и мест"
+    } else if (isEnd) {
+        text = currentLanguage === Languages.English ? "To": "Куда"
+    } else {
+        text = currentLanguage === Languages.English ? "From": "Откуда"
     }
 
-    const color = currentPoint ? InstColors.get(currentPoint.institute) : "#CCCCCC";
+    function onClickHandler() {
+        dispatch(toggleSearchModal());
+        if (setIsStartPressed) {
+            setIsStartPressed(!isEnd)
+        }
+    }
 
     return (
         <>
             <button
-                className={isHomePage ? "home-open-search-btn open-search-btn" : "open-search-btn"}
+                className={isHomePage ? 
+                    `${style.homeOpenSearchBtn} ${style.openSearchBtn}` : 
+                    style.openSearchBtn
+                }
                 onClick={ onClickHandler }
             >
-                <div className="open-search-btn-container">
-                    { isHomePage ? null : <div className="open-search-btn-circle" style={{ backgroundColor: color }}/> }
-                    { currentPoint && !isHomePage ? 
-                        <p className="open-search-btn-name not-like-placeholder">{ currentPoint.names.join(', ') }</p> : 
-                        <p className="open-search-btn-name like-placeholder">{ currentLanguage === "english" ? valueEng.get(value) : value}</p> 
+                <div className={style.openSearchBtnContainer}>
+                    {isHomePage ? 
+                        null : 
+                        <div className={style.openSearchBtnCircle} style={{ backgroundColor: color }}/> 
+                    }
+                    {currentPoint ? 
+                        <p className={`${style.openSearchBtnName} ${style.notLikePlaceholder}`}>
+                            { currentPoint.names.join(', ') }
+                        </p> : 
+                        <p className={`${style.openSearchBtnName} ${style.likePlaceholder}`}>
+                            { text }
+                        </p> 
                     }
                 </div>
             </button>

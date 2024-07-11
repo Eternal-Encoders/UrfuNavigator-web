@@ -1,4 +1,4 @@
-import "./quick-tip-button-style.css";
+import style from "./quick-tip-button-style.module.css";
 
 interface QuickTipButtonProps {
     tipName: string,
@@ -7,9 +7,9 @@ interface QuickTipButtonProps {
 
 function QuickTipButton({ tipIcon, tipName }: QuickTipButtonProps) {
     return (
-        <button className="tip-btn btn-reset">
-            <img className="tip-icon" src={ tipIcon }  alt={ tipName }/>
-            <p className="tip-name">{ tipName }</p>
+        <button className={style.tipBtnBtnReset}>
+            <img className={style.tipIcon} src={ tipIcon }  alt={ tipName }/>
+            <p className={style.tipName}>{ tipName }</p>
         </button>
     );
 }

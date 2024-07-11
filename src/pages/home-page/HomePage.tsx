@@ -1,28 +1,28 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
-import { GlobalContext } from "../../contextes/GlobalContext";
+import { Helmet } from "react-helmet-async";
 
+import { useGetInstitutesQuery } from "../../features/api/apiSlice";
+import { useAppSelector } from "../../store/hook";
+import { selectSearchModal, selectSettingsModal } from "../../features/modals/modalsSlice";
 import OpneSettingsBtn from "../../components/ui/open-settings-btn/OpenSettingsBtn";
 import InstitutesModal from "../../components/ui/institutes-modal/institutes-list/InstitutesList";
 import OpenSearchBtn from "../../components/ui/open-search-btn/OpenSearchBtn";
 import SearchModal from "../../components/ui/search-modal/search-ui/SearchUi";
 import SettingsModal from "../../components/ui/settings-modal/settings-ui/SettingsUi";
 
-import { Helmet } from "react-helmet-async";
-import { PointSearchTyping } from "../../utils/const";
-
-import "./home-style.css";
-import { IInstituteIcon } from "../../utils/interfaces";
-import { findInstituteIcon } from "../../utils/server-connect";
+import styles from "./home-style.module.css";
 
 function HomePage() {
-    const { isSearchModal, isSettingsModal } = useContext(GlobalContext);
     const navigate = useNavigate();
+
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
 
-    const [instLink, setInstLink] = useState<IInstituteIcon[]>([]);
+    const { data } = useGetInstitutesQuery(undefined)
+    const isSearchModal = useAppSelector(selectSearchModal)
+    const isSettingsModal = useAppSelector(selectSettingsModal)
 
     useEffect(() => {
         const handleResize = () => {
@@ -37,16 +37,8 @@ function HomePage() {
         };
     }, []);
 
-    useEffect(() => {
-        async function getInstLink() {
-            await findInstituteIcon()
-            .then((e) => setInstLink(e));
-        }
-        void getInstLink();
-    }, [setInstLink]);
-
     return(
-        <div className="container-home" style={{ height: window.innerHeight }}>
+        <div className={styles.containerHome} style={{ height: window.innerHeight }}>
             <Helmet>
                 <title>Навигатор УрФУ</title>
                 <meta
@@ -64,9 +56,10 @@ function HomePage() {
                         zoom: 15 
                     }}
                 >
-                    {instLink.map((e) => {
+                    {data && data.map((e) => {
                         return (
                             <Placemark
+                                key={`/institute/${e.url[0] === "/" ? e.url.slice(1): e.url}`}
                                 onClick={() => navigate(`/institute/${e.url[0] === "/" ? e.url.slice(1): e.url}`)}
                                 geometry={[e.latitude, e.longitude]}
                                 properties={{
@@ -81,14 +74,14 @@ function HomePage() {
                     })}
                 </Map>
             </YMaps>
-            <div className="home-elements-div">
-                <div className="search-div">
+            <div className={styles.homeElementsDiv}>
+                <div className={styles.searchDiv}>
                     <OpneSettingsBtn/>
-                    <OpenSearchBtn value={PointSearchTyping.homePageText} isHomePage={true}/>  
+                    <OpenSearchBtn isEnd={false} isHomePage={true}/>  
                 </div>
-                <InstitutesModal instLink={instLink} />
-                { isSearchModal && <SearchModal/> }
-                { isSettingsModal && <SettingsModal/> }
+                <InstitutesModal instLink={data ? data: []} />
+                { isSearchModal && <SearchModal isStartPressed={false} /> }
+                { isSettingsModal && <SettingsModal /> }
             </div>
         </div>
     )

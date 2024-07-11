@@ -3,9 +3,6 @@ import { IGraphPoint, PointTypes } from "../../../utils/interfaces";
 import { findDataByType } from "../../../utils/server-connect";
 import { getRenderWay, getShortestPath } from "../../../utils/get-path";
 
-import { RouteContext } from "../../../contextes/RouteContext";
-import { useContext } from "react";
-
 interface PathMapProps {
     institute: string,
     currentFloor: number
@@ -17,7 +14,6 @@ interface PathMapProps {
 
 function PathMap({institute, from, to, currentFloor}: PathMapProps) {
     const [path, setPath] = useState<{[inst: string]: {[floor: number]: IGraphPoint[][]}}>({});
-    const { setFloors } = useContext(RouteContext);
 
     useEffect(() => {
         async function getPath() {
@@ -36,15 +32,6 @@ function PathMap({institute, from, to, currentFloor}: PathMapProps) {
         }
         void getPath();
     }, [from, to]);
-
-    useEffect(() => {
-        if (path[from.institute]) {
-            setFloors({
-                [from.institute]: Object.keys(path[from.institute]),
-                [to.institute]: Object.keys(path[to.institute])
-            });
-        }
-    }, [path]);
 
     return (
         <>

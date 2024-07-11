@@ -1,4 +1,4 @@
-import "./name-institute.css"
+import { insName } from './name-institute.module.css'
 
 interface NameInstituteProps {
     name: string,
@@ -15,7 +15,7 @@ function NameInstitute({ name, isActive }: NameInstituteProps) {
     }
 
     return (
-        <h1 className="ins-name" style={ isActive ? nonActiveStyles : activeStyles }>{ name }</h1>
+        <h1 className={insName} style={ isActive ? nonActiveStyles : activeStyles }>{ name }</h1>
     )
 }
 

@@ -1,48 +1,46 @@
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { GlobalContext } from "../../../../contextes/GlobalContext";
-import { RouteContext } from "../../../../contextes/RouteContext";
-import { MapContext } from "../../../../contextes/MapContext";
+import { useAppDispatch, useAppSelector } from "../../../../store/hook";
+import { selectSearchPoints, setFromPoint, setToPoint } from "../../../../features/pointsSearch/pointsSearchSlice";
+import { toggleSearchModal } from "../../../../features/modals/modalsSlice";
+import { floorSet } from "../../../../features/floor/floorSlice";
 import { IGraphPoint } from "../../../../utils/interfaces";
-import { PointSearchTyping, InstColors } from "../../../../utils/const";
+import { InstColors } from "../../../../utils/const";
 import { InstLinks } from "../../../../utils/const";
 
-import "./search-result-btn-style.css";
+import style from "./search-result-btn-style.module.css";
 
 interface SearchResultBtnProps {
     data: IGraphPoint,
+    isStartPressed: boolean
 }
 
-function SearchResultBtn({ data }: SearchResultBtnProps) {
-    const { points, setPoints, isStartPoint } = useContext(RouteContext);
-    const { setIsSearchModal } = useContext(GlobalContext);
-    const { setCurrentFloor } = useContext(MapContext);
+function SearchResultBtn({ data, isStartPressed }: SearchResultBtnProps) {
+    const dispatch = useAppDispatch()
+    const points = useAppSelector(selectSearchPoints)
     const navigate = useNavigate();
 
     function onClickHandler() {
-        const link = InstLinks.get(data.institute)
-
-        if (isStartPoint) {
-            setPoints({ ...points, [PointSearchTyping.start]: data });
+        const link = InstLinks.get(data.institute);
+        if (isStartPressed) {
+            dispatch(setFromPoint(data))
         } else {
-            setPoints({ ...points, [PointSearchTyping.end]: data });
+            dispatch(setToPoint(data))
         }
+        dispatch(toggleSearchModal())
 
-        setIsSearchModal(false);
-
-        if (link && (window.location.pathname === "/" || isStartPoint || !points[PointSearchTyping.start])) {
+        if (link && (window.location.pathname === "/" || isStartPressed || !points.from)) {
             navigate(`/institute${link}`);
-            setCurrentFloor(data.floor);
+            dispatch(floorSet(data.floor))
         }
     }
 
     return (
         <li>
-            <button className="search-result-btn" onClick={ onClickHandler }>
-                <p className="search-result-btn-name">{ data.names.join(', ') }</p>
-                <div className="search-result-addition">
-                    <div className="search-result-addition-img" style={{ backgroundColor: InstColors.get(data.institute) }}/>
-                    <p className="search-result-addition-name">{ data.institute }</p>
+            <button className={style.searchResultBtn} onClick={ onClickHandler }>
+                <p className={style.searchResultBtnName}>{ data.names.join(', ') }</p>
+                <div className={style.searchResultAddition}>
+                    <div className={style.searchResultAdditionImg} style={{ backgroundColor: InstColors.get(data.institute) }}/>
+                    <p className={style.searchResultAdditionName}>{ data.institute }</p>
                 </div>
             </button>
         </li>

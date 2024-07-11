@@ -1,18 +1,17 @@
-import { useContext } from "react";
-import { GlobalContext } from "../../../contextes/GlobalContext";
-
+import { useAppDispatch } from "../../../store/hook";
+import { toggleSettingsModal } from "../../../features/modals/modalsSlice";
 import settingsImg from './img/settings-btn.svg';
-import "./open-settings-btn-style.css"
+import style from "./open-settings-btn-style.module.css";
 
 function OpneSettingsBtn() {
-    const {setIsSettingsModal} = useContext(GlobalContext);
+    const dispatch = useAppDispatch()
 
     function onSettingsBtnClick() {
-        setIsSettingsModal(true)
+        dispatch(toggleSettingsModal())
     }
 
     return(
-        <button className="settings-btn button" onClick={ onSettingsBtnClick }>
+        <button className={style.settingsBtnButton} onClick={ onSettingsBtnClick }>
             <img src={ settingsImg } alt='Кнопочка настроек'/>
         </button>
     )

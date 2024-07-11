@@ -68,10 +68,7 @@ function heuristic(a: IGraphPoint, b: IGraphPoint): number {
    
 }
 
-async function getShortestPath(
-        start: IGraphPoint, 
-        end: IGraphPoint
-    ): Promise<{[floor: number]: IGraphPoint[][]} >{
+async function getShortestPath(start: IGraphPoint, end: IGraphPoint): Promise<{[floor: number]: IGraphPoint[][]} >{
     const toSearch = new PriorityQueue<IQueueData>((a, b) => a.priority < b.priority);
     const cameFrom: {[id: string]: IQueueData} = {}
     const costsoFar: {[id: string]: number} = {}

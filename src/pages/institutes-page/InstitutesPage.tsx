@@ -1,44 +1,40 @@
-import { useParams, redirect } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+
+import { useGetInstituteByUrlQuery } from "../../features/api/apiSlice";
 import ToRenderMap from "../../components/map/to-render-map/ToRenderMap";
 import MapUI from "../../components/ui/map-ui/MapUi";
-import { Helmet } from "react-helmet-async";
-import { useLayoutEffect, useState } from "react";
-import { findInstituteByUrl } from "../../utils/server-connect";
 
 function InstitutesPage() {
-    const data = useParams<{intstName: string}>();
-    const [instName, setInstName] = useState("");
-    const [firstFloor, setFirstFloor] = useState(1);
-    const [lastFloor, setLastFloor] = useState(1);
-    
-    useLayoutEffect(() => {
-        async function getInst() {
-            if (data.intstName) {
-                await findInstituteByUrl(`/${data.intstName}`)
-                .then((e) => {
-                    setInstName(e.name);
-                    setFirstFloor(e.minFloor);
-                    setLastFloor(e.maxFloor);
-                })
-                .catch(() => redirect("/"));
-            }
-        }
-        void getInst();
-    })
+    const params = useParams<{intstName: string}>();
+    const { data, isLoading } = useGetInstituteByUrlQuery(`/${params.intstName}`)
 
     return (
         <>
-            <Helmet>
-                <title>{instName} — Навигатор УрФУ</title>
-                <meta
-                    name="description"
-                    content={`Страница навигации по ${instName} УрФУ`}
-                />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-            </Helmet>
-            <MapUI instFullName={instName} firstFloor={firstFloor} lastFloor={lastFloor} />
-            {instName !== "" &&
-                <ToRenderMap instFullName={instName} firstFloor={firstFloor} lastFloor={lastFloor}/>
+            {!isLoading && data ?
+                <>
+                    <Helmet>
+                        <title>{data.name} — Навигатор УрФУ</title>
+                        <meta
+                            name="description"
+                            content={`Страница навигации по ${data.name} УрФУ`}
+                        />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+                    </Helmet>
+                    <MapUI instFullName={data.name} firstFloor={data.minFloor} lastFloor={data.maxFloor} />
+                    <ToRenderMap instFullName={data.name} firstFloor={data.minFloor} lastFloor={data.minFloor}/>
+                </>:
+                <>
+                    <Helmet>
+                        <title>Загрузка</title>
+                        <meta
+                            name="description"
+                            content={`Страница загрузки`}
+                        />
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+                    </Helmet>
+                    Подождите
+                </>
             }
         </>
         

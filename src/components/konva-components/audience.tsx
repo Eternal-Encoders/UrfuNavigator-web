@@ -1,5 +1,5 @@
 import React from "react";
-import {Rect, Group } from "react-konva";
+import { Rect, Group } from "react-konva";
 
 interface AudienceProps {
     x: number,

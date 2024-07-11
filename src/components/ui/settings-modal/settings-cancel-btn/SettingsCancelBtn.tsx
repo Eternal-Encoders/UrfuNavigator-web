@@ -1,19 +1,19 @@
-import { useContext } from "react";
-import { GlobalContext } from "../../../../contextes/GlobalContext";
-
 import backIcon from "./img/back-btn.svg";
-import "./settings-cancel-btn-style.css";
+import { useAppDispatch } from "../../../../store/hook";
+import { toggleSettingsModal } from "../../../../features/modals/modalsSlice";
+
+import styles from "./settings-cancel-btn-style.module.css";
 
 function SettingsCancelBtn() {
-    const { setIsSettingsModal } = useContext(GlobalContext);
+    const dispatch = useAppDispatch()
 
     function onClickHandler() {
-        setIsSettingsModal(false);
+        dispatch(toggleSettingsModal());
     }
 
     return (
         <>
-            <button onClick={ onClickHandler } className="back-btn">
+            <button onClick={ onClickHandler } className={styles.backBtn}>
                 <img src={ backIcon } alt='Назад'/>
             </button>
         </>

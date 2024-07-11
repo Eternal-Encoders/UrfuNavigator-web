@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import { GlobalContext } from "../../../../contextes/GlobalContext";
-
+import { useAppDispatch } from "../../../../store/hook";
+import { toggleSearchModal } from "../../../../features/modals/modalsSlice";
 import cancelBtn from "./img/cancel-btn.svg";
-import "./back-button-style.css";
+// import style from "./back-button-style.module.css";
 
 interface SearchCancelBtnProps {
     name: string,
@@ -10,19 +9,19 @@ interface SearchCancelBtnProps {
 }
 
 function SearchCancelBtn({ name, onClick }: SearchCancelBtnProps) {
-    const { setIsSearchModal } = useContext(GlobalContext);
+    const dispatch = useAppDispatch()
 
     function onClickHandler() {
         if (name) {
             onClick()
         } else {
-            setIsSearchModal(false)
+            dispatch(toggleSearchModal())
         }
     }
 
     return (
         <>
-            <button onClick={onClickHandler}>
+            <button onClick={ onClickHandler }>
                 <img src={ cancelBtn } alt='Назад'/>
             </button>
         </>

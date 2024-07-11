@@ -1,10 +1,9 @@
-import { useContext } from "react";
-import { GlobalContext } from "../../../../../contextes/GlobalContext";
+import { useAppSelector } from "../../../../../store/hook";
+import { selectLang } from "../../../../../features/lang/langSlice";
+import { Languages, PointTypes } from "../../../../../utils/interfaces";
 import QuickTipButton from "../quick-tip-button/QuickTipButton";
-import { PointTypes } from "../../../../../utils/interfaces";
 
-import "./quick-tips-list.css"
-
+import style from "./quick-tips-list.module.css"
 import cashMachine from './img/cashMachine.svg';
 import vending from './img/vending.svg';
 import wardrobe from './img/wardrobe.svg';
@@ -36,16 +35,18 @@ interface QuickTipsListProps {
 }
 
 function QuickTipsList({ onClick }: QuickTipsListProps) {
-    const { currentLanguage } = useContext(GlobalContext);
+    const currentLanguage = useAppSelector(selectLang)
 
     return (
         <>
-            <p className="quick-tips-text">Быстрый поиск</p>
-            <ul className="quick-tips-list list-reset flex">
+            <p className={style.quickTipsText}>
+                Быстрый поиск
+            </p>
+            <ul className={`${style.quickTipsList} ${style.listReset} flex`}>
                 {
                     QIUCK_TIPS_LIST.map(e => (
-                        <li key={ e.tipName } className="quick-tips-list-item" onClick={ () => onClick(e.tipName, e.tipType) }>
-                            <QuickTipButton tipIcon={ e.tipIcon } tipName={ currentLanguage === "english" ? e.tipNameEng : e.tipName }/>
+                        <li key={ e.tipName } className={style.quickTipsListItem} onClick={ () => onClick(e.tipName, e.tipType) }>
+                            <QuickTipButton tipIcon={ e.tipIcon } tipName={ currentLanguage === Languages.English ? e.tipNameEng : e.tipName }/>
                         </li>
                     ))
                 }

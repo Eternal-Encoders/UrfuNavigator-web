@@ -22,16 +22,7 @@ InstLinks.set("УГИ", "/ugi");
 // InstLinks.set("ИНЭУ", "/ineu");
 // InstLinks.set("ИНМТ", "/inmt");
 
-
-enum PointSearchTyping {
-    start = "Откуда",
-    end = "Куда",
-    homePageText = "Поиск аудиторий и мест",
-    none = ""
-}
-
 export { 
     InstColors, 
-    InstLinks,  
-    PointSearchTyping 
+    InstLinks,
 }
