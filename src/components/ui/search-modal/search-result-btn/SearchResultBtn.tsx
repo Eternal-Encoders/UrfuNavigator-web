@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import { selectSearchPoints, setFromPoint, setToPoint } from "../../../../features/pointsSearch/pointsSearchSlice";
 import { toggleSearchModal } from "../../../../features/modals/modalsSlice";

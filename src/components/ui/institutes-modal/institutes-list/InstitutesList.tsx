@@ -1,11 +1,11 @@
-import { IInstituteIcon } from "../../../../utils/interfaces";
+import { IInstitute } from "../../../../utils/interfaces";
 import { useInstituteList } from "./InstitutesListHook";
 import LinkToInstitute from "../link-to-institute/LinkToInstitute";
 
 import style from "./institutes-list-style.module.css"
 
 interface InstitutesModalProps {
-    instLink: IInstituteIcon[]
+    instLink: IInstitute[]
 }
 
 function InstitutesModal({ instLink }: InstitutesModalProps) {

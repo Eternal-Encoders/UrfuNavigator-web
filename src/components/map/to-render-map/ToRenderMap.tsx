@@ -5,14 +5,15 @@ import Konva from "konva";
 import { useAppSelector } from "../../../store/hook";
 import { selectFloor } from "../../../features/floor/floorSlice";
 import { useGetFloorQuery } from "../../../features/api/apiSlice";
-import { getAudiences, getService } from "../../../utils/get-floor";
-import PathMap from "../path-map/PathMap";
-import RoutePoint from "../../ui/routePoint/RoutePoint";
-
-import { toRenderMap } from "./to-render-map-style.module.css";
+import { getAudiences, getService } from "../../../utils/translateToKonva";
 import { useMapHook } from "./MapHook";
 import { IAuditorium, IService } from "../../../utils/interfaces";
 import { selectSearchPoints } from "../../../features/pointsSearch/pointsSearchSlice";
+import { toRenderMap } from "./to-render-map-style.module.css";
+
+import PathMap from "../path-map/PathMap";
+import RoutePoint from "../../ui/routePoint/RoutePoint";
+
 
 interface ToRenderMapProps {
     instFullName: string,

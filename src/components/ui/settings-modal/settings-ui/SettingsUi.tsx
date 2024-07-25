@@ -42,7 +42,7 @@ function SettingsModal() {
     }
 
     return (
-        <div className="settings-container modal-window"
+        <div className={`${styles.settingsContainer} modal-window`}
             onTouchStart={ (e) => handleTouchStart(e) }
             onTouchMove={ (e) => handleTouchMove(e) }
             onTouchEnd={ () => handleTouchEnd() }

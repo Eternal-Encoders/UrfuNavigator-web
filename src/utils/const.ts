@@ -6,11 +6,6 @@ InstColors.set("ИНМИТ-ХТИ", "#68A357");
 InstColors.set("ИСА", "#A02B09");
 InstColors.set("УГИ", "#662B73");
 
-// InstColors.set("ИНМТ", "#55211D");
-// InstColors.set("ИНФО", "#090159");
-// InstColors.set("ИНЭУ", "#007180");
-
-
 const InstLinks = new Map<string, string>();
 InstLinks.set("ИРИТ-РТФ", "/irit");
 InstLinks.set("ИСА", "/isa");
@@ -18,9 +13,6 @@ InstLinks.set("ГУК", "/guk");
 InstLinks.set("УРАЛЭНИН", "/uralenin");
 InstLinks.set("ИНМИТ-ХТИ", "/inmit-hti");
 InstLinks.set("УГИ", "/ugi");
-
-// InstLinks.set("ИНЭУ", "/ineu");
-// InstLinks.set("ИНМТ", "/inmt");
 
 export { 
     InstColors, 

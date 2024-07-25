@@ -1,11 +1,12 @@
 import { InstColors } from "../../../utils/const";
 
-import style from "./open-search-btn-style.module.css";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { selectLang } from "../../../features/lang/langSlice";
 import { toggleSearchModal } from "../../../features/modals/modalsSlice";
 import { Languages } from "../../../utils/interfaces";
 import { selectSearchPoints } from "../../../features/pointsSearch/pointsSearchSlice";
+
+import style from "./open-search-btn-style.module.css";
 
 interface OpenSearchBtnProps {
     isEnd: boolean,

@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import langSlice from "../features/lang/langSlice";
 import { apiSlice } from "../features/api/apiSlice";
+import langSlice from "../features/lang/langSlice";
 import floorSlice from "../features/floor/floorSlice";
 import pointsSearchSlice from "../features/pointsSearch/pointsSearchSlice";
 import modalsSlice from "../features/modals/modalsSlice";

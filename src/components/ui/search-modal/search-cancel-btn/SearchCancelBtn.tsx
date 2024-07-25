@@ -1,7 +1,7 @@
 import { useAppDispatch } from "../../../../store/hook";
 import { toggleSearchModal } from "../../../../features/modals/modalsSlice";
 import cancelBtn from "./img/cancel-btn.svg";
-// import style from "./back-button-style.module.css";
+import style from "./back-button-style.module.css";
 
 interface SearchCancelBtnProps {
     name: string,
@@ -21,7 +21,7 @@ function SearchCancelBtn({ name, onClick }: SearchCancelBtnProps) {
 
     return (
         <>
-            <button onClick={ onClickHandler }>
+            <button className={style.backBtn} onClick={ onClickHandler }>
                 <img src={ cancelBtn } alt='Назад'/>
             </button>
         </>

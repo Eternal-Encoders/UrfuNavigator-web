@@ -1,10 +1,11 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import './normalize.css';
 import "./style.css";
-import './normalize.css'
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 
 import HomePage from './pages/home-page/HomePage';
 import InstitutesPage from './pages/institutes-page/InstitutesPage';
-import { HelmetProvider } from "react-helmet-async";
 
 function App() {
   return (

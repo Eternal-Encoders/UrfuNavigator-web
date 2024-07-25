@@ -1,12 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IGraphPoint } from "../../utils/interfaces";
-import { getShortestPath } from "../../utils/get-path";
+import { IGraphPoint, IPath } from "../../utils/interfaces";
 
-interface IPath {
-    [inst: string]: {
-        [floor: number]: IGraphPoint[][]
-    }
-}
 
 interface PathPayload {
     from: IGraphPoint,

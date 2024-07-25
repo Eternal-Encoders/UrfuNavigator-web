@@ -1,22 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { IGraphPoint, IInstitute, IMapObject, IPath, PointTypes } from "../../utils/interfaces";
 
-import { IAuditorium, IGraphPoint, IInstituteIcon, IService, PointTypes } from "../../utils/interfaces";
+const urlOrigin = import.meta.env.VITE_HOST ? `https://${import.meta.env.VITE_HOST}/api` : 'https://how-to-navigate.ru:2053/api'
 
-const urlOrigin = import.meta.env.VITE_BACKEND_ORIGIN ? import.meta.env.VITE_BACKEND_ORIGIN : 'https://how-to-navigate.ru:2083'
-
-interface IFloor {
-    width: number, 
-    height:number, 
-    audiences: IAuditorium[], 
-    service: IService[]
-}
 interface IFloorReq {
     inst: string,
     floor: number
-}
-
-interface IGraph {
-    [id: string]: IGraphPoint
 }
 
 interface IByTypeReq {
@@ -30,259 +19,82 @@ interface IByNameReq {
   length: number
 }
 
-const floorQuery = (institute: string, floor: number) => `
-query {
-    Floors(where: { institute: { equals: "${institute}" }, floor: { equals: ${floor} } }) {
-        docs {
-            width
-            height
-            audiences,
-            service
-        }
-    }
+interface IPathReq {
+    from: string,
+    to: string
 }
-`
-
-const instituteUrlQuery = (url: string) => `
-query {
-    Insitutes(where: { url: { equals: "${url}" } }) {
-      docs {
-        name
-        displayableName
-        minFloor
-        maxFloor
-        url
-        icon {
-          url
-          alt
-          filename
-          mimeType
-          filesize
-        }
-      }
-    }
-  }
-`
-
-const institutesQuery = (page: number | undefined) => `
-query {
-    Insitutes(page: ${page ? page: 1}) {
-      docs {
-        name
-        displayableName
-        minFloor
-        maxFloor
-        url
-        latitude
-        longitude
-        icon {
-          url
-          alt
-          filename
-          mimeType
-          filesize
-        }
-      }
-    }
-  }
-`
-
-const graphQuery = (institute: string, floor: number) => `
-query {
-    Floors (where: { institute: {equals:"${institute}"}, floor: {equals:${floor}} }) {
-      docs {
-        graph {
-          id 
-          x
-          y
-          links
-          types
-          names
-          floor
-          institute
-          time
-          menuId
-          isPassFree
-          stairId
-        }
-      }
-    }
-  }
-`
-
-const stairsQuery = (institute: string) => `
-query {
-    Stairs (where: {institute: {equals: "${institute}"}} limit: 60) {
-      docs {
-        stairPoint {
-          id
-        }
-        links {
-            stairPoint {
-              id
-              floor
-            }
-        }
-      }
-    }
-  }
-`
-
-const byTypeQuery = (type: PointTypes, institute?: string, floor?: number) => `
-query {
-  Graph_points (where: { ${institute ?  `institute: {equals:"${institute}"}` : ""}, ${floor ? `floor: {equals:${floor}}`: ""}, types: {contains:"${type}"} } limit: 20000) {
-    docs {
-      id 
-      x
-      y
-      links
-      types
-      names
-      floor
-      institute
-      time
-      menuId
-      isPassFree
-      stairId
-    }
-  }
-}
-`
-
-const byNameQuery = (name: string, length: number) => `
-query {
-  Graph_points (where: { names: {like:"${name}"} }, limit: ${length}) {
-    docs {
-      id 
-      x
-      y
-      links
-      types
-      names
-      floor
-      institute
-      time
-      menuId
-      isPassFree
-      stairId
-    }
-  }
-}
-`
-
-const byIdQuery = (id: string) => `
-query {
-  Graph_point (id:"${id}") {
-    id 
-    x
-    y
-    links
-    types
-    names
-    floor
-    institute
-    time
-    menuId
-    isPassFree
-    stairId
-  }
-}
-`
 
 export const apiSlice = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
-        baseUrl: `${urlOrigin}/api/graphql`,
-        headers: {
-            Authorization: `JWT ${import.meta.env.VITE_BACKEND_JWT}`
-        }
+        baseUrl: urlOrigin,
     }),
     endpoints: build => ({
-        getFloor: build.query<IFloor, IFloorReq>({
+        getFloor: build.query<IMapObject, IFloorReq>({
             query: ({inst, floor}) => ({
-                url: '',
-                method: 'POST',
-                body: {query: floorQuery(inst, floor)}
+                url: '/floor',
+                method: 'GET',
+                params: {
+                    floor: floor,
+                    institute: inst
+                }
             }),
-            transformResponse: (rawResult: any, _) => {
-                return rawResult.data.Floors.docs[0]
-            }
         }),
-        getInstituteByUrl: build.query<IInstituteIcon, string>({
+        getInstituteByUrl: build.query<IInstitute, string>({
             query: (url) => ({
-                url: '',
-                method: 'POST',
-                body: {query: instituteUrlQuery(url)}
-            }),
-            transformResponse: (rawResult: any, _) => {
-                return rawResult.data.Insitutes.docs[0]
-            }
+                url: '/institute',
+                params: {
+                    url: url
+                },
+                method: 'GET',
+            })
         }),
-        getInstitutes: build.query<IInstituteIcon[], number | undefined>({
-            query: (page?) => ({
-                url: '',
-                method: 'POST',
-                body: {query: institutesQuery(page)}
+        getInstitutes: build.query<IInstitute[], undefined>({
+            query: () => ({
+                url: '/institutes',
+                method: 'GET'
             }),
-            transformResponse: (rawResult: any, _) => {
-                return rawResult.data.Insitutes.docs
-            }
-        }),
-        getGraph: build.query<IGraph, IFloorReq>({
-            query: ({inst, floor}) => ({
-                url: '',
-                method: 'POST',
-                body: {query: graphQuery(inst, floor)}
-            }),
-            transformResponse: (rawResult: any, _) => {
-                return rawResult.data.Floors.docs[0].graph.reduce((accum: any, value: any) => {
-                    return {
-                        ...accum,
-                        [value.id]: value
-                    }
-                }, {})
-            }
-        }),
-        getStairs: build.query<IGraph, string>({
-            query: (inst) => ({
-                url: '',
-                method: 'POST',
-                body: {query: stairsQuery(inst)}
-            }),
-            transformResponse: (rawResult: any, _) => {
-                return rawResult.data.Stairs.docs
-            }
         }),
         getPointsByType: build.query<IGraphPoint[], IByTypeReq>({
             query: ({ type, institute, floor }) => ({
-                url: '',
-                method: 'POST',
-                body: {query: byTypeQuery(type, institute, floor)}
-            }),
-            transformResponse: (rawResult: any, _) => {
-                return rawResult.data.Graph_points.docs
-            }
+                url: '/points',
+                params: {
+                    type: type,
+                    institute: institute,
+                    floor: floor
+                },
+                method: 'GET',
+            })
         }),
         getPointsByName: build.query<IGraphPoint[], IByNameReq>({
           query: ({ name, length }) => ({
-              url: '',
-              method: 'POST',
-              body: {query: byNameQuery(name, length)}
-          }),
-          transformResponse: (rawResult: any, _) => {
-              return rawResult.data.Graph_points.docs
-          }
+              url: '/points',
+              params: {
+                name: name,
+                length: length
+              },
+              method: 'GET',
+          })
         }),
         getPointById: build.query<IGraphPoint, string>({
           query: (id) => ({
-              url: '',
-              method: 'POST',
-              body: {query: byIdQuery(id)}
-          }),
-          transformResponse: (rawResult: any, _) => {
-              return rawResult.data.Graph_point
-          }
+              url: '/point',
+              params: {
+                id: id
+              },
+              method: 'GET',
+          })
         }),
+        getPath: build.query<IPath, IPathReq>({
+            query: ({ from, to }) => ({
+                url: '/path',
+                params: {
+                    from: from,
+                    to: to
+                },
+                method: 'GET'
+            })
+        })
     })
 })
 
@@ -290,9 +102,8 @@ export const {
     useGetFloorQuery,
     useGetInstituteByUrlQuery,
     useGetInstitutesQuery,
-    useGetGraphQuery,
-    useGetStairsQuery,
     useGetPointsByTypeQuery,
     useGetPointsByNameQuery,
-    useGetPointByIdQuery
+    useGetPointByIdQuery,
+    useGetPathQuery
  } = apiSlice

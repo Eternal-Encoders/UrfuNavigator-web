@@ -28,19 +28,19 @@ export const enum WeekDay {
 }
 
 export interface ITime {
-    isDayOff?: boolean
+    isDayOff: boolean | null
     from: string,
     to: string
 }
   
 export type IWeek = [
-    ITime?, 
-    ITime?, 
-    ITime?, 
-    ITime?, 
-    ITime?, 
-    ITime?, 
-    ITime?
+    ITime | null, 
+    ITime | null, 
+    ITime | null, 
+    ITime | null, 
+    ITime | null, 
+    ITime | null, 
+    ITime | null
 ];
 
 export const PointTranslation = {
@@ -80,8 +80,8 @@ export interface IAuditoriumChild {
     x: number,
     y: number,
     identifier: string,
-    alignX: "LEFT" | "CENTER" | "RIGHT" | "JUSTIFIED" | undefined,
-    alignY: "CENTER" | "TOP" | "BOTTOM" | undefined
+    alignX: "LEFT" | "CENTER" | "RIGHT" | "JUSTIFIED" | "",
+    alignY: "CENTER" | "TOP" | "BOTTOM" | ""
   }
   
 export interface IAuditorium {
@@ -90,8 +90,8 @@ export interface IAuditorium {
     y: number,
     width: number,
     height: number,
-    fill?: string,
-    stroke?: string,
+    fill: string | null,
+    stroke: string | null,
     pointId: string,
     children: IAuditoriumChild[],
     doors: IAuditoriumDoors[]
@@ -109,50 +109,29 @@ export interface IGraphPoint {
     time: IWeek,
     description: string,
     info: string,
-    menuId?: string,
-    isPassFree?: boolean,
-    stairId?: string
+    menuId: string | null,
+    isPassFree: boolean | null,
+    stairId: string | null
 }
 
 export interface IService {
     x: number,
     y: number,
     data: string,
-    stroke?: string,
-    fiil?: string
-}
-
-export interface IStair {
-    stairPoint: {
-        id: string
-    },
-    links: {
-        stairPoint: {
-            id: string,
-            floor: number
-        }
-    }[]
+    stroke: string | null,
+    fiil: string | null
 }
 
 export interface IMapObject {
     service: IService[],
     audiences: IAuditorium[],
-    graph: IGraphPoint[],
     institute: string,
     floor: number,
     width: number,
     height: number
 }
 
-export interface IGraphQLRes<Type> {
-    data: {
-        [collection: string]: {
-            docs: Type[]
-        }
-    }
-}
-
-export interface IInstituteIcon {
+export interface IInstitute {
     name: string,
     displayableName: string,
     minFloor: number,
@@ -164,4 +143,8 @@ export interface IInstituteIcon {
         url: string,
         alt: string
     }
+}
+
+export interface IPath {
+    [floor: number]: IGraphPoint[][]
 }

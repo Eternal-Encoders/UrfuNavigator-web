@@ -17,8 +17,8 @@ function getAudiences(audiences: IAuditorium[]): React.ReactNode[] {
                             x={child.x} 
                             y={child.y} 
                             text={child.identifier}
-                            alignX={child.alignX}
-                            alignY={child.alignY}
+                            alignX={child.alignX === "" ? undefined : child.alignX}
+                            alignY={child.alignY === "" ? undefined : child.alignY}
                         />
                     );
             }
@@ -41,8 +41,8 @@ function getAudiences(audiences: IAuditorium[]): React.ReactNode[] {
                 y={auditorium.y} 
                 width={auditorium.width} 
                 height={auditorium.height}
-                fill={auditorium.fill}
-                stroke={auditorium.stroke}
+                fill={auditorium.fill === null ? undefined : auditorium.fill}
+                stroke={auditorium.stroke === null ? undefined : auditorium.stroke}
             >
                 {doors}
                 {children}
@@ -59,8 +59,8 @@ function getService(services: IService[]): React.ReactNode[] {
                 x={service.x}
                 y={service.y}
                 data={service.data}
-                fill={service.fiil}
-                stroke={service.stroke}
+                fill={service.fiil === null ? undefined : service.fiil}
+                stroke={service.stroke === null ? undefined : service.stroke}
                 strokeWidth={service.stroke ? 5: undefined}
                 
             />

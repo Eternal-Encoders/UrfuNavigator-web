@@ -31,7 +31,7 @@ function SearchModal({ isStartPressed }: SearchModalProps) {
     } = useSearchUi(inputRef);
 
     return (
-        <div className={`container ${style.searchContainer} ${style.modalWindow}`}
+        <div className={`container modal-window ${style.searchContainer}`}
             onTouchStart={ (e) => handleTouchStart(e) }
             onTouchMove={ (e) => handleTouchMove(e) }
             onTouchEnd={ () => handleTouchEnd() }

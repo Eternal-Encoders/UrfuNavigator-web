@@ -42,7 +42,7 @@ function QuickTipsList({ onClick }: QuickTipsListProps) {
             <p className={style.quickTipsText}>
                 Быстрый поиск
             </p>
-            <ul className={`${style.quickTipsList} ${style.listReset} flex`}>
+            <ul className={`${style.quickTipsList} list-reset flex`}>
                 {
                     QIUCK_TIPS_LIST.map(e => (
                         <li key={ e.tipName } className={style.quickTipsListItem} onClick={ () => onClick(e.tipName, e.tipType) }>
