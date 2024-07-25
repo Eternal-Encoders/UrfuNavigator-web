@@ -1,16 +1,19 @@
-import { useContext, useState } from "react";
-import { GlobalContext } from "../../../../contextes/GlobalContext";
-import "./change-language-style.css";
+import { useState } from "react";
 import { Languages } from "../../../../utils/interfaces";
+import { useAppDispatch, useAppSelector } from "../../../../store/hook";
+import { selectLang, toggleLang } from "../../../../features/lang/langSlice";
+
+import style from "./change-language-style.module.css";
 
 function СhangeLanguage() {
-    const { currentLanguage, setCurrentLanguage } = useContext(GlobalContext);
+    const dispatch = useAppDispatch()
+    const currentLanguage = useAppSelector(selectLang)
 
     const [rusButton, setRusButton] = useState(currentLanguage === Languages.Russian ? true : false);
     const [engButton, setEngButton] = useState(currentLanguage === Languages.English ? true : false);
 
     function onHandleClick(value: Languages) {
-        setCurrentLanguage(value);
+        dispatch(toggleLang());
         if (value === Languages.Russian) {
             setRusButton(true);
             setEngButton(false);
@@ -21,17 +24,17 @@ function СhangeLanguage() {
     }
 
     return (
-        <div className="change-language-container">
-            <p className="change-language-title">{ currentLanguage === Languages.English ? "Language" : "Язык" }</p>
-            <div className="change-language-div">
+        <div className={style.changeLanguageContainer}>
+            <p className={style.changeLanguageTitle}>{ currentLanguage === Languages.English ? "Language" : "Язык" }</p>
+            <div className={style.changeLanguageDiv}>
                 <button 
-                    className={ rusButton ? "active-russian" : "change-language-button" }
+                    className={ rusButton ? style.activeRussian : style.changeLanguageButton }
                     onClick={ () => onHandleClick(Languages.Russian) }
                 >
                     <p>Русский</p>
                 </button>
                 <button 
-                    className={ engButton ? "active-english" : "change-language-button" }
+                    className={ engButton ? style.activeEnglish : style.changeLanguageButton }
                     onClick={ () => onHandleClick(Languages.English) }
                 >
                     <p>English</p>

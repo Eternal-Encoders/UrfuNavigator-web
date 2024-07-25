@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import "./link-to-institute-style.css";
+import style from "./link-to-institute-style.module.css";
 
 interface LinkToInstituteProps {
     instPath: string,
@@ -10,10 +10,10 @@ interface LinkToInstituteProps {
 
 function LinkToInstitute({ instPath, instIcon, instName }: LinkToInstituteProps) {
     return (
-        <Link to={ instPath } className="institutions-list-item-link flex">
-            <button className="btn-reset">
-                <img className="institutions-icon" src={ instIcon } alt={ instName }/>
-                <p className="institutions-name">{ instName }</p>
+        <Link to={ instPath } className={`${style.institutionsListItemLink} flex`}>
+            <button className={style.btnReset}>
+                <img className={style.institutionsIcon} src={ instIcon } alt={ instName }/>
+                <p className={style.institutionsName}>{ instName }</p>
             </button>
         </Link>
     );

@@ -1,25 +1,27 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { GlobalContext } from "../../../../contextes/GlobalContext";
 
-import "./contacts-style.css";
 import telegramLogo from "./img/telegramLogo.png"
 import vkLogo from "./img/vkLogo.png"
+import { useAppSelector } from "../../../../store/hook";
+import { selectLang } from "../../../../features/lang/langSlice";
+
+import style from "./contacts-style.module.css";
+import { Languages } from "../../../../utils/interfaces";
 
 function Contacts() {
-    const { currentLanguage } = useContext(GlobalContext);
+    const currentLanguage = useAppSelector(selectLang)
 
     return (
-        <div className="contacts-container">
-            <p className="contacts-title">{ currentLanguage === "english" ? "Contacts" : "Контакты" }</p>
-            <div className="contacts-list-container">
-                <Link className="contacts-link" to="https://t.me/navigator_urfu" target="_blank">
-                    <img className="contacts-img" src={ telegramLogo } alt="" />
-                    <p className="contacts-text">TG</p>
+        <div className={style.contactsContainer}>
+            <p className={style.contactsTitle}>{ currentLanguage === Languages.English ? "Contacts" : "Контакты" }</p>
+            <div className={style.contactsListContainer}>
+                <Link className={style.contactsLink} to="https://t.me/navigator_urfu" target="_blank">
+                    <img className={style.contactsImg} src={ telegramLogo } alt="" />
+                    <p className={style.contactsText}>TG</p>
                 </Link>
-                <Link className="contacts-link" to="https://vk.com/urfu_navigator" target="_blank">
-                    <img className="contacts-img" src={ vkLogo } alt="" />
-                    <p className="contacts-text">VK</p>
+                <Link className={style.contactsLink} to="https://vk.com/urfu_navigator" target="_blank">
+                    <img className={style.contactsImg} src={ vkLogo } alt="" />
+                    <p className={style.contactsText}>VK</p>
                 </Link>
             </div>
         </div>

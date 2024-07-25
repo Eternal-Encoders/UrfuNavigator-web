@@ -1,22 +1,22 @@
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { RouteContext } from "../../../contextes/RouteContext";
-import { PointSearchTyping } from "../../../utils/const";
 
+import { useAppDispatch, useAppSelector } from "../../../store/hook";
+import { selectSearchPoints, setPoints } from "../../../features/pointsSearch/pointsSearchSlice";
 import backIcon from "./img/back-btn.svg";
-import "./back-button-style.css";
+
+import style from "./back-button-style.module.css";
 
 function BackButton() {
     const navigate = useNavigate();
-    const { points, setPoints, setFloors } = useContext(RouteContext);
+    const dispatch = useAppDispatch()
+    const points = useAppSelector(selectSearchPoints)
 
     function onClickHandler() {
-        if (points[PointSearchTyping.start] || points[PointSearchTyping.end]) {
-            setPoints({
-                [PointSearchTyping.start]: undefined,
-                [PointSearchTyping.end]: undefined
-            })
-            setFloors({'': ['']});
+        if (points.from || points.to) {
+            dispatch(setPoints({
+                from: undefined,
+                to: undefined
+            }))
         } else {
             navigate("/");
         }
@@ -24,7 +24,7 @@ function BackButton() {
 
     return (
         <>
-            <button onClick={ onClickHandler } className="back-btn">
+            <button onClick={ onClickHandler } className={style.backBtn}>
                 <img src={ backIcon } alt='Назад'/>
             </button>
         </>

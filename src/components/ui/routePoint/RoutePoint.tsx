@@ -1,39 +1,19 @@
-import { useEffect, useState } from "react";
 import { Image } from "react-konva";
 import useImage from "use-image";
-import { IGraphPoint } from "../../../utils/interfaces";
-import { findPointById } from "../../../utils/server-connect";
 
+import { useRoutePoint } from "./RoutePointHook";
+import { IGraphPoint } from "../../../utils/interfaces";
 import pointImg from "./img/routePoint.svg"
-import "./route-point-style.css";
+// import style from "./route-point-style.module.css";
 
 interface RoutePointProps {
     point: IGraphPoint,
     isStart: boolean
 }
 
-function RoutePoint({ point, isStart }: RoutePointProps) {
+function RoutePoint({ point }: RoutePointProps) {
     const [usePointImg] = useImage(pointImg);
-    const [rotation, setRotation] = useState(0);
-
-    useEffect(() => {
-        async function getRotation() {
-            const neighbourPoint = await findPointById(point.links[0]);
-            const xDif = point.x - neighbourPoint.x;
-            const yDif = point.y - neighbourPoint.y;
-
-            if (xDif === 0){
-                yDif > 0 ? setRotation(90) : setRotation(270)
-                console
-            } else {
-                xDif > 0 ? setRotation(0) : setRotation(180)
-            }
-
-            if (isStart) setRotation(rotation => rotation + 180)
-        }
-
-        void getRotation()
-    }, [point, setRotation]);
+    const {  getRotation } = useRoutePoint(point.links[0])
 
     return (
         <Image 
@@ -42,9 +22,10 @@ function RoutePoint({ point, isStart }: RoutePointProps) {
             y={ point.y } 
             width={ 50 } 
             height={ 50 }
-            rotation={ rotation }
+            rotation={ getRotation(point) }
             offsetX={ 25 }
-            offsetY={ 25 }/>
+            offsetY={ 25 }
+        />
     )
 }
 

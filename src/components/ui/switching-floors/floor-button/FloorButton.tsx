@@ -1,9 +1,8 @@
-import { useContext } from "react";
-import { MapContext } from "../../../../contextes/MapContext";
-import { RouteContext } from "../../../../contextes/RouteContext";
-import { PointSearchTyping } from "../../../../utils/const";
+import { selectSearchPoints } from "../../../../features/pointsSearch/pointsSearchSlice";
+import { useAppDispatch, useAppSelector } from "../../../../store/hook";
+import { floorSet, selectFloor } from "../../../../features/floor/floorSlice";
 
-import "./floor-button-style.css";
+import styles from "./floor-button-style.module.css";
 
 interface FloorButtonProps {
     currentInst: string,
@@ -11,27 +10,25 @@ interface FloorButtonProps {
 }
 
 function FloorButton({ currentInst, floorNumber }: FloorButtonProps) {
-    const { currentFloor, setCurrentFloor } = useContext(MapContext);
-    const { points, floors } = useContext(RouteContext);
+    const dispatch = useAppDispatch()
+    const floor = useAppSelector(selectFloor)
+    const points = useAppSelector(selectSearchPoints)
     
     const className = [
-        "floor-button", 
-
-        currentFloor === floorNumber ? "active": "",
-
-        (points[PointSearchTyping.start] && points[PointSearchTyping.start].floor === floorNumber) && points[PointSearchTyping.start].institute === currentInst || 
-            (points[PointSearchTyping.end] && points[PointSearchTyping.end].floor === floorNumber) && points[PointSearchTyping.end].institute === currentInst ||
-                floors[currentInst]?.includes(floorNumber.toString()) ? 
-                    "on-the-way": ""
+        styles.floorButton, 
+        floor === floorNumber ? styles.active: "",
+        (points.from && points.from.floor === floorNumber) && points.from.institute === currentInst || 
+            (points.to && points.to.floor === floorNumber) && points.to.institute === currentInst ? 
+            styles.onTheWay: 
+            ""
     ];
 
     return (
-        <li className="floor-element">
+        <li className={styles.floorElement}>
             <button 
                 className={ className.join(" ") }
-                // style={currentFloor === floorNumber ? activeStyles :nonActiveStyles}
                 value={ floorNumber } 
-                onClick={ (e) => setCurrentFloor(Number(e.currentTarget.value)) }
+                onClick={ (e) => dispatch(floorSet(Number(e.currentTarget.value))) }
             >
                 { floorNumber }
             </button>

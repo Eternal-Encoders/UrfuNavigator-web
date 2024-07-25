@@ -1,17 +1,20 @@
-import React,  { useContext } from "react";
-import { GlobalContext } from "../../../../contextes/GlobalContext";
+import React from "react";
+
+import { useAppDispatch, useAppSelector } from "../../../../store/hook";
+import { selectLang } from "../../../../features/lang/langSlice";
+import { toggleSettingsModal } from "../../../../features/modals/modalsSlice";
+import { Languages } from "../../../../utils/interfaces";
 import СhangeLanguage from "../change-language/СhangeLanguage"
-import FeedbackFormEng from "../feedback-form/FeedbackFormEng";
-import FeedbackFormRus from "../feedback-form/FeedbackFormRus";
 import Contacts from "../contacts/Contacts";
 import SettingsCancelBtn from "../settings-cancel-btn/SettingsCancelBtn";
 import AgreementBtn from "../agreement";
-import { Languages } from "../../../../utils/interfaces";
 
-import "./settings-ui-style.css";
+import styles from "./settings-ui-style.module.css";
+import FeedbackForm from "../feedback-form/FeedbackForm";
 
 function SettingsModal() {
-    const { setIsSettingsModal, currentLanguage } = useContext(GlobalContext);
+    const dispatch = useAppDispatch()
+    const currentLanguage = useAppSelector(selectLang)
 
     const paddingRelativeScreenWidth = window.screen.width > 1200 ? 0 : 5;
     const [displayHeight, setdisplayHeight] = React.useState(paddingRelativeScreenWidth);
@@ -34,30 +37,28 @@ function SettingsModal() {
     function handleTouchEnd() {
         setdisplayHeight(paddingRelativeScreenWidth)
         if (touchStart - touchEnd < -30) {
-            setIsSettingsModal(false);
+            dispatch(toggleSettingsModal());
         } 
     }
 
     return (
-        <div className="settings-container modal-window"
+        <div className={`${styles.settingsContainer} modal-window`}
             onTouchStart={ (e) => handleTouchStart(e) }
             onTouchMove={ (e) => handleTouchMove(e) }
             onTouchEnd={ () => handleTouchEnd() }
             style={{ top: displayHeight + '%' }}
         >
-            <div className="pull-btn"/>
-            <div className="settings-head">
-                <div className="settings-title">
-                    <p className="settings-title-text">{ currentLanguage === Languages.English ? "Settings" : "Настройки" }</p>
+            <div className={styles.pullBtn}/>
+            <div className={styles.settingsHead}>
+                <div className={styles.settingsTitle}>
+                    <p className={styles.settingsTitleText}>{ currentLanguage === Languages.English ? "Settings" : "Настройки" }</p>
                 </div>
                 <SettingsCancelBtn/>
             </div>
             <СhangeLanguage/>
-            { currentLanguage === Languages.English ? 
-                <FeedbackFormEng/> : 
-                <FeedbackFormRus/> }
+            <FeedbackForm />
             <Contacts/>
-            <AgreementBtn currentLanguage={currentLanguage} />
+            <AgreementBtn />
         </div>
     )
 }

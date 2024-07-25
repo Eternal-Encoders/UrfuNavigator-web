@@ -1,17 +1,18 @@
-import { Languages } from "../../../../utils/interfaces";
-import legal from "../../../../../public/legal.pdf"
-
-import "./agreemet-btn.css";
 import { Link } from "react-router-dom";
 
-interface AgreementBtnProps {
-    currentLanguage: Languages
-}
+import { Languages } from "../../../../utils/interfaces";
+import { useAppSelector } from "../../../../store/hook";
+import { selectLang } from "../../../../features/lang/langSlice";
+import legal from "../../../../../public/legal.pdf"
 
-function AgreementBtn({ currentLanguage }: AgreementBtnProps) {
+import style from "./agreemet-btn.module.css";
+
+function AgreementBtn() {
+    const currentLanguage = useAppSelector(selectLang)
+
     return (
-        <div className="agreemet-container">
-            <Link className="agreemet-link" to={legal} target="_blanc">
+        <div className={style.agreemetContainer}>
+            <Link className={style.agreemetLink} to={legal} target="_blanc">
                 {currentLanguage === Languages.Russian ?
                     "Политика обработки персональных данных и Политика конфиденциальности":
                     "Personal Data Processing Policy and Privacy Policy"
