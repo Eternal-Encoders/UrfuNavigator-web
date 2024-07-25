@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { IGraphPoint, PointTypes } from "../../../utils/interfaces";
+import { useState } from "react";
+import { IGraphPoint } from "../../../utils/interfaces";
 import { getRenderWay } from "../../../utils/path";
 
 interface PathMapProps {
@@ -11,8 +11,8 @@ interface PathMapProps {
 
 // Заменить await'ы на Promise.All
 
-function PathMap({institute, from, to, currentFloor}: PathMapProps) {
-    const [path, setPath] = useState<{[inst: string]: {[floor: number]: IGraphPoint[][]}}>({});
+function PathMap({institute, currentFloor}: PathMapProps) {
+    const [path, _] = useState<{[inst: string]: {[floor: number]: IGraphPoint[][]}}>({});
 
     // useEffect(() => {
     //     async function getPath() {

@@ -1,11 +1,11 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IGraphPoint, IPath } from "../../utils/interfaces";
+import { createSlice } from "@reduxjs/toolkit";
+import { IPath } from "../../utils/interfaces";
 
 
-interface PathPayload {
-    from: IGraphPoint,
-    to: IGraphPoint
-}
+// interface PathPayload {
+//     from: IGraphPoint,
+//     to: IGraphPoint
+// }
 
 const initialState: IPath = {
 }
@@ -14,14 +14,6 @@ const pathSlice = createSlice({
     name: 'path',
     initialState,
     reducers: {
-        getPath: (state, action: PayloadAction<PathPayload>) => {
-            // const { from, to } = action.payload
-            // if (from.institute == to.institute) {
-            //     state[from.institute] = getShortestPath(from, to)
-            // } else {
-
-            // }
-        }
     },
     selectors: {
     }
