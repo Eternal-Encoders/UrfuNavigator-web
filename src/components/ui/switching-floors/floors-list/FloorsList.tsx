@@ -1,6 +1,6 @@
 import FloorButton from "../floor-button/FloorButton";
 
-import { floorsList } from "./floors-list-style.module.css"
+import style from "./floors-list-style.module.css"
 
 interface FloorsListProps {
     currentInst: string,
@@ -10,7 +10,7 @@ interface FloorsListProps {
 
 function FloorsList({ currentInst, firstFloor, lastFloor }: FloorsListProps) {
     return (
-        <ul className={`${floorsList} flex`}>
+        <ul className={`${style.floorsList} flex`}>
             {(() => {
                 const floorsButton = [];
                 for (let i=firstFloor; i <= lastFloor; i++) {

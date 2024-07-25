@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 
 import { InstLinks, InstColors } from "../../../../utils/const";
-import { redirectContainer } from './redirect-institute-style.module.css'
 
+import style from './redirect-institute-style.module.css'
 import NameInstitute from "../name-institute/nameInstitute";
 
 interface RedirectInstituteProps {
@@ -24,7 +24,7 @@ function RedirectInstitute({ instName, currentInst }: RedirectInstituteProps) {
     }
     
     return (
-        <div className={redirectContainer} style={currentInst !== instName ? nonActiveStyles : activeStyles}>
+        <div className={style.redirectContainer} style={currentInst !== instName ? nonActiveStyles : activeStyles}>
             { currentInst !== instName ?
                 <Link to={ link ? `/institute${link}` : "/" } className="redirect-institute">
                     <NameInstitute name={ instName } isActive={ true }/>

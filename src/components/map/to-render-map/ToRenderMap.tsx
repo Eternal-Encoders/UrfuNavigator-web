@@ -9,8 +9,8 @@ import { getAudiences, getService } from "../../../utils/translateToKonva";
 import { useMapHook } from "./MapHook";
 import { IAuditorium, IService } from "../../../utils/interfaces";
 import { selectSearchPoints } from "../../../features/pointsSearch/pointsSearchSlice";
-import { toRenderMap } from "./to-render-map-style.module.css";
 
+import style from "./to-render-map-style.module.css";
 import PathMap from "../path-map/PathMap";
 import RoutePoint from "../../ui/routePoint/RoutePoint";
 
@@ -64,7 +64,7 @@ function ToRenderMap({ instFullName }: ToRenderMapProps) {
             x={width > 1200 ? width * 0.4 : width * 0.1}
             scaleX={Math.min(height, width) / 3500}
             scaleY={Math.min(height, width) / 3500}
-            className={toRenderMap}
+            className={style.toRenderMap}
             draggable={!isTouchEnabled()}
             onDragMove={() => {}}
             dragBoundFunc={handelDragBound}
