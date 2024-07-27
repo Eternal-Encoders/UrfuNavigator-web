@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IGraphPoint, IInstitute, IMapObject, IPath, PointTypes } from "../../utils/interfaces";
 
-const urlOrigin = import.meta.env.VITE_HOST ? `https://${import.meta.env.VITE_HOST}/api` : 'https://how-to-navigate.ru:2053/api'
+console.log(import.meta.env.VITE_HOST)
+const urlOrigin = import.meta.env.VITE_HOST ? `https://${import.meta.env.VITE_HOST}` : 'https://dev.how-to-navigate.ru/api'
 
 interface IFloorReq {
     inst: string,

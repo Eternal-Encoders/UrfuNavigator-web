@@ -2,12 +2,16 @@ import { createSlice } from "@reduxjs/toolkit";
 import { IPath } from "../../utils/interfaces";
 
 
+interface PathState {
+    [institute: string]: IPath
+}
+
 // interface PathPayload {
 //     from: IGraphPoint,
 //     to: IGraphPoint
 // }
 
-const initialState: IPath = {
+const initialState: PathState = {
 }
 
 const pathSlice = createSlice({

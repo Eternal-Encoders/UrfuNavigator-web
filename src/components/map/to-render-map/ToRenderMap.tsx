@@ -77,12 +77,7 @@ function ToRenderMap({ instFullName }: ToRenderMapProps) {
                 {getAudiences(floor)}
                 {getService(services)}
                 {points.from && points.to &&    
-                    <PathMap 
-                        from={points.from} 
-                        to={points.to} 
-                        currentFloor={currentFloor} 
-                        institute={instFullName}  
-                    />
+                    <PathMap institute={instFullName} />
                 }    
                 {points.from && 
                     points.from.floor === currentFloor && 
