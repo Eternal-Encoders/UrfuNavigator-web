@@ -31,18 +31,18 @@ function SearchModal({ isStartPressed }: SearchModalProps) {
     } = useSearchUi(inputRef);
 
     return (
-        <div className={`container modal-window ${style.searchContainer}`}
+        <div className={`container modal-window ${style['search-container']}`}
             onTouchStart={ (e) => handleTouchStart(e) }
             onTouchMove={ (e) => handleTouchMove(e) }
             onTouchEnd={ () => handleTouchEnd() }
             style={{ top: displayHeight + '%', height: window.screen.height }}
         >
-            <div className={style.pullBtn} />
-            <div className={style.modalSearchInputDiv}>
+            <div className={style['pull-btn']} />
+            <div className={style['modal-search-input-div']}>
                 <img src={ searchImg } alt='Поиск'/>
                 <input type="text"
                     ref={ inputRef }
-                    className={style.pointsSearchInput}
+                    className={style['points-search-input']}
                     value={ name }
                     placeholder={ currentLanguage === Languages.English ? "Search for audiences and places" : "Поиск аудиторий и мест" }
                     onChange={ (e) => onNameChange(e) }

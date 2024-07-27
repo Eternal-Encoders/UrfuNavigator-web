@@ -15,16 +15,16 @@ function FloorButton({ currentInst, floorNumber }: FloorButtonProps) {
     const points = useAppSelector(selectSearchPoints)
     
     const className = [
-        styles.floorButton, 
-        floor === floorNumber ? styles.active: "",
+        styles['floor-button'], 
+        floor === floorNumber ? styles['active']: "",
         (points.from && points.from.floor === floorNumber) && points.from.institute === currentInst || 
             (points.to && points.to.floor === floorNumber) && points.to.institute === currentInst ? 
-            styles.onTheWay: 
+            styles['on-the-way']: 
             ""
     ];
 
     return (
-        <li className={styles.floorElement}>
+        <li className={styles['floor-element']}>
             <button 
                 className={ className.join(" ") }
                 value={ floorNumber } 

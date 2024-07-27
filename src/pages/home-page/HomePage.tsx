@@ -38,7 +38,7 @@ function HomePage() {
     }, []);
 
     return(
-        <div className={styles.containerHome} style={{ height: window.innerHeight }}>
+        <div className={styles['container-home']} style={{ height: window.innerHeight }}>
             <Helmet>
                 <title>Навигатор УрФУ</title>
                 <meta
@@ -74,8 +74,8 @@ function HomePage() {
                     })}
                 </Map>
             </YMaps>
-            <div className={styles.homeElementsDiv}>
-                <div className={styles.searchDiv}>
+            <div className={styles['home-elements-div']}>
+                <div className={styles['search-div']}>
                     <OpneSettingsBtn/>
                     <OpenSearchBtn isEnd={false} isHomePage={true}/>  
                 </div>

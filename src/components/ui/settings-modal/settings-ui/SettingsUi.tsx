@@ -42,16 +42,16 @@ function SettingsModal() {
     }
 
     return (
-        <div className={`${styles.settingsContainer} modal-window`}
+        <div className={`${styles['settings-container']} modal-window`}
             onTouchStart={ (e) => handleTouchStart(e) }
             onTouchMove={ (e) => handleTouchMove(e) }
             onTouchEnd={ () => handleTouchEnd() }
             style={{ top: displayHeight + '%' }}
         >
-            <div className={styles.pullBtn}/>
-            <div className={styles.settingsHead}>
-                <div className={styles.settingsTitle}>
-                    <p className={styles.settingsTitleText}>{ currentLanguage === Languages.English ? "Settings" : "Настройки" }</p>
+            <div className={styles['pull-btn']}/>
+            <div className={styles['settings-head']}>
+                <div className={styles['settings-title']}>
+                    <p className={styles['settings-title-text']}>{ currentLanguage === Languages.English ? "Settings" : "Настройки" }</p>
                 </div>
                 <SettingsCancelBtn/>
             </div>

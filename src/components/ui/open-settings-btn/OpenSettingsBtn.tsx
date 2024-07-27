@@ -11,7 +11,7 @@ function OpneSettingsBtn() {
     }
 
     return(
-        <button className={style.settingsBtnButton} onClick={ onSettingsBtnClick }>
+        <button className={style['settings-btn-button']} onClick={ onSettingsBtnClick }>
             <img src={ settingsImg } alt='Кнопочка настроек'/>
         </button>
     )

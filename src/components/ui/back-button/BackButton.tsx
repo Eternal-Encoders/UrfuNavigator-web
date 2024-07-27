@@ -24,7 +24,7 @@ function BackButton() {
 
     return (
         <>
-            <button onClick={ onClickHandler } className={style.backBtn}>
+            <button onClick={ onClickHandler } className={style['back-btn']}>
                 <img src={ backIcon } alt='Назад'/>
             </button>
         </>

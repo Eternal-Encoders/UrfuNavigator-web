@@ -23,7 +23,7 @@ function SearchList({ name, type, isStartPressed }: SearchListProps) {
     return (
         <>
             {searchPoints &&
-                <ul className={style.resultsList}>
+                <ul className={style['results-list']}>
                     {(() => {
                         const searchResults = [];
                         for (let i=0; i < searchPoints.length; i++) {

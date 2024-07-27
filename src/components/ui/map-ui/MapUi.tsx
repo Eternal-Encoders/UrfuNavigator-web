@@ -24,19 +24,19 @@ function MapUI({ instFullName, firstFloor, lastFloor }: MapUIProps) {
     const [isStartPressed, setIsStartPressed] = useState(false)
         
     return (
-        <div className={`container ${style.uiContainer}`}>
-            <div className={style.mapElementsDiv}>
-                <div className={style.headerDiv}>
+        <div className={`container ${style['ui-container']}`}>
+            <div className={style['map-elements-div']}>
+                <div className={style['header-div']}>
                     <OpenSearchBtn isEnd={false} setIsStartPressed={setIsStartPressed} />
                     <OpenSearchBtn isEnd={true} setIsStartPressed={setIsStartPressed} />
                     <BackButton/>
                 </div>
                 { isSearchModal && <SearchModal isStartPressed={isStartPressed} /> }
             </div>
-            <div className={style.floorListContainer}>
+            <div className={style['floor-list-container']}>
                 <FloorsList currentInst={instFullName} firstFloor={firstFloor} lastFloor={lastFloor}/>
             </div>
-            <div className={style.instituteNameDiv}>
+            <div className={style['institute-name-div']}>
                 <RedirectInstitute instName={ start ? start.institute : (end ? end.institute : instFullName) } currentInst={instFullName}/>
                 {end && start && end.institute === start.institute ? 
                     <RedirectInstitute instName={end.institute} currentInst={instFullName}/>:

@@ -13,7 +13,7 @@ function SettingsCancelBtn() {
 
     return (
         <>
-            <button onClick={ onClickHandler } className={styles.backBtn}>
+            <button onClick={ onClickHandler } className={styles['back-btn']}>
                 <img src={ backIcon } alt='Назад'/>
             </button>
         </>

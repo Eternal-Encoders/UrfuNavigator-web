@@ -64,7 +64,7 @@ function ToRenderMap({ instFullName }: ToRenderMapProps) {
             x={width > 1200 ? width * 0.4 : width * 0.1}
             scaleX={Math.min(height, width) / 3500}
             scaleY={Math.min(height, width) / 3500}
-            className={style.toRenderMap}
+            className={style['to-render-map']}
             draggable={!isTouchEnabled()}
             onDragMove={() => {}}
             dragBoundFunc={handelDragBound}

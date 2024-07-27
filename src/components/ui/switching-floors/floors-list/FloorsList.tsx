@@ -10,7 +10,7 @@ interface FloorsListProps {
 
 function FloorsList({ currentInst, firstFloor, lastFloor }: FloorsListProps) {
     return (
-        <ul className={`${style.floorsList} flex`}>
+        <ul className={`${style['floors-list']} flex`}>
             {(() => {
                 const floorsButton = [];
                 for (let i=firstFloor; i <= lastFloor; i++) {

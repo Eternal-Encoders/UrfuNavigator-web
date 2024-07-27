@@ -15,7 +15,7 @@ function NameInstitute({ name, isActive }: NameInstituteProps) {
     }
 
     return (
-        <h1 className={style.insName} style={ isActive ? nonActiveStyles : activeStyles }>{ name }</h1>
+        <h1 className={style['ins-name']} style={ isActive ? nonActiveStyles : activeStyles }>{ name }</h1>
     )
 }
 

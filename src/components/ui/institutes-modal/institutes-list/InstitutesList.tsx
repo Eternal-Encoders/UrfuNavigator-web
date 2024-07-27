@@ -17,16 +17,16 @@ function InstitutesModal({ instLink }: InstitutesModalProps) {
     } = useInstituteList()
 
     return (
-        <div className={style.institutesModal} 
+        <div className={style['institutes-modal']} 
             onTouchStart={ handleTouchStart }
             onTouchMove={ handleTouchMoveModalInstitutes }
             onTouchEnd={ handleTouchEndModalInstitutes }
             style={{ bottom: displayHeightModalInstitutes + 'px' }}
         >
-            <div className={style.pullBtn} /> 
-            <ul className={`${style.institutionsList} ${style.listReset}`}> 
+            <div className={style['pull-btn']} /> 
+            <ul className={`${style['institutions-list']} ${style['list-reset']}`}> 
                 {instLink.map(e => (
-                    <li key={ e.name } className={style.institutionsListItem}>
+                    <li key={ e.name } className={style['institutions-list-item']}>
                         <LinkToInstitute 
                             instPath={ `/institute/${e.url[0] === "/" ? e.url.slice(1): e.url}` } 
                             instName={ e.displayableName } 

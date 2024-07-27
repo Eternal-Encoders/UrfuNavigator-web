@@ -24,7 +24,7 @@ function RedirectInstitute({ instName, currentInst }: RedirectInstituteProps) {
     }
     
     return (
-        <div className={style.redirectContainer} style={currentInst !== instName ? nonActiveStyles : activeStyles}>
+        <div className={style['redirect-container']} style={currentInst !== instName ? nonActiveStyles : activeStyles}>
             { currentInst !== instName ?
                 <Link to={ link ? `/institute${link}` : "/" } className="redirect-institute">
                     <NameInstitute name={ instName } isActive={ true }/>

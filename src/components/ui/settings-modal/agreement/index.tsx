@@ -11,8 +11,8 @@ function AgreementBtn() {
     const currentLanguage = useAppSelector(selectLang)
 
     return (
-        <div className={style.agreemetContainer}>
-            <Link className={style.agreemetLink} to={legal} target="_blanc">
+        <div className={style['agreemet-container']}>
+            <Link className={style['agreemet-link']} to={legal} target="_blanc">
                 {currentLanguage === Languages.Russian ?
                     "Политика обработки персональных данных и Политика конфиденциальности":
                     "Personal Data Processing Policy and Privacy Policy"

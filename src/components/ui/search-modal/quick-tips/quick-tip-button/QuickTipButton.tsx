@@ -7,9 +7,9 @@ interface QuickTipButtonProps {
 
 function QuickTipButton({ tipIcon, tipName }: QuickTipButtonProps) {
     return (
-        <button className={style.tipBtnBtnReset}>
-            <img className={style.tipIcon} src={ tipIcon }  alt={ tipName }/>
-            <p className={style.tipName}>{ tipName }</p>
+        <button className={style['tip-btn-btn-reset']}>
+            <img className={style['tip-icon']} src={ tipIcon }  alt={ tipName }/>
+            <p className={style['tip-name']}>{ tipName }</p>
         </button>
     );
 }

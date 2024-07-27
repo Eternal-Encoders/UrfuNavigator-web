@@ -24,17 +24,17 @@ function СhangeLanguage() {
     }
 
     return (
-        <div className={style.changeLanguageContainer}>
-            <p className={style.changeLanguageTitle}>{ currentLanguage === Languages.English ? "Language" : "Язык" }</p>
-            <div className={style.changeLanguageDiv}>
+        <div className={style['change-language-container']}>
+            <p className={style['change-language-title']}>{ currentLanguage === Languages.English ? "Language" : "Язык" }</p>
+            <div className={style['change-language-div']}>
                 <button 
-                    className={ rusButton ? style.activeRussian : style.changeLanguageButton }
+                    className={ rusButton ? style['active-russian'] : style['change-language-button'] }
                     onClick={ () => onHandleClick(Languages.Russian) }
                 >
                     <p>Русский</p>
                 </button>
                 <button 
-                    className={ engButton ? style.activeEnglish : style.changeLanguageButton }
+                    className={ engButton ? style['active-english'] : style['change-language-button'] }
                     onClick={ () => onHandleClick(Languages.English) }
                 >
                     <p>English</p>

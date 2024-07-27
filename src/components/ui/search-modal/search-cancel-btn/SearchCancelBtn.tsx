@@ -21,7 +21,7 @@ function SearchCancelBtn({ name, onClick }: SearchCancelBtnProps) {
 
     return (
         <>
-            <button className={style.backBtn} onClick={ onClickHandler }>
+            <button className={style['back-btn']} onClick={ onClickHandler }>
                 <img src={ cancelBtn } alt='Назад'/>
             </button>
         </>

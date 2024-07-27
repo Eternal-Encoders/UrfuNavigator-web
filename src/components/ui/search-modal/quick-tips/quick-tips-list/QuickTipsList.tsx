@@ -39,13 +39,13 @@ function QuickTipsList({ onClick }: QuickTipsListProps) {
 
     return (
         <>
-            <p className={style.quickTipsText}>
+            <p className={style['quick-tips-text']}>
                 Быстрый поиск
             </p>
-            <ul className={`${style.quickTipsList} list-reset flex`}>
+            <ul className={`${style['quick-tips-list']} list-reset flex`}>
                 {
                     QIUCK_TIPS_LIST.map(e => (
-                        <li key={ e.tipName } className={style.quickTipsListItem} onClick={ () => onClick(e.tipName, e.tipType) }>
+                        <li key={ e.tipName } className={style['quick-tips-list-item']} onClick={ () => onClick(e.tipName, e.tipType) }>
                             <QuickTipButton tipIcon={ e.tipIcon } tipName={ currentLanguage === Languages.English ? e.tipNameEng : e.tipName }/>
                         </li>
                     ))

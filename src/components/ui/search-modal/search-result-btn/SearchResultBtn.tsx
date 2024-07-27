@@ -37,11 +37,11 @@ function SearchResultBtn({ data, isStartPressed }: SearchResultBtnProps) {
 
     return (
         <li>
-            <button className={style.searchResultBtn} onClick={ onClickHandler }>
-                <p className={style.searchResultBtnName}>{ data.names.join(', ') }</p>
-                <div className={style.searchResultAddition}>
-                    <div className={style.searchResultAdditionImg} style={{ backgroundColor: InstColors.get(data.institute) }}/>
-                    <p className={style.searchResultAdditionName}>{ data.institute }</p>
+            <button className={style['search-result-btn']} onClick={ onClickHandler }>
+                <p className={style['search-result-btn-name']}>{ data.names.join(', ') }</p>
+                <div className={style['search-result-addition']}>
+                    <div className={style['search-result-addition-img']} style={{ backgroundColor: InstColors.get(data.institute) }}/>
+                    <p className={style['search-result-addition-name']}>{ data.institute }</p>
                 </div>
             </button>
         </li>

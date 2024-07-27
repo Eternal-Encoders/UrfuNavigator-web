@@ -12,16 +12,16 @@ function Contacts() {
     const currentLanguage = useAppSelector(selectLang)
 
     return (
-        <div className={style.contactsContainer}>
-            <p className={style.contactsTitle}>{ currentLanguage === Languages.English ? "Contacts" : "Контакты" }</p>
-            <div className={style.contactsListContainer}>
-                <Link className={style.contactsLink} to="https://t.me/navigator_urfu" target="_blank">
-                    <img className={style.contactsImg} src={ telegramLogo } alt="" />
-                    <p className={style.contactsText}>TG</p>
+        <div className={style['contacts-container']}>
+            <p className={style['contacts-title']}>{ currentLanguage === Languages.English ? "Contacts" : "Контакты" }</p>
+            <div className={style['contacts-list-container']}>
+                <Link className={style['contacts-link']} to="https://t.me/navigator_urfu" target="_blank">
+                    <img className={style['contacts-img']} src={ telegramLogo } alt="" />
+                    <p className={style['contacts-text']}>TG</p>
                 </Link>
-                <Link className={style.contactsLink} to="https://vk.com/urfu_navigator" target="_blank">
-                    <img className={style.contactsImg} src={ vkLogo } alt="" />
-                    <p className={style.contactsText}>VK</p>
+                <Link className={style['contacts-link']} to="https://vk.com/urfu_navigator" target="_blank">
+                    <img className={style['contacts-img']} src={ vkLogo } alt="" />
+                    <p className={style['contacts-text']}>VK</p>
                 </Link>
             </div>
         </div>

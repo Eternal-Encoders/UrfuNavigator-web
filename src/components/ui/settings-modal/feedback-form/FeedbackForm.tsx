@@ -10,15 +10,15 @@ function FeedbackForm() {
     const currentLanguage = useAppSelector(selectLang)
 
     return (
-        <div className={style.feedbackFormContainer}>
-            <p className={style.feedbackFormTitle}>
+        <div className={style['feedback-form-container']}>
+            <p className={style['feedback-form-title']}>
                 {currentLanguage == Languages.Russian ?
                     'У вас возникли проблемы? Хотите оставить комментарий или задать вопрос? Заполните форму.':
                     'Are you having any problems with our site? Want to leave a comment or ask a question? Fill out this form!'
                 }
             </p>
             <Link 
-                className={style.feedbackFormLink}
+                className={style['feedback-form-link']}
                 to={`https://forms.yandex.ru/u/${currentLanguage == Languages.Russian ? '64d37a5b73cee73605116cb0': '6510362502848ffde0b25c51'}/`} 
                 target="_blank"
             >
