@@ -1,0 +1,40 @@
+.search-result-btn {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    padding: 8px 0;
+    border-bottom: 1px solid #EEEEEE;
+}
+
+.search-result-btn-name {
+    pointer-events: none;
+    margin: 0;
+    margin-bottom: 2px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: normal;
+    color: #3A3A3A;
+}
+
+.search-result-addition {
+    display: flex;
+    align-items: center;
+}
+
+.search-result-addition-img {
+    pointer-events: none;
+    width: 10px;
+    height: 10px;
+    -webkit-mask: url('../../../../../shared/img//ellipse.svg') no-repeat center;
+    mask: url('../../../../../shared/img//ellipse.svg') no-repeat center; 
+}
+
+.search-result-addition-name {
+    pointer-events: none;
+    margin: 0;
+    margin-left: 4px;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: normal;
+    color: #3A3A3A;
+}

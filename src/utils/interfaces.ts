@@ -27,6 +27,14 @@ export const enum WeekDay {
     Sun = 6
 }
 
+export const enum SideBarContent {
+    Institutes = "institutes",
+    Settings = "settings",
+    TypeList = "typeList",
+    PointsList = "pointsList",
+    Empty = "empty"
+}
+
 export interface ITime {
     isDayOff: boolean | null
     from: string,
@@ -146,5 +154,7 @@ export interface IInstitute {
 }
 
 export interface IPath {
-    [floor: number]: IGraphPoint[][]
+    [institute: string]: {
+        [floor: number]: IGraphPoint[][]
+    }
 }

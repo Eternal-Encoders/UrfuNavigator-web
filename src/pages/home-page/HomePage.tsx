@@ -4,15 +4,12 @@ import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
 import { Helmet } from "react-helmet-async";
 
 import { useGetInstitutesQuery } from "../../features/api/apiSlice";
-import { useAppSelector } from "../../store/hook";
-import { selectSearchModal, selectSettingsModal } from "../../features/modals/modalsSlice";
-import OpneSettingsBtn from "../../components/ui/open-settings-btn/OpenSettingsBtn";
-import InstitutesModal from "../../components/ui/institutes-modal/institutes-list/InstitutesList";
-import OpenSearchBtn from "../../components/ui/open-search-btn/OpenSearchBtn";
-import SearchModal from "../../components/ui/search-modal/search-ui/SearchUi";
-import SettingsModal from "../../components/ui/settings-modal/settings-ui/SettingsUi";
+import { useAppDispatch } from "../../store/hook";
 
 import styles from "./home-style.module.css";
+import { setContent } from "../../features/sideBar/sideBarSlice";
+import { SideBarContent } from "../../utils/interfaces";
+import SideMenu from "../../components/ui/side-bar/side-menu/SideMenu";
 
 function HomePage() {
     const navigate = useNavigate();
@@ -20,11 +17,13 @@ function HomePage() {
     const [width, setWidth] = useState(window.innerWidth);
     const [height, setHeight] = useState(window.innerHeight);
 
+
+    const dispatch = useAppDispatch()
     const { data } = useGetInstitutesQuery(undefined)
-    const isSearchModal = useAppSelector(selectSearchModal)
-    const isSettingsModal = useAppSelector(selectSettingsModal)
 
     useEffect(() => {
+        dispatch(setContent(SideBarContent.Institutes))
+
         const handleResize = () => {
             setWidth(window.innerWidth);
             setHeight(window.innerHeight);
@@ -74,15 +73,7 @@ function HomePage() {
                     })}
                 </Map>
             </YMaps>
-            <div className={styles['home-elements-div']}>
-                <div className={styles['search-div']}>
-                    <OpneSettingsBtn/>
-                    <OpenSearchBtn isEnd={false} isHomePage={true}/>  
-                </div>
-                <InstitutesModal instLink={data ? data: []} />
-                { isSearchModal && <SearchModal isStartPressed={false} /> }
-                { isSettingsModal && <SettingsModal /> }
-            </div>
+            <SideMenu />
         </div>
     )
 }

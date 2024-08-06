@@ -1,12 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { Languages } from "../../utils/interfaces";
 
 const langSlice = createSlice({
     name: 'lang',
     initialState: Languages.Russian,
     reducers: {
-        toggleLang(state) { 
-            state = state == Languages.Russian ? Languages.English: Languages.Russian
+        setLang: (_, action: PayloadAction<Languages>) => { 
+            return action.payload;
         }
     },
     selectors: {
@@ -15,7 +15,7 @@ const langSlice = createSlice({
 })
 
 export const { 
-    toggleLang 
+    setLang 
 } = langSlice.actions
 
 export const {

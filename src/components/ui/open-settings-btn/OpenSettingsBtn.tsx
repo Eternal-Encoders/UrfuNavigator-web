@@ -1,5 +1,7 @@
 import { useAppDispatch } from "../../../store/hook";
-import { toggleSettingsModal } from "../../../features/modals/modalsSlice";
+import { setContent } from "../../../features/sideBar/sideBarSlice";
+import { SideBarContent } from "../../../utils/interfaces";
+
 import settingsImg from './img/settings-btn.svg';
 import style from "./open-settings-btn-style.module.css";
 
@@ -7,7 +9,7 @@ function OpneSettingsBtn() {
     const dispatch = useAppDispatch()
 
     function onSettingsBtnClick() {
-        dispatch(toggleSettingsModal())
+        dispatch(setContent(SideBarContent.Settings))
     }
 
     return(

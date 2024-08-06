@@ -4,10 +4,20 @@ import { Helmet } from "react-helmet-async";
 import { useGetInstituteByUrlQuery } from "../../features/api/apiSlice";
 import ToRenderMap from "../../components/map/to-render-map/ToRenderMap";
 import MapUI from "../../components/ui/map-ui/MapUi";
+import { useEffect } from "react";
+import { useAppDispatch } from "../../store/hook";
+import { setContent } from "../../features/sideBar/sideBarSlice";
+import { SideBarContent } from "../../utils/interfaces";
 
 function InstitutesPage() {
+    const dispatch = useAppDispatch()
+
     const params = useParams<{intstName: string}>();
     const { data, isLoading } = useGetInstituteByUrlQuery(`/${params.intstName}`)
+
+    useEffect(() => {
+        dispatch(setContent(SideBarContent.Empty))
+    })
 
     return (
         <>

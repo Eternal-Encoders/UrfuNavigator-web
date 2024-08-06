@@ -41,7 +41,7 @@
 .open-search-btn-circle {
     width: 10px;
     height: 10px;
-    -webkit-mask: url('../../../shared/img/ellipse.svg') no-repeat center;
-    mask: url('../../../shared/img/ellipse.svg') no-repeat center; 
+    -webkit-mask: url('../../../shared//img/ellipse.svg') no-repeat center;
+    mask: url('../../../shared//img/ellipse.svg') no-repeat center; 
 }
     
