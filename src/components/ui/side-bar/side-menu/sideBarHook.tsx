@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { selectContent } from "../../../../features/sideBar/sideBarSlice";
-import { useAppSelector } from "../../../../store/hook";
+import { useEffect, useState } from "react";
+import { selectContent, selectPrevContent, setContent } from "../../../../features/sideBar/sideBarSlice";
+import { useAppDispatch, useAppSelector } from "../../../../store/hook";
 import { Languages, PointTypes, SideBarContent } from "../../../../utils/interfaces";
 
 import BackButton from "../../back-button/BackButton";
@@ -16,17 +16,29 @@ import PointsUI from "../points-windows/points-ui/PointsUI";
 import HeaderTitle from "../../header-title/HeaderTitle";
 import SettingsCancelBtn from "../settings-window/settings-cancel-btn/SettingsCancelBtn";
 
-export function useSideBarHook() {
-    const sideBarContent = useAppSelector(selectContent)
+export function useSideBarHook(
+    setPosToMin: () => void,
+    setPosToMiddle: () => void,
+    setPosToMax: () => void,
+    isNearMin: (threshold?: number) => boolean,
+    isNearMiddle: (threshold?: number) => boolean,
+    isNearMax: (threshold?: number) => boolean,
+) {
+    const sideBarContent = useAppSelector(selectContent);
+    const prevContent = useAppSelector(selectPrevContent);
+    const dispatch = useAppDispatch();
 
     const [nameFrom, setNameFrom] = useState<string | undefined>(undefined);
     const [nameTo, setNameTo] = useState<string | undefined>(undefined);
-    const [typeFrom, setTypeFrom] = useState<PointTypes | undefined>(undefined)
-    const [typeTo, setTypeTo] = useState<PointTypes | undefined>(undefined)
-
+    const [typeFrom, setTypeFrom] = useState<PointTypes | undefined>(undefined);
+    const [typeTo, setTypeTo] = useState<PointTypes | undefined>(undefined);
     const [isEnd, setIsEnd] = useState<boolean>(false);
 
-    function getBody() {
+    const MOVE_BACK_THRESHOLD = 15;
+    const MOVE_MAX_THRESHOLD = 110;
+    const MOVE_MIDDLE_THRESHOLD = 40;
+
+    function _getBody() {
         switch(sideBarContent) {
             case SideBarContent.Institutes:
                 return (<InstitutesUI />);
@@ -57,7 +69,7 @@ export function useSideBarHook() {
         }
     }
     
-    function getHeader() {
+    function _getHeader() {
         switch(sideBarContent) {
             case SideBarContent.Institutes:
                 return (
@@ -110,11 +122,47 @@ export function useSideBarHook() {
         }
     }
 
-    const sideBarHeader = getHeader()
-    const sideBarBody = getBody()
+    useEffect(() => {
+        switch (sideBarContent) {
+            case SideBarContent.TypeList:
+            case SideBarContent.PointsList:
+            case SideBarContent.Settings:
+                setPosToMax();
+                break;
+            case SideBarContent.Institutes:
+                setPosToMin();
+                break;
+        }
+    }, [sideBarContent]);
 
+    function sideTouchEndHandle() {
+        if (sideBarContent === SideBarContent.Institutes) {
+            if (isNearMiddle(MOVE_MIDDLE_THRESHOLD)) {
+                setPosToMiddle();
+            }
+        } else {
+            if (isNearMax(MOVE_MAX_THRESHOLD)) {
+                setPosToMax();
+            } else if (isNearMin(MOVE_BACK_THRESHOLD)) {
+                dispatch(setContent(prevContent));
+            }
+        }
+    }
+
+    const sideBarHeader = _getHeader();
+    const sideBarBody = _getBody();
+    const isEmpty = sideBarContent === SideBarContent.Empty;
+    const isHeadInDrawer = [
+        SideBarContent.TypeList,
+        SideBarContent.PointsList,
+        SideBarContent.Settings
+    ].indexOf(sideBarContent) !== -1;
+    
     return {
         sideBarBody,
-        sideBarHeader
+        sideBarHeader,
+        isEmpty,
+        isHeadInDrawer,
+        sideTouchEndHandle
     }
 }

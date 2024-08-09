@@ -1,7 +1,6 @@
 .contacts-container {
-    position: absolute;
-    bottom: 40px;
-    left: 20px;
+    margin-top: 20px;
+    margin-right: auto;
 }
 
 .contacts-title {

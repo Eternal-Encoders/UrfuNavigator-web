@@ -27,6 +27,11 @@ export const enum WeekDay {
     Sun = 6
 }
 
+export const enum DrawerOrient {
+    Horizontal = 'h',
+    Vertical = 'v'
+}
+
 export const enum SideBarContent {
     Institutes = "institutes",
     Settings = "settings",

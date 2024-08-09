@@ -114,6 +114,9 @@ img {
 }
 
 @media (max-width: 1200px) {
+  .container {
+    padding: 0;
+  }
   .pull-btn {
     margin-bottom: 10px;
     width: 50px;

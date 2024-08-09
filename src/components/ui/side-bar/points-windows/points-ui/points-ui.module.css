@@ -1,5 +1,6 @@
 .results-list {
     width: 100%;
-    overflow: visible auto;
+    height: 100%;
+    overflow: scroll auto;
     padding: 0 20px;
 }

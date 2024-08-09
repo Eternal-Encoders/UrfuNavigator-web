@@ -33,6 +33,7 @@
 .floor-list-container {
   z-index: 1000;
   position: absolute;
+  top: 40px;
   right: 10px;
   height: calc(100% - 180px);
   max-height: max-content;
@@ -68,9 +69,7 @@
   }
 
   .floor-list-container {
-    z-index: 1000;
-    position: absolute;
-    right: 10px;
+    top: 90px;
   }
 
   .institute-name-div {

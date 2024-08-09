@@ -9,8 +9,8 @@ function SettingsUI() {
         <>
             <СhangeLanguage/>
             <FeedbackForm />
-            <Contacts/>
             <AgreementBtn />
+            <Contacts />
         </>
     )
 }

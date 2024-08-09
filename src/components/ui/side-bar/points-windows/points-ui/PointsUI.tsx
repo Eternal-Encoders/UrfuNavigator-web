@@ -33,10 +33,19 @@ function PointsUI({
 
     const data = usePointsUIListHook(name, type);
 
+    function preventPassThrough(e: React.TouchEvent<HTMLUListElement>) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
     return (
         <>
             {data &&
-                <ul className={styles['results-list']}>
+                <ul 
+                    className={styles['results-list']}
+                    onTouchStart={preventPassThrough}
+                    onTouchMove={preventPassThrough}
+                >
                     {(() => {
                         const searchResults = [];
                         for (let i=0; i < data.length; i++) {

@@ -6,7 +6,6 @@
     padding: 0;
     align-items: center;
     border-radius: 0px;
-    background: #FCFCFC;
 }
 
 .institutions-list {
@@ -24,11 +23,9 @@
     grid-template-columns: 25% 25% 25% 25%;
 }
 
-/* @media (max-width: 1200px){
-    .institutions-list {
-        grid-template-columns: 20% 20% 20% 20% 20%;
-    }
-} */
+@media (max-width: 1200px) {
+    
+}
 
 @media (max-width: 460px) {
     .institutions-list {

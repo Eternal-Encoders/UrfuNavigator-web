@@ -42,8 +42,11 @@ const QIUCK_TIPS_LIST = [
     { tipType: PointTypes.Dinning, tipName: "Столовая", tipNameEng: "Canteen", tipIcon: canteen },
 ];
 
+const PHONE_BREAKPOINT = 1200;
+
 export { 
     InstColors, 
     InstLinks,
-    QIUCK_TIPS_LIST
+    QIUCK_TIPS_LIST,
+    PHONE_BREAKPOINT
 }
