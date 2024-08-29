@@ -94,6 +94,16 @@ export const apiSlice = createApi({
                 },
                 method: 'GET'
             })
+        }),
+        searchPoints: build.query<IGraphPoint[], IByNameReq>({
+            query: ({ name, length }) => ({
+                url: '/search',
+                params: {
+                    name: name,
+                    length: length
+                  },
+                method: 'GET',
+            })
         })
     })
 })
@@ -105,5 +115,6 @@ export const {
     useGetPointsByTypeQuery,
     useGetPointsByNameQuery,
     useGetPointByIdQuery,
-    useGetPathQuery
+    useGetPathQuery,
+    useSearchPointsQuery
  } = apiSlice

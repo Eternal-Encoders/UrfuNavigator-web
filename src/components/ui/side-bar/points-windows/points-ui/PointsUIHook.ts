@@ -1,4 +1,4 @@
-import { useGetPointsByNameQuery, useGetPointsByTypeQuery } from "../../../../../features/api/apiSlice";
+import { useSearchPointsQuery, useGetPointsByTypeQuery } from "../../../../../features/api/apiSlice";
 import { IGraphPoint, PointTypes } from "../../../../../utils/interfaces";
 
 export function usePointsUIListHook(name: string | undefined, type: PointTypes | undefined) {
@@ -10,7 +10,7 @@ export function usePointsUIListHook(name: string | undefined, type: PointTypes |
         });
         res = data;
     } else {
-        const { data } = useGetPointsByNameQuery({
+        const { data } = useSearchPointsQuery({
             name: name ? name : '',
             length: 40
         });

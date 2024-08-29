@@ -10,6 +10,7 @@
   height: 100%;
   background: #FCFCFC;
   box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.10);
+  animation: new-anim 1s ease-in-out;
 }
 
 .side-menu-header {
@@ -34,6 +35,17 @@
   align-items: center;
   border-radius: 0px;
   background-color: #FCFCFC;
+}
+
+@keyframes new-anim {
+	from {
+		transform: translateX(-100%);
+		opacity: 0;
+	}
+	to {
+		transform: translateX(0);
+		opacity: 1;	
+	}
 }
 
 @media (max-width: 1200px) {
