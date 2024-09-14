@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { selectContent, selectPrevContent, setContent } from "../../../../features/sideBar/sideBarSlice";
 import { useAppDispatch, useAppSelector } from "../../../../store/hook";
-import { Languages, PointTypes, SideBarContent } from "../../../../utils/interfaces";
+import { PointTypes, SideBarContent } from "../../../../utils/interfaces";
 
+import { useTranslation } from "react-i18next";
 import BackButton from "../../back-button/BackButton";
+import HeaderTitle from "../../header-title/HeaderTitle";
 import OpenSearchBtn from "../../open-search-btn/OpenSearchBtn";
 import OpneSettingsBtn from "../../open-settings-btn/OpenSettingsBtn";
+import SearchCancel from "../../search-cancel/SearchCancel";
+import SearchField from "../../search-field/SearchField";
 import InstitutesUI from "../institutes-window/institutes-list/InstitutesUI";
+import PointsUI from "../points-windows/points-ui/PointsUI";
+import SettingsCancelBtn from "../settings-window/settings-cancel-btn/SettingsCancelBtn";
 import SettingsUI from "../settings-window/settings-ui/SettingsUi";
 import TypesUi from "../types-window/types-ui/TypesUi";
-import searchImg from "./img/seacrh-img.svg"
-import SearchField from "../../search-field/SearchField";
-import SearchCancel from "../../search-cancel/SearchCancel";
-import PointsUI from "../points-windows/points-ui/PointsUI";
-import HeaderTitle from "../../header-title/HeaderTitle";
-import SettingsCancelBtn from "../settings-window/settings-cancel-btn/SettingsCancelBtn";
+import searchImg from "./img/seacrh-img.svg";
 
 export function useSideBarHook(
     setPosToMin: () => void,
@@ -33,6 +34,7 @@ export function useSideBarHook(
     const [typeFrom, setTypeFrom] = useState<PointTypes | undefined>(undefined);
     const [typeTo, setTypeTo] = useState<PointTypes | undefined>(undefined);
     const [isEnd, setIsEnd] = useState<boolean>(false);
+    const {t} = useTranslation();
 
     const MOVE_BACK_THRESHOLD = 15;
     const MOVE_MAX_THRESHOLD = 110;
@@ -104,10 +106,7 @@ export function useSideBarHook(
             case SideBarContent.Settings:
                 return (
                     <>
-                        <HeaderTitle text={{
-                            [Languages.Russian]: 'Настройки',
-                            [Languages.English]: 'Settings'
-                        }} />
+                        <HeaderTitle text={t('Settings')} />
                         <SettingsCancelBtn />
                     </>
                 );

@@ -1,8 +1,8 @@
-import { selectLang } from '../../../features/lang/langSlice';
+import { useTranslation } from 'react-i18next';
 import { setContentNoHistory } from '../../../features/sideBar/sideBarSlice';
-import { useAppDispatch, useAppSelector } from '../../../store/hook';
-import { Languages, SideBarContent } from '../../../utils/interfaces';
-import styles from './search-field.module.css'
+import { useAppDispatch } from '../../../store/hook';
+import { SideBarContent } from '../../../utils/interfaces';
+import styles from './search-field.module.css';
 
 interface SearchFieldProps {
     nameFrom: string | undefined,
@@ -20,7 +20,7 @@ function SearchField({
         isEnd
     }: SearchFieldProps) {
     const dispatch = useAppDispatch();
-    const currentLanguage = useAppSelector(selectLang);
+    const {t} = useTranslation();
 
     const name = isEnd ? nameTo : nameFrom;
     const setName = isEnd ? setNameTo : setNameFrom;
@@ -40,7 +40,7 @@ function SearchField({
             <input type="text"
                 className={styles['points-search-input']}
                 value={ name }
-                placeholder={ currentLanguage === Languages.English ? "Search for audiences and places" : "Поиск аудиторий и мест" }
+                placeholder={ t('SearchForAudiencesAndPlaces') }
                 onChange={ (e) => nameCahngehandler(e) }
                 autoFocus
             />

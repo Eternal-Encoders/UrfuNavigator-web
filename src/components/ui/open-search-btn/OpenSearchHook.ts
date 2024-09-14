@@ -1,9 +1,9 @@
-import { selectLang } from "../../../features/lang/langSlice";
+import { useTranslation } from "react-i18next";
 import { selectSearchPoints } from "../../../features/pointsSearch/pointsSearchSlice";
 import { setContent } from "../../../features/sideBar/sideBarSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hook";
 import { InstColors } from "../../../utils/const";
-import { Languages, SideBarContent } from "../../../utils/interfaces";
+import { SideBarContent } from "../../../utils/interfaces";
 
 export function useOpenSearchHook(
         isEnd: boolean,
@@ -11,19 +11,19 @@ export function useOpenSearchHook(
         setIsEnd: (isEnd: boolean) => void
     ) {
     const dispatch = useAppDispatch()
-    const currentLanguage = useAppSelector(selectLang)
     const points = useAppSelector(selectSearchPoints)
+    const {t} = useTranslation();
 
     const currentPoint = isEnd ? points.to: points.from;
     const color = currentPoint ? InstColors.get(currentPoint.institute) : "#CCCCCC";
 
     let text = ''
     if (isHomePage) {
-        text = currentLanguage === Languages.English ? "Search for audiences and places": "Поиск аудиторий и мест"
+        text = t('SearchForAudiencesAndPlaces')
     } else if (isEnd) {
-        text = currentLanguage === Languages.English ? "To": "Куда"
+        text = t('To')
     } else {
-        text = currentLanguage === Languages.English ? "From": "Откуда"
+        text = t('From')
     }
 
     function onClickHandler() {

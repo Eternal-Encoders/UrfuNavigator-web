@@ -1,3 +1,8 @@
+export interface Ilngs {
+    en: 'English',
+    ru: 'Русский'
+}
+
 export const enum PointTypes {
     Corridor= "corridor",
     Auditorium = "auditorium",

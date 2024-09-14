@@ -1,7 +1,7 @@
-import { selectLang } from "../../../../../features/lang/langSlice";
+import { useTranslation } from "react-i18next";
 import { setContentNoHistory } from "../../../../../features/sideBar/sideBarSlice";
-import { useAppDispatch, useAppSelector } from "../../../../../store/hook";
-import { Languages, PointTypes, SideBarContent } from "../../../../../utils/interfaces";
+import { useAppDispatch } from "../../../../../store/hook";
+import { PointTypes, SideBarContent } from "../../../../../utils/interfaces";
 import style from "./types-btn-style.module.css";
 
 interface TypesButtonProps {
@@ -22,9 +22,9 @@ function TypesButton({
     setType
 }: TypesButtonProps) {
     const dispatch = useAppDispatch()
-    const currentLanguage = useAppSelector(selectLang);
+    const {i18n} = useTranslation();
 
-    const name = currentLanguage === Languages.English ? tipNameEng : tipName
+    const name = i18n.language === 'en' ? tipNameEng : tipName
 
     function clickHandle() {
         setName(name);
