@@ -1,9 +1,9 @@
-name: Stable Image
+name: Latest Image
 
 on:
     push:
         branches:
-          - main
+          - release
 
 jobs:
     build_and_publish:
@@ -14,4 +14,4 @@ jobs:
               run: |
                 docker login --username Roaoch --password ${{ secrets.PACKAGER }} ghcr.io
                 docker build . --tag ghcr.io/eternal-encoders/urfunavigator-web:latest
-                docker push ghcr.io/eternal-encoders/urfunavigator-web:stable
+                docker push ghcr.io/eternal-encoders/urfunavigator-web:latest
