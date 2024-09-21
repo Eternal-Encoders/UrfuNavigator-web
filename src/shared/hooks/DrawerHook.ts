@@ -1,5 +1,5 @@
-import { TouchEvent, TouchList, useState } from "react"
-import { DrawerOrient } from "../../utils/interfaces";
+import { TouchEvent, TouchList, useState } from 'react';
+import { DrawerOrient } from '../../utils/interfaces';
 
 
 function touchesToPos(touches: TouchList, orient: DrawerOrient): number {
@@ -7,12 +7,12 @@ function touchesToPos(touches: TouchList, orient: DrawerOrient): number {
     
     for (let i=0; i < touches.length; i++) {
         switch (orient) {
-            case DrawerOrient.Horizontal:
-                sumOf += touches[i].clientX;
-                break;
-            case DrawerOrient.Vertical:
-                sumOf += touches[i].clientY;
-                break;
+        case DrawerOrient.Horizontal:
+            sumOf += touches[i].clientX;
+            break;
+        case DrawerOrient.Vertical:
+            sumOf += touches[i].clientY;
+            break;
         }        
     }
 
@@ -22,10 +22,10 @@ function touchesToPos(touches: TouchList, orient: DrawerOrient): number {
 function translatePart(num: number, orient: DrawerOrient) {
     if (num > 0 && num <= 1) {
         switch (orient) {
-            case DrawerOrient.Horizontal:
-                return window.innerWidth * num;
-            case DrawerOrient.Vertical:
-                return window.innerHeight * num;
+        case DrawerOrient.Horizontal:
+            return window.innerWidth * num;
+        case DrawerOrient.Vertical:
+            return window.innerHeight * num;
         }
     }
     return num;
@@ -37,6 +37,7 @@ export function useDrawer(
     orient: DrawerOrient
 ) {
     initialPosition = translatePart(initialPosition, orient);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     breakePoints = breakePoints.map((e) => translatePart(e, orient));
     

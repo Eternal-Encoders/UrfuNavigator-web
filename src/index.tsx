@@ -7,12 +7,12 @@ import './shared/config/i18n/i18n.ts';
 import store from './store';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    {/* В будущем fallback заменить на loader/skeleton */}
-    <Suspense fallback="">
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </Suspense>
-  </React.StrictMode>
+    <React.StrictMode>
+        {/* В будущем fallback заменить на loader/skeleton */}
+        <Suspense fallback="">
+            <Provider store={store}>
+                <App />
+            </Provider>
+        </Suspense>
+    </React.StrictMode>
 );

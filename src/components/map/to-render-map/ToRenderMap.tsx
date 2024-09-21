@@ -1,18 +1,18 @@
-import { useRef } from "react";
-import { Layer, Stage } from "react-konva";
-import Konva from "konva";
+import Konva from 'konva';
+import { useRef } from 'react';
+import { Layer, Stage } from 'react-konva';
 
-import { useAppSelector } from "../../../store/hook";
-import { selectFloor } from "../../../features/floor/floorSlice";
-import { useGetFloorQuery } from "../../../features/api/apiSlice";
-import { getAudiences, getService } from "../../../utils/translateToKonva";
-import { useMapHook } from "./MapHook";
-import { IAuditorium, IService } from "../../../utils/interfaces";
-import { selectSearchPoints } from "../../../features/pointsSearch/pointsSearchSlice";
+import { useGetFloorQuery } from '../../../features/api/apiSlice';
+import { selectFloor } from '../../../features/floor/floorSlice';
+import { selectSearchPoints } from '../../../features/pointsSearch/pointsSearchSlice';
+import { useAppSelector } from '../../../store/hook';
+import { IAuditorium, IService } from '../../../utils/interfaces';
+import { getAudiences, getService } from '../../../utils/translateToKonva';
+import { useMapHook } from './MapHook';
 
-import style from "./to-render-map-style.module.css";
-import PathMap from "../path-map/PathMap";
-import RoutePoint from "../../ui/routePoint/RoutePoint";
+import RoutePoint from '../../../widgets/routePoint/RoutePoint';
+import PathMap from '../path-map/PathMap';
+import style from './to-render-map-style.module.css';
 
 
 interface ToRenderMapProps {

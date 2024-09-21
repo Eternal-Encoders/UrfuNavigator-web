@@ -1,5 +1,5 @@
-import Konva from "konva";
-import { RefObject, useEffect, useState } from "react";
+import Konva from 'konva';
+import { RefObject, useEffect, useState } from 'react';
 
 interface Point {
     x: number,
@@ -44,18 +44,18 @@ export function useMapHook({ mapSize, stageRef }: MapHookProps) {
     }, []);
     
     function getDistance(p1: Point, p2: Point) {
-      return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
     }
     
     function getCenter(p1: Point, p2: Point) {
-      return {
-        x: (p1.x + p2.x) / 2,
-        y: (p1.y + p2.y) / 2,
-      };
+        return {
+            x: (p1.x + p2.x) / 2,
+            y: (p1.y + p2.y) / 2,
+        };
     }
     
     function isTouchEnabled() { 
-      return ( 'ontouchstart' in window ) ||  
+        return ( 'ontouchstart' in window ) ||  
              ( navigator.maxTouchPoints > 0 ); 
     } 
     
@@ -163,7 +163,13 @@ export function useMapHook({ mapSize, stageRef }: MapHookProps) {
                     y: (pointerPos.y - stage.y()) / oldScale,
                 };
 
-                const newScale = clamp(event.evt.deltaY < 0 ? oldScale * SCALE_BY : oldScale / SCALE_BY, MIN_SCALE, MAX_SCALE);
+                const newScale = 
+                    clamp(event.evt.deltaY < 0 
+                        ? 
+                        oldScale * SCALE_BY 
+                        : 
+                        oldScale / SCALE_BY, MIN_SCALE, MAX_SCALE);
+
                 stage.scale({ x: newScale, y: newScale });
 
                 const newPos = {

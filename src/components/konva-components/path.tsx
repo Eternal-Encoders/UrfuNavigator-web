@@ -1,4 +1,4 @@
-import { Line } from "react-konva";
+import { Line } from 'react-konva';
 
 interface PathProps {
     points: number[]

@@ -1,7 +1,7 @@
-/* eslint-disable no-unused-vars */
+ 
 import { ButtonHTMLAttributes, FC } from 'react';
 import { classNames } from '../../lib/classNames/classNames';
-import cls from './Button.module.css';
+import cls from './Button.module.scss';
 
 interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;

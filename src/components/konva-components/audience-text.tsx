@@ -1,12 +1,12 @@
-import React from "react";
-import { Text } from "react-konva";
+import React from 'react';
+import { Text } from 'react-konva';
 
 interface AudienceTextProps {
     x: number,
     y: number,
     text: string,
-    alignX: "LEFT" | "CENTER" | "RIGHT" | "JUSTIFIED" | undefined,
-    alignY: "CENTER" | "TOP" | "BOTTOM" | undefined
+    alignX: 'LEFT' | 'CENTER' | 'RIGHT' | 'JUSTIFIED' | undefined,
+    alignY: 'CENTER' | 'TOP' | 'BOTTOM' | undefined
 }
 
 function AudienceText({text, x, y, alignX, alignY}: AudienceTextProps) {

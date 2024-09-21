@@ -1,9 +1,9 @@
-import { configureStore } from "@reduxjs/toolkit";
-import { apiSlice } from "../features/api/apiSlice";
-import floorSlice from "../features/floor/floorSlice";
-import pathSlice from "../features/path/pathSlice";
-import pointsSearchSlice from "../features/pointsSearch/pointsSearchSlice";
-import sideBarSlice from "../features/sideBar/sideBarSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import { apiSlice } from '../features/api/apiSlice';
+import floorSlice from '../features/floor/floorSlice';
+import pathSlice from '../features/path/pathSlice';
+import pointsSearchSlice from '../features/pointsSearch/pointsSearchSlice';
+import sideBarSlice from '../features/sideBar/sideBarSlice';
 
 const store = configureStore({
     reducer: {

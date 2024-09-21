@@ -8,5 +8,17 @@
   "AreYouHavingAnyProblemsWithOurSite": "У вас возникли проблемы? Хотите оставить комментарий или задать вопрос? Заполните форму.",
   "FeedbackForm": "Форма обратной связи",
   "PersonalDataProcessingPolicyAndPrivacyPolicy": "Политика обработки персональных данных и Политика конфиденциальности",
-  "Contacts": "Контакты"
+  "Contacts": "Контакты",
+  "WC (W)": "Санузел (Ж)",
+  "WC (M)": "Санузел (М)",
+  "Cafe": "Кафе",
+  "Vending Machine": "Вендинг",
+  "Coworking": "Коворкинг",
+  "ATM": "Банкомат",
+  "Cloakroom": "Гардероб",
+  "Public Printer": "Печать",
+  "Head Office": "Деканат",
+  "Student Union": "Союз студентов",
+  "Canteen": "Столовая",
+  "QuickSearch": "Быстрый поиск"
 }

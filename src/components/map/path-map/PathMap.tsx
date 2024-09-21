@@ -1,5 +1,5 @@
-import { getRenderWay } from "../../../utils/path";
-import { usePathMap } from "./PathMapHook";
+import { getRenderWay } from '../../../utils/path';
+import { usePathMap } from './PathMapHook';
 
 interface PathMapProps {
     institute: string
@@ -14,7 +14,7 @@ function PathMap({ institute }: PathMapProps) {
                 getRenderWay(path[institute][currentFloor])
             }
         </>
-   )
+    )
 }
 
 export default PathMap;

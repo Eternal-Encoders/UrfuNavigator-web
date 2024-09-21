@@ -1,0 +1,17 @@
+.MiniButton {
+    width: 40px; 
+    height: 40px;
+    border-radius: 6px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.painted {
+    background: #EEE;
+}
+
+.clear {
+    background: none;
+}

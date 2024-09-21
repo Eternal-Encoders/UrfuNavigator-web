@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { IPath } from "../../utils/interfaces";
+import { createSlice } from '@reduxjs/toolkit';
+import { IPath } from '../../utils/interfaces';
 
 
 interface PathState {
@@ -23,11 +23,14 @@ const pathSlice = createSlice({
     }
 })
 
+// eslint-disable-next-line no-empty-pattern
 export const { 
-
+    
 } = pathSlice.actions
 
+// eslint-disable-next-line no-empty-pattern
 export const {
+    
 } = pathSlice.selectors
 
 export default pathSlice.reducer

@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { IGraphPoint } from "../../utils/interfaces";
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { IGraphPoint } from '../../utils/interfaces';
 
 interface IPointsSearch {
     from?: IGraphPoint, 
@@ -25,6 +25,7 @@ const pointsSearchSlice = createSlice({
         },
         setPoints: (state, action: PayloadAction<IPointsSearch>) => {
             const points = action.payload
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             state.to = points.to,
             state.from = points.from
         }

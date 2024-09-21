@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SideBarContent } from "../../utils/interfaces";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { SideBarContent } from '../../utils/interfaces';
 
 
 const initialState = {

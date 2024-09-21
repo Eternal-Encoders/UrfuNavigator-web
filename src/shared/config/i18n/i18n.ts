@@ -9,9 +9,9 @@ i18n
     .use(LanguageDetector)
     .use(Backend)
     .init({
+        supportedLngs: ['ru', 'en'],
         fallbackLng: 'ru',
-        debug: false,
-
+        debug: import.meta.env.MODE === 'development',
         interpolation: {
             escapeValue: false,
         },
