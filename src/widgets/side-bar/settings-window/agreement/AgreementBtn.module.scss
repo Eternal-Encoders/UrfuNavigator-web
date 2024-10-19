@@ -1,0 +1,18 @@
+.AgreementContainer {
+    width: 100%;
+}
+
+.agreement-link {
+    display: flex;
+    width: 100%;
+    padding: 16px 0;
+    justify-content: center;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    color: #6D6D6D;
+    border-radius: 12px;
+    background: #EEE;
+    box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
+}

@@ -1,0 +1,21 @@
+.Button {
+    cursor: pointer;
+    width: 50%;
+    font-family: Roboto, sans-serif;
+    color: #6D6D6D;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+}
+
+.active-russian {
+    color: #EEE;
+    border-radius: 12px;
+    background: #0039A6;
+}
+
+.active-english {
+    color: #EEE;
+    border-radius: 12px;
+    background: #CF142B;
+}

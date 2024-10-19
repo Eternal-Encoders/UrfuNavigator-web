@@ -1,7 +1,11 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { IGraphPoint, IInstitute, IMapObject, IPath, PointTypes } from "../../utils/interfaces";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { IGraphPoint, IInstitute, IMapObject, IPath, PointTypes } from '../../utils/interfaces';
 
-const urlOrigin = import.meta.env.VITE_HOST ? `https://${import.meta.env.VITE_HOST}` : 'https://dev.how-to-navigate.ru/api'
+const urlOrigin = import.meta.env.VITE_HOST 
+    ? 
+    `https://${import.meta.env.VITE_HOST}` 
+    : 
+    'https://dev.how-to-navigate.ru/api'
 
 interface IFloorReq {
     inst: string,
@@ -67,23 +71,23 @@ export const apiSlice = createApi({
             })
         }),
         getPointsByName: build.query<IGraphPoint[], IByNameReq>({
-          query: ({ name, length }) => ({
-              url: '/points',
-              params: {
-                name: name,
-                length: length
-              },
-              method: 'GET',
-          })
+            query: ({ name, length }) => ({
+                url: '/points',
+                params: {
+                    name: name,
+                    length: length
+                },
+                method: 'GET',
+            })
         }),
         getPointById: build.query<IGraphPoint, string>({
-          query: (id) => ({
-              url: '/point',
-              params: {
-                id: id
-              },
-              method: 'GET',
-          })
+            query: (id) => ({
+                url: '/point',
+                params: {
+                    id: id
+                },
+                method: 'GET',
+            })
         }),
         getPath: build.query<IPath, IPathReq>({
             query: ({ from, to }) => ({
@@ -101,7 +105,7 @@ export const apiSlice = createApi({
                 params: {
                     name: name,
                     length: length
-                  },
+                },
                 method: 'GET',
             })
         })
@@ -117,4 +121,4 @@ export const {
     useGetPointByIdQuery,
     useGetPathQuery,
     useSearchPointsQuery
- } = apiSlice
+} = apiSlice

@@ -1,20 +1,26 @@
+ 
+export interface Ilngs {
+    en: 'English',
+    ru: 'Русский'
+}
+
 export const enum PointTypes {
-    Corridor= "corridor",
-    Auditorium = "auditorium",
-    Dinning = "dinning",
-    Exit = "exit",
-    Stair = "stair",
-    ToiletM = "toilet-m",
-    ToiletW = "toilet-w",
-    Cafe = "cafe",
-    Vending = "vending",
-    Coworking = "coworking",
-    Atm = "atm",
-    Wardrobe = "wardrobe",
-    Print = "print",
-    Deanery = "deanery",
-    Students = "students",
-    Other = "other"
+    Corridor= 'corridor',
+    Auditorium = 'auditorium',
+    Dinning = 'dinning',
+    Exit = 'exit',
+    Stair = 'stair',
+    ToiletM = 'toilet-m',
+    ToiletW = 'toilet-w',
+    Cafe = 'cafe',
+    Vending = 'vending',
+    Coworking = 'coworking',
+    Atm = 'atm',
+    Wardrobe = 'wardrobe',
+    Print = 'print',
+    Deanery = 'deanery',
+    Students = 'students',
+    Other = 'other'
 }
 
 export const enum WeekDay {
@@ -33,11 +39,11 @@ export const enum DrawerOrient {
 }
 
 export const enum SideBarContent {
-    Institutes = "institutes",
-    Settings = "settings",
-    TypeList = "typeList",
-    PointsList = "pointsList",
-    Empty = "empty"
+    Institutes = 'institutes',
+    Settings = 'settings',
+    TypeList = 'typeList',
+    PointsList = 'pointsList',
+    Empty = 'empty'
 }
 
 export interface ITime {
@@ -57,27 +63,27 @@ export type IWeek = [
 ];
 
 export const PointTranslation = {
-    [PointTypes.Corridor]: "Коридор",
-    [PointTypes.Auditorium]: "Аудитория",
-    [PointTypes.Dinning]: "Столовая",
-    [PointTypes.Exit]: "Вход/Выход",
-    [PointTypes.Stair]: "Лустница",
-    [PointTypes.ToiletM]: "Туалет (М)",
-    [PointTypes.ToiletW]: "Туалет (Ж)",
-    [PointTypes.Cafe]: "Кафе",
-    [PointTypes.Vending]: "Вендинг",
-    [PointTypes.Coworking]: "Коворкинг",
-    [PointTypes.Atm]: "Банкомат",
-    [PointTypes.Wardrobe]: "Гардероб",
-    [PointTypes.Print]: "Печать",
-    [PointTypes.Deanery]: "Деканат",
-    [PointTypes.Students]: "Союз Студентов",
-    [PointTypes.Other]: "Другое..."
+    [PointTypes.Corridor]: 'Коридор',
+    [PointTypes.Auditorium]: 'Аудитория',
+    [PointTypes.Dinning]: 'Столовая',
+    [PointTypes.Exit]: 'Вход/Выход',
+    [PointTypes.Stair]: 'Лустница',
+    [PointTypes.ToiletM]: 'Туалет (М)',
+    [PointTypes.ToiletW]: 'Туалет (Ж)',
+    [PointTypes.Cafe]: 'Кафе',
+    [PointTypes.Vending]: 'Вендинг',
+    [PointTypes.Coworking]: 'Коворкинг',
+    [PointTypes.Atm]: 'Банкомат',
+    [PointTypes.Wardrobe]: 'Гардероб',
+    [PointTypes.Print]: 'Печать',
+    [PointTypes.Deanery]: 'Деканат',
+    [PointTypes.Students]: 'Союз Студентов',
+    [PointTypes.Other]: 'Другое...'
 };
 
 export const enum Languages {
-    English = "english",
-    Russian = "russian"
+    English = 'english',
+    Russian = 'russian'
 }
 
 export interface IAuditoriumDoors {
@@ -89,12 +95,12 @@ export interface IAuditoriumDoors {
 }
 
 export interface IAuditoriumChild {
-    type: "text" | "icon",
+    type: 'text' | 'icon',
     x: number,
     y: number,
     identifier: string,
-    alignX: "LEFT" | "CENTER" | "RIGHT" | "JUSTIFIED" | "",
-    alignY: "CENTER" | "TOP" | "BOTTOM" | ""
+    alignX: 'LEFT' | 'CENTER' | 'RIGHT' | 'JUSTIFIED' | '',
+    alignY: 'CENTER' | 'TOP' | 'BOTTOM' | ''
   }
   
 export interface IAuditorium {

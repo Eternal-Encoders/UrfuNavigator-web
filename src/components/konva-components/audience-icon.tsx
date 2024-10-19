@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Image } from "react-konva";
-import useImage from "use-image";
-import nullSvg from "./img/null.svg";
+import React, { useEffect, useState } from 'react';
+import { Image } from 'react-konva';
+import useImage from 'use-image';
+import nullSvg from './img/null.svg';
 
 interface AudienceIconProps {
     imgName: string,

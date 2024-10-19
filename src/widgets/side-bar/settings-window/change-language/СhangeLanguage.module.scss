@@ -1,0 +1,50 @@
+.ChangeLanguageContainer {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.change-language-title {
+    margin: 0;
+    margin-bottom: 10px;
+    font-family: Roboto, sans-serif;;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6D6D6D;
+}
+
+.change-language-div {
+    border-radius: 12px;
+    background: #EEE;
+    box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
+}
+
+.change-language-button {
+    width: 50%;
+    font-family: Roboto, sans-serif;;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6D6D6D;
+    transition: all 0.3s ease-in-out;
+}
+
+.active-russian {
+    width: 50%;
+    font-family: Roboto, sans-serif;;
+    font-size: 14px;
+    font-weight: 500;
+    color: #EEE;
+    border-radius: 12px;
+    background: #0039A6;
+    transition: all 0.3s ease-in-out;
+}
+
+.active-english {
+    width: 50%;
+    font-family: Roboto, sans-serif;;
+    font-size: 14px;
+    font-weight: 500;
+    color: #EEE;
+    border-radius: 12px;
+    background: #CF142B;
+    transition: all 0.3s ease-in-out;
+}

@@ -1,0 +1,30 @@
+.InstitutesModal {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0;
+    align-items: center;
+    border-radius: 0;
+}
+
+.institutions-list {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+}
+
+.institutions-list-item {
+    display: flex;
+    justify-content: center;
+}
+
+@media (width <= 1200px) {
+    
+}
+
+@media (width <= 460px) {
+    .institutions-list {
+        grid-template-columns: 25% 25% 25% 25%;
+    }
+}

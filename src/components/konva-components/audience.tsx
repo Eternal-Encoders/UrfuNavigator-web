@@ -1,5 +1,5 @@
-import React from "react";
-import { Rect, Group } from "react-konva";
+import React from 'react';
+import { Group, Rect } from 'react-konva';
 
 interface AudienceProps {
     x: number,
@@ -25,8 +25,8 @@ function Audience({
             <Rect 
                 width={width} 
                 height={height} 
-                fill={fill ? fill: ""}
-                stroke={stroke ? stroke: ""}
+                fill={fill ? fill: ''}
+                stroke={stroke ? stroke: ''}
                 strokeWidth={stroke ? 5: 0}
             />
             {children}

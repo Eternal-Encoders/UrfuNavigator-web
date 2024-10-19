@@ -1,8 +1,8 @@
-import { useGetPathQuery } from "../../../features/api/apiSlice";
-import { selectFloor } from "../../../features/floor/floorSlice"
-import { selectSearchPoints } from "../../../features/pointsSearch/pointsSearchSlice"
-import { useAppSelector } from "../../../store/hook"
-import { IPath } from "../../../utils/interfaces";
+import { useGetPathQuery } from '../../../features/api/apiSlice';
+import { selectFloor } from '../../../features/floor/floorSlice'
+import { selectSearchPoints } from '../../../features/pointsSearch/pointsSearchSlice'
+import { useAppSelector } from '../../../store/hook'
+import { IPath } from '../../../utils/interfaces';
 
 export function usePathMap() {
     const points = useAppSelector(selectSearchPoints);
@@ -17,7 +17,6 @@ export function usePathMap() {
         });
         path = data;
     }
-    
 
 
     return {

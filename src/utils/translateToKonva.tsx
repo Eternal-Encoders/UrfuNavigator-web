@@ -1,26 +1,31 @@
-import { Line, Path } from "react-konva";
-import { Audience, AudienceIcon, AudienceText } from "../components/konva-components"
-import { IAuditorium, IService } from "./interfaces";
+import { Line, Path } from 'react-konva';
+import { Audience, AudienceIcon, AudienceText } from '../components/konva-components';
+import { IAuditorium, IService } from './interfaces';
 
 function getAudiences(audiences: IAuditorium[]): React.ReactNode[] {
     return audiences.map((auditorium) => {
         const children = auditorium.children.map((child, index) => {
             switch (child.type) {
-                case "icon":
-                    return (
-                        <AudienceIcon key={`${child.identifier}${index}`} x={child.x} y={child.y} imgName={child.identifier} />
-                    );
-                case "text":
-                    return (
-                        <AudienceText 
-                            key={`${child.identifier}${index}`} 
-                            x={child.x} 
-                            y={child.y} 
-                            text={child.identifier}
-                            alignX={child.alignX === "" ? undefined : child.alignX}
-                            alignY={child.alignY === "" ? undefined : child.alignY}
-                        />
-                    );
+            case 'icon':
+                return (
+                    <AudienceIcon 
+                        key={`${child.identifier}${index}`} 
+                        x={child.x} 
+                        y={child.y} 
+                        imgName={child.identifier} 
+                    />
+                );
+            case 'text':
+                return (
+                    <AudienceText 
+                        key={`${child.identifier}${index}`} 
+                        x={child.x} 
+                        y={child.y} 
+                        text={child.identifier}
+                        alignX={child.alignX === '' ? undefined : child.alignX}
+                        alignY={child.alignY === '' ? undefined : child.alignY}
+                    />
+                );
             }
         });
         const doors = auditorium.doors.map((door, index) => {
@@ -68,7 +73,8 @@ function getService(services: IService[]): React.ReactNode[] {
     })
 }
 
-export { 
-    getAudiences, 
-    getService 
-}
+export {
+    getAudiences,
+    getService
+};
+

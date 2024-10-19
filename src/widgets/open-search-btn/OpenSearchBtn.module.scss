@@ -1,0 +1,46 @@
+.open-search-btn {
+    padding: 10px 12px;
+    height: 20px;
+    width: calc((100% - 98px) / 2);
+    cursor: text;
+    border-radius: 8px;
+    background-color: #EEE;
+}
+
+.open-search-btn:not(:last-child) {
+    margin-right: 5px;
+}
+
+.home-open-search-btn {
+    width: 100%;
+}
+
+.open-search-btn-container {
+    display: flex;
+    align-items: center;
+}
+
+.open-search-btn-name {
+    margin: 0;
+    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.not-like-placeholder {
+    color: #3A3A3A;
+}
+
+.like-placeholder {
+    color: #CCC;
+}
+
+.open-search-btn-circle {
+    width: 10px;
+    height: 10px;
+    mask: url('./../../shared/assets/icons/ellipse.svg') no-repeat center; 
+}
+    

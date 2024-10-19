@@ -1,7 +1,7 @@
-import React from "react";
-import { Path } from "../components/konva-components";
-import { IGraphPoint } from "./interfaces";
-import { Group } from "react-konva";
+import React from 'react';
+import { Path } from '../components/konva-components';
+import { IGraphPoint } from './interfaces';
+import { Group } from 'react-konva';
 
 
 function getRenderWay(points: IGraphPoint[][]): React.ReactNode {

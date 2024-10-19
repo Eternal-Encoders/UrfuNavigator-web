@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { YMaps, Map, Placemark } from "@pbe/react-yandex-maps";
-import { Helmet } from "react-helmet-async";
+import { Map, Placemark, YMaps } from '@pbe/react-yandex-maps';
+import { useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
 
-import { useGetInstitutesQuery } from "../../features/api/apiSlice";
-import { useAppDispatch } from "../../store/hook";
+import { useGetInstitutesQuery } from '../../features/api/apiSlice';
+import { useAppDispatch } from '../../store/hook';
 
-import styles from "./home-style.module.css";
-import { setContent } from "../../features/sideBar/sideBarSlice";
-import { SideBarContent } from "../../utils/interfaces";
-import SideMenu from "../../components/ui/side-bar/side-menu/SideMenu";
+import { setContent } from '../../features/sideBar/sideBarSlice';
+import { SideBarContent } from '../../utils/interfaces';
+import SideMenu from '../../widgets/side-bar/side-menu/SideMenu';
+import styles from './HomePage.module.scss';
 
 function HomePage() {
     const navigate = useNavigate();
@@ -37,14 +37,17 @@ function HomePage() {
     }, []);
 
     return(
-        <div className={styles['container-home']} style={{ height: window.innerHeight }}>
+        <div className={styles['ContainerHome']} style={{ height: window.innerHeight }}>
             <Helmet>
                 <title>Навигатор УрФУ</title>
                 <meta
                     name="description"
+                    // eslint-disable-next-line max-len
                     content="Это навигатор по УрФУ для всех, кто испытывает сложности с ориентированием внутри зданий унивирситета."
                 />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+                <meta 
+                    name="viewport" 
+                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             </Helmet>
             <YMaps>
                 <Map
@@ -58,8 +61,8 @@ function HomePage() {
                     {data && data.map((e) => {
                         return (
                             <Placemark
-                                key={`/institute/${e.url[0] === "/" ? e.url.slice(1): e.url}`}
-                                onClick={() => navigate(`/institute/${e.url[0] === "/" ? e.url.slice(1): e.url}`)}
+                                key={`/institute/${e.url[0] === '/' ? e.url.slice(1): e.url}`}
+                                onClick={() => navigate(`/institute/${e.url[0] === '/' ? e.url.slice(1): e.url}`)}
                                 geometry={[e.latitude, e.longitude]}
                                 properties={{
                                     iconContent: e.displayableName,
