@@ -44,7 +44,7 @@ export const apiSlice = createApi({
             query: (url) => ({
                 url: '/institute',
                 params: {
-                    url: url
+                    institute: url
                 },
                 method: 'GET',
             })
