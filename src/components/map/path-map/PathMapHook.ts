@@ -15,7 +15,7 @@ export function usePathMap() {
             from: points.from.id,
             to: points.to.id
         });
-        path = data;
+        path = data?.res;
     }
 
 
