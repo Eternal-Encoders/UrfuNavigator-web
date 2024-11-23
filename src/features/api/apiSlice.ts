@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IGraphPoint, IInstitute, IMapObject, IPath, PointTypes } from '../../utils/interfaces';
+import { IGraphPoint, IInstitute, IMapObject, IPathRes, PointTypes } from '../../utils/interfaces';
 
 const urlOrigin = import.meta.env.VITE_HOST 
     ? 
@@ -89,7 +89,7 @@ export const apiSlice = createApi({
                 method: 'GET',
             })
         }),
-        getPath: build.query<IPath, IPathReq>({
+        getPath: build.query<IPathRes, IPathReq>({
             query: ({ from, to }) => ({
                 url: '/path',
                 params: {

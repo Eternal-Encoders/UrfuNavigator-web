@@ -164,6 +164,14 @@ export interface IInstitute {
     }
 }
 
+export interface IPathRes {
+    res: {
+        [institute: string]: {
+            [floor: number]: IGraphPoint[][]
+        }
+    }   
+}
+
 export interface IPath {
     [institute: string]: {
         [floor: number]: IGraphPoint[][]
