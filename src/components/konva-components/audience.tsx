@@ -1,7 +1,10 @@
 import React from 'react';
 import { Group, Rect } from 'react-konva';
+import { useAppDispatch } from '../../store/hook';
+import { PointSet } from '../../features/descMenu/descMenuSlice';
 
 interface AudienceProps {
+    id: string,
     x: number,
     y: number,
     width: number,
@@ -12,6 +15,7 @@ interface AudienceProps {
 }
 
 function Audience({
+    id,
     x,
     y,
     width,
@@ -20,8 +24,14 @@ function Audience({
     fill,
     children
 }: AudienceProps) {
+    const dispatch = useAppDispatch();
+
+    function clickHandle() {
+        dispatch(PointSet(id))
+    }
+
     return (
-        <Group x={x} y={y}>
+        <Group x={x} y={y} onClick={clickHandle}>
             <Rect 
                 width={width} 
                 height={height} 

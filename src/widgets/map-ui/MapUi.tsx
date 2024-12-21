@@ -1,6 +1,7 @@
 
 import { selectFromPoint, selectToPoint } from '../../features/pointsSearch/pointsSearchSlice';
 import { useAppSelector } from '../../store/hook';
+import DescriptionMenu from '../description-menu/DescriptionMenu';
 import SideMenu from '../side-bar/side-menu/SideMenu';
 import FloorsList from '../switching-floors/floors-list/FloorsList';
 import RedirectInstitute from '../switching-institutions/redirect-institute/redirect-institute';
@@ -32,6 +33,7 @@ function MapUI({ instFullName, firstFloor, lastFloor }: MapUIProps) {
                     null
                 }
             </div>
+            <DescriptionMenu />
         </div>
     )
 }

@@ -4,6 +4,7 @@ import floorSlice from '../features/floor/floorSlice';
 import pathSlice from '../features/path/pathSlice';
 import pointsSearchSlice from '../features/pointsSearch/pointsSearchSlice';
 import sideBarSlice from '../features/sideBar/sideBarSlice';
+import descMenuSlice from '../features/descMenu/descMenuSlice';
 
 const store = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
         pointsSearch: pointsSearchSlice,
         path: pathSlice,
         sideBar: sideBarSlice,
+        descMenu: descMenuSlice,
         [apiSlice.reducerPath]: apiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
