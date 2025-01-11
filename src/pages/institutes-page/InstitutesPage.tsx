@@ -32,7 +32,7 @@ function InstitutesPage() {
     }
 
     const userLoc = useGpsHook(
-        Boolean(instGps),
+        true,
         GPS_BUFFER
     )
 
