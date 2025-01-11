@@ -34,11 +34,12 @@ export function useGpsHook(isGpsAv: boolean, bufferSize: number) {
                 },
                 () => {},
                 {
+                    maximumAge: 0,
                     enableHighAccuracy: true,
                 }
             )
         }
-    }, [navigator.geolocation]);
+    }, [navigator]);
 
     return userLoc;
 }
