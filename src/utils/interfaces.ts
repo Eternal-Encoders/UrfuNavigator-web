@@ -141,13 +141,44 @@ export interface IService {
     fiil: string | null
 }
 
+export interface ILinearEq {
+    b1: number,
+    b2: number,
+    a: number
+}
+
+export interface IStabForce {
+    point: {
+        x: number,
+        y: number
+    },
+    force: {
+        x: number,
+        y: number
+    }
+}
+
+export interface IFloorGps {
+    linear: {
+        x: ILinearEq,
+        y: ILinearEq
+    },
+    forces: IStabForce[]
+}
+
 export interface IMapObject {
     service: IService[],
     audiences: IAuditorium[],
+    gps: IFloorGps | null,
     institute: string,
     floor: number,
     width: number,
     height: number
+}
+
+export interface IInstituteGps {
+    centre: number,
+    floor: number
 }
 
 export interface IInstitute {
@@ -161,7 +192,8 @@ export interface IInstitute {
     icon: {
         url: string,
         alt: string
-    }
+    },
+    gps: IInstituteGps[] | null
 }
 
 export interface IPathRes {
@@ -176,4 +208,16 @@ export interface IPath {
     [institute: string]: {
         [floor: number]: IGraphPoint[][]
     }
+}
+
+export interface UserGps {
+    latitude: number,
+    longtitude: number,
+    altitude: number
+}
+
+export interface UserLocation {
+    x: number,
+    y: number,
+    z: number
 }
