@@ -32,9 +32,10 @@ function InstitutesPage() {
     }
 
     const userLoc = useGpsHook(
-        true,
         GPS_BUFFER
     )
+
+    console.log(userLoc)
 
     dispatch(floorSet(instGps ?  getClosestFloor(instGps, approxGps(userLoc)).floor : 1));
 
