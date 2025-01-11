@@ -16,14 +16,10 @@ export function useGpsHook(isGpsAv: boolean, bufferSize: number) {
                     }))
                 }
             )
-        }
-    }, []);
 
-    /* ON GPS UPDATE */
-    useEffect(() => {
-        if (navigator.geolocation && isGpsAv) {
             navigator.geolocation.watchPosition(
                 (pos) => {
+                    console.log(userLoc);
                     userLoc.shift()
                     userLoc.push({
                         latitude: pos.coords.latitude,
