@@ -48,7 +48,7 @@ const EQUATORIAL_RADIUS = 6378160;
 
 const POLAR_RADIUS = 6356774;
 
-const GPS_BUFFER = 4;
+const GPS_BUFFER = 2;
 
 export {
     InstColors,
