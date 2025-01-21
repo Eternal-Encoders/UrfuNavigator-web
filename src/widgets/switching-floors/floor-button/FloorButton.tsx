@@ -30,7 +30,10 @@ function FloorButton({ currentInst, floorNumber }: FloorButtonProps) {
             <button 
                 className={ className.join(' ') }
                 value={ floorNumber } 
-                onClick={ (e) => dispatch(floorSet(Number(e.currentTarget.value))) }
+                onClick={ (e) => dispatch(floorSet({
+                    floor: Number(e.currentTarget.value),
+                    priority: 1
+                })) }
             >
                 { floorNumber }
             </button>

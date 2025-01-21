@@ -36,6 +36,24 @@ function deg2rad(x: number): number {
     return x * (Math.PI / 180);
 }
 
+function calcOneRotationDeg(x: number, y: number): number {
+    if (y >= 0) {
+        return Math.acos(x) * (180 / Math.PI);
+    }
+    else {
+        return 360 - Math.acos(x)  * (180 / Math.PI);
+    }
+}
+
+function normalizeVector(x: number, y: number): {x: number, y:number} {
+    const coef = Math.sqrt(1 / (Math.pow(x, 2) + Math.pow(y, 2)));
+    return {
+        x: x * coef,
+        y: y * coef
+    }
+}
+
+
 function getClosestFloor(floors: IInstituteGps[], loc: UserGps): IInstituteGps {
     let min_index = 1;
     let min_value = Number.MAX_VALUE;
@@ -66,7 +84,10 @@ function flattenSphericalCoord(loc: UserGps): UserLocation {
     }
 }
 
-function createPredictor(mapGps: IFloorGps): (loc: UserGps) => {x: number, y: number} {
+function createPredictor(mapGps: IFloorGps): [
+    (loc: UserGps) => {x: number, y: number},
+    (heading: number) => number
+] {
     function predictor(loc: UserGps): {x: number, y: number} {
         const flatCoord = flattenSphericalCoord(loc);
 
@@ -95,14 +116,28 @@ function createPredictor(mapGps: IFloorGps): (loc: UserGps) => {x: number, y: nu
         }
     }
 
-    return predictor;
+    const oneVectorNorm = normalizeVector(
+        mapGps.linear.x.a + mapGps.linear.x.b1,
+        mapGps.linear.y.a + mapGps.linear.y.b1
+    );
+    const baseRotation = calcOneRotationDeg(
+        oneVectorNorm.x,
+        oneVectorNorm.y
+    )
+
+    return [
+        predictor,
+        (heading: number) => heading + baseRotation
+    ];
 }
 
 export {
     approxGps,
     boundGpsToMap,
     deg2rad,
+    calcOneRotationDeg,
     getClosestFloor,
     flattenSphericalCoord,
-    createPredictor
+    createPredictor,
+    normalizeVector
 }

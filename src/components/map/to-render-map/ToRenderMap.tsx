@@ -21,10 +21,11 @@ interface ToRenderMapProps {
     instFullName: string,
     firstFloor: number,
     lastFloor: number,
-    userLoc: UserGps
+    userLoc: UserGps,
+    heading: number
 }
 
-function ToRenderMap({ instFullName, userLoc }: ToRenderMapProps) {
+function ToRenderMap({ instFullName, userLoc, heading }: ToRenderMapProps) {
     const stageRef = useRef<Konva.Stage>(null);
 
     const currentFloor = useAppSelector(selectFloor)
@@ -36,6 +37,7 @@ function ToRenderMap({ instFullName, userLoc }: ToRenderMapProps) {
 
     let mapGps: IFloorGps | null = null;
     let coordsPredictor: ((loc: UserGps) => {x: number, y: number}) | null = null;
+    let headingPredictor: ((heading: number) => number) | null = null;
     let floor: IAuditorium[] = []
     let services: IService[] = []
     let mapSize = {
@@ -45,7 +47,7 @@ function ToRenderMap({ instFullName, userLoc }: ToRenderMapProps) {
 
     if (data) {
         mapGps = data.gps;
-        coordsPredictor = mapGps ? createPredictor(mapGps) : null;
+        [coordsPredictor, headingPredictor] = mapGps ? createPredictor(mapGps) : [null, null];
         floor = data.audiences;
         services = data.service;
         mapSize = {
@@ -102,6 +104,7 @@ function ToRenderMap({ instFullName, userLoc }: ToRenderMapProps) {
                 {mapGps && coordsPredictor &&
                     <GpsPoint
                         coords={boundGpsToMap(coordsPredictor(userLoc), mapSize)}
+                        rotation={headingPredictor ? headingPredictor(heading) : 0}
                     />
                 }
             </Layer>

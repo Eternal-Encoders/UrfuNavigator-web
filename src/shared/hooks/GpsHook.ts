@@ -4,6 +4,7 @@ import { useGeolocated } from "react-geolocated";
 
 export function useGpsHook(bufferSize: number) {
     const [userLoc, setUserLoc] = useState(new Array<UserGps>(bufferSize));
+    const [heading, setHeading] = useState<number>(0);
 
     const { coords } = useGeolocated({
         positionOptions: {
@@ -26,41 +27,13 @@ export function useGpsHook(bufferSize: number) {
                 altitude: coords.altitude ? coords.altitude : 268.4
             })
             setUserLoc(userLoc);
+            setHeading(coords.heading ? coords.heading : 0);
         }
         
     }, [coords])
 
-    /* ON MOUNT - GET CURRENT GPS */
-    // useEffect(() => {
-    //     if (navigator.geolocation && isGpsAv) {
-    //         navigator.geolocation.getCurrentPosition(
-    //             (pos) => {
-    //                 setUserLoc(userLoc.fill({
-    //                     latitude: pos.coords.latitude,
-    //                     longtitude: pos.coords.longitude,
-    //                     altitude: pos.coords.altitude ? pos.coords.altitude : 268.4
-    //                 }))
-    //             }
-    //         )
-
-    //         navigator.geolocation.watchPosition(
-    //             (pos) => {
-    //                 userLoc.shift()
-    //                 userLoc.push({
-    //                     latitude: pos.coords.latitude,
-    //                     longtitude: pos.coords.longitude,
-    //                     altitude: pos.coords.altitude ? pos.coords.altitude : 268.4
-    //                 })
-    //                 setUserLoc(userLoc);
-    //             },
-    //             () => {},
-    //             {
-    //                 maximumAge: 0,
-    //                 enableHighAccuracy: true,
-    //             }
-    //         )
-    //     }
-    // }, [navigator]);
-
-    return userLoc;
+    return {
+        userLoc,
+        heading
+    };
 }
