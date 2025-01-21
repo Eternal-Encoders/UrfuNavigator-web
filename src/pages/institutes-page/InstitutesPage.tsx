@@ -31,13 +31,17 @@ function InstitutesPage() {
         instGps = data.gps;
     }
 
-    const userLoc = useGpsHook(
+    const { userLoc, heading } = useGpsHook(
         GPS_BUFFER
     )
 
-    console.log(userLoc)
-
-    dispatch(floorSet(instGps ?  getClosestFloor(instGps, approxGps(userLoc)).floor : 1));
+    dispatch(
+        floorSet(
+            instGps ? 
+            {floor: getClosestFloor(instGps, approxGps(userLoc)).floor, priority: 0} : 
+            {floor: 1, priority: 0}
+        )
+    );
 
     return (
         <>
@@ -63,6 +67,7 @@ function InstitutesPage() {
                         firstFloor={data.minFloor} 
                         lastFloor={data.minFloor}
                         userLoc={approxGps(userLoc)}
+                        heading={heading}
                     />
                 </>:
                 <>
