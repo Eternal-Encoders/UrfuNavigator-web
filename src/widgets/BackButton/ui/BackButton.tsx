@@ -26,8 +26,6 @@ export const BackButton = ({ className }: IBackButtonProps) => {
         }
     }
 
-    console.log(2);
-
     return (
         <button onClick={ onClickHandler } >
             <MiniButton 

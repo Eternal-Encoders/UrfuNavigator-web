@@ -27,11 +27,12 @@ function Audience({
     const dispatch = useAppDispatch();
 
     function clickHandle() {
+        console.log(id)
         dispatch(PointSet(id))
     }
 
     return (
-        <Group x={x} y={y} onClick={clickHandle}>
+        <Group x={x} y={y} onClick={clickHandle} onTap={clickHandle}>
             <Rect 
                 width={width} 
                 height={height} 
