@@ -42,6 +42,7 @@ function getAudiences(audiences: IAuditorium[]): React.ReactNode[] {
         return (
             <Audience 
                 key={auditorium.id}
+                id={auditorium.id}
                 x={auditorium.x} 
                 y={auditorium.y} 
                 width={auditorium.width} 

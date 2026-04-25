@@ -1,6 +1,8 @@
 
+import { selectPointData } from '../../features/descMenu/descMenuSlice';
 import { selectFromPoint, selectToPoint } from '../../features/pointsSearch/pointsSearchSlice';
 import { useAppSelector } from '../../store/hook';
+import DescriptionMenu from '../description-menu/DescriptionMenu';
 import SideMenu from '../side-bar/side-menu/SideMenu';
 import FloorsList from '../switching-floors/floors-list/FloorsList';
 import RedirectInstitute from '../switching-institutions/redirect-institute/redirect-institute';
@@ -16,10 +18,14 @@ interface MapUIProps {
 function MapUI({ instFullName, firstFloor, lastFloor }: MapUIProps) {
     const start = useAppSelector(selectFromPoint)
     const end = useAppSelector(selectToPoint)
+    const poinId = useAppSelector(selectPointData)
         
     return (
         <div className={`container ${style['UIContainer']}`}>
             <SideMenu />
+            {poinId &&
+                <DescriptionMenu pointId={poinId}/>
+            }
             <div className={style['floor-list-container']}>
                 <FloorsList currentInst={instFullName} firstFloor={firstFloor} lastFloor={lastFloor}/>
             </div>
