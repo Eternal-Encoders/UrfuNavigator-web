@@ -6,7 +6,7 @@ interface PathProps {
 
 function Path({points}: PathProps) {
     return (
-        <Line points={points} stroke="#329F5B" strokeWidth={15} />
+        <Line points={points} stroke="#54B235" strokeWidth={15} />
     )
 }
 

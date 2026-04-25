@@ -7,8 +7,12 @@ import ToRenderMap from '../../components/map/to-render-map/ToRenderMap';
 import { useGetInstituteByUrlQuery } from '../../features/api/apiSlice';
 import { setContent } from '../../features/sideBar/sideBarSlice';
 import { useAppDispatch } from '../../store/hook';
-import { SideBarContent } from '../../utils/interfaces';
+import { IInstituteGps, SideBarContent } from '../../utils/interfaces';
 import MapUI from '../../widgets/map-ui/MapUi';
+import { useGpsHook } from '../../shared/hooks/GpsHook';
+import { GPS_BUFFER } from '../../utils/const';
+import { approxGps, getClosestFloor } from '../../utils/gps';
+import { floorSet } from '../../features/floor/floorSlice';
 
 function InstitutesPage() {
     const dispatch = useAppDispatch()
@@ -20,6 +24,24 @@ function InstitutesPage() {
     useEffect(() => {
         dispatch(setContent(SideBarContent.Empty))
     })
+
+    let instGps: IInstituteGps[] | null = null;
+
+    if (data) {
+        instGps = data.gps;
+    }
+
+    const { userLoc, heading } = useGpsHook(
+        GPS_BUFFER
+    )
+
+    dispatch(
+        floorSet(
+            instGps ? 
+            {floor: getClosestFloor(instGps, approxGps(userLoc)).floor, priority: 0} : 
+            {floor: 1, priority: 0}
+        )
+    );
 
     return (
         <>
@@ -35,8 +57,18 @@ function InstitutesPage() {
                             name="viewport" 
                             content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
                     </Helmet>
-                    <MapUI instFullName={data.name} firstFloor={data.minFloor} lastFloor={data.maxFloor} />
-                    <ToRenderMap instFullName={data.name} firstFloor={data.minFloor} lastFloor={data.minFloor}/>
+                    <MapUI 
+                        instFullName={data.name} 
+                        firstFloor={data.minFloor} 
+                        lastFloor={data.maxFloor} 
+                    />
+                    <ToRenderMap 
+                        instFullName={data.name} 
+                        firstFloor={data.minFloor} 
+                        lastFloor={data.minFloor}
+                        userLoc={approxGps(userLoc)}
+                        heading={heading}
+                    />
                 </>:
                 <>
                     <Helmet>

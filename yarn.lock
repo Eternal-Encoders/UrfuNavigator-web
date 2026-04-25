@@ -2838,6 +2838,11 @@ react-fast-compare@^3.2.2:
   resolved "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-3.2.2.tgz"
   integrity sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==
 
+react-geolocated@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/react-geolocated/-/react-geolocated-4.3.0.tgz#94565732e029624ea4c089660a24c544e256a68a"
+  integrity sha512-jj3x45VACcHHvSNWqWHf0f60V12pQDPIH6HuFyJi+BmndQ/dlE+vR0R2Eis+BYnwZPTlaEQ/ANmJjuUPH3Lxsg==
+
 react-helmet-async@^2.0.5:
   version "2.0.5"
   resolved "https://registry.npmjs.org/react-helmet-async/-/react-helmet-async-2.0.5.tgz"

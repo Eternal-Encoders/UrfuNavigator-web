@@ -9,7 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:ts": "eslint \"**/*.{ts,tsx}\"",
     "lint:ts:fix": "eslint \"**/*.{ts,tsx}\" --fix",
-    "lint:scss": "npx stylelint \"**/*.scss\"", 
+    "lint:scss": "npx stylelint \"**/*.scss\"",
     "lint:scss:fix": "npx stylelint \"**/*.scss\" --fix",
     "preview": "vite preview"
   },
@@ -21,6 +21,7 @@
     "konva": "^9.3.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-geolocated": "^4.3.0",
     "react-helmet-async": "^2.0.5",
     "react-i18next": "^15.0.1",
     "react-konva": "^18.2.10",

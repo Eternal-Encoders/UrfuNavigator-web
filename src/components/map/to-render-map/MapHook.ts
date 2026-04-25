@@ -29,7 +29,7 @@ export function useMapHook({ mapSize, stageRef }: MapHookProps) {
     let lastDist = 0;
     let lastAngle: number | null = null;
 
-    /* ON RESIZE */
+    /* ON MOUNT - SET RESIZE */
     useEffect(() => {
         const handleResize = () => {
             setWidth(window.innerWidth);
