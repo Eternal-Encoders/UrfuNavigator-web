@@ -3,12 +3,18 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 const floorSlice = createSlice({
     name: 'floor',
     initialState: {
-        value: 1
+        value: 1,
+        priority: 0
     },
     reducers: {
-        floorSet: (state, action: PayloadAction<number>) => {
-            const floor = action.payload
-            state.value = floor
+        floorSet: (state, action: PayloadAction<{floor: number, priority: number}>) => {
+            const floor = action.payload.floor;
+            const priority = action.payload.priority;
+
+            if (priority >= state.priority) {
+                state.value = floor;
+                state.priority = priority;
+            }
         }
     },
     selectors: {

@@ -44,8 +44,19 @@ const QIUCK_TIPS_LIST = [
 
 const PHONE_BREAKPOINT = 1200;
 
+const EQUATORIAL_RADIUS = 6378160;
+
+const POLAR_RADIUS = 6356774;
+
+const GPS_BUFFER = 2;
+
 export {
     InstColors,
-    InstLinks, PHONE_BREAKPOINT, QIUCK_TIPS_LIST
+    InstLinks, 
+    PHONE_BREAKPOINT, 
+    QIUCK_TIPS_LIST,
+    EQUATORIAL_RADIUS,
+    POLAR_RADIUS,
+    GPS_BUFFER
 };
 

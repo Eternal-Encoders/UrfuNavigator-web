@@ -35,7 +35,7 @@ function PointResult({data, setName, setType, isEnd}: PointResultProps) {
         const link = InstLinks.get(data.institute);
         if (link && window.location.pathname === '/') {
             navigate(`/institute${link}`);
-            dispatch(floorSet(data.floor));
+            dispatch(floorSet({floor: data.floor, priority: 1}));
         }
     }
 
