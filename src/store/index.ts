@@ -5,6 +5,8 @@ import pathSlice from '../features/path/pathSlice';
 import pointsSearchSlice from '../features/pointsSearch/pointsSearchSlice';
 import sideBarSlice from '../features/sideBar/sideBarSlice';
 import descMenuSlice from '../features/descMenu/descMenuSlice';
+import rootDataSlice from '../features/rootData/rootDataSlice';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
 const store = configureStore({
     reducer: {
@@ -13,11 +15,14 @@ const store = configureStore({
         path: pathSlice,
         sideBar: sideBarSlice,
         descMenu: descMenuSlice,
+        rootData: rootDataSlice,
         [apiSlice.reducerPath]: apiSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(apiSlice.middleware)
 })
+
+setupListeners(store.dispatch)
 
 export default store
 

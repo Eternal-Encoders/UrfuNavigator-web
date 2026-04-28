@@ -1,6 +1,6 @@
 import { useGetPointByIdQuery } from "../../features/api/apiSlice";
 import { PointClear } from "../../features/descMenu/descMenuSlice"
-import { useAppDispatch } from "../../store/hook";
+import { useAppDispatch, useAppSelector } from "../../store/hook";
 import { PointTranslation } from "../../utils/interfaces"
 import { XSign } from "../../shared/ui/XSign/XSign";
 import { MiniButton } from "../../shared/ui/MiniButton/MiniButton";
@@ -10,6 +10,7 @@ import { DrawerOrient } from "../../utils/interfaces";
 import DecorDragable from "../decor-dragable/DecorDragable";
 
 import style from './DescriptionMenui.module.scss'
+import { selectScreenSize } from "../../features/rootData/rootDataSlice";
 
 interface DescriptionMenuProps {
     pointId: string
@@ -18,6 +19,7 @@ interface DescriptionMenuProps {
 function DescriptionMenu({ pointId }: DescriptionMenuProps) {
     const  dispatch = useAppDispatch()
     const { data } = useGetPointByIdQuery(pointId)
+    const { innerWidth } = useAppSelector(selectScreenSize)
 
     const {
         position,
@@ -118,7 +120,7 @@ function DescriptionMenu({ pointId }: DescriptionMenuProps) {
         </>
     )
 
-    if (window.innerWidth <= PHONE_BREAKPOINT) {
+    if (innerWidth <= PHONE_BREAKPOINT) {
         return (
             <>
                 <div

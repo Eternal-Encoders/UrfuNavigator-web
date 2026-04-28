@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router-dom';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ToRenderMap from '../../components/map/to-render-map/ToRenderMap';
 import { useGetInstituteByUrlQuery } from '../../features/api/apiSlice';
@@ -13,69 +13,72 @@ import { useGpsHook } from '../../shared/hooks/GpsHook';
 import { GPS_BUFFER } from '../../utils/const';
 import { approxGps, getClosestFloor } from '../../utils/gps';
 import { floorSet } from '../../features/floor/floorSlice';
+import { InstLinks } from '../../utils/const';
+
+const instTranslations = new Map<string, string>();
+InstLinks.forEach((k, v) => {
+    instTranslations.set(k.replace('/', ''), v);
+});
 
 function InstitutesPage() {
     const dispatch = useAppDispatch()
-    const {t} = useTranslation();
+
+    const [mapGps, setMapGps] = useState<IInstituteGps[] | undefined>(undefined)
 
     const params = useParams<{intstName: string}>();
+    const { t } = useTranslation();
+    const { userLoc, userGPSState } = useGpsHook(
+        GPS_BUFFER
+    )
+
     const { data, isLoading } = useGetInstituteByUrlQuery(`/${params.intstName}`)
 
     useEffect(() => {
         dispatch(setContent(SideBarContent.Empty))
+        dispatch(floorSet({
+            floor: 1,
+            priority: 0
+        }))
     })
 
-    let instGps: IInstituteGps[] | null = null;
+    useEffect(() => {
+        if (data) {
+            if (data.gps && userGPSState) {
+                setMapGps(data.gps)
+                floorSet({
+                    floor: getClosestFloor(data.gps, approxGps(userLoc)).floor,
+                    priority: 0
+                })
+            } else if (mapGps) {
+                setMapGps(undefined)
+            }
+        }
+    }, [data, userGPSState])
 
-    if (data) {
-        instGps = data.gps;
-    }
 
-    const { userLoc, heading } = useGpsHook(
-        GPS_BUFFER
-    )
-
-    dispatch(
-        floorSet(
-            instGps ? 
-            {floor: getClosestFloor(instGps, approxGps(userLoc)).floor, priority: 0} : 
-            {floor: 1, priority: 0}
-        )
-    );
+    let headerName = params.intstName
+    headerName = headerName ? instTranslations.get(headerName) : 'undefined'
 
     return (
         <>
-            {!isLoading && data ?
-                <>
-                    <Helmet>
-                        <title>{data.name} — Навигатор УрФУ</title>
-                        <meta
-                            name="description"
-                            content={`Страница навигации по ${data.name} УрФУ`}
-                        />
-                        <meta 
-                            name="viewport" 
-                            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-                    </Helmet>
-                    <MapUI 
-                        instFullName={data.name} 
-                        firstFloor={data.minFloor} 
-                        lastFloor={data.maxFloor} 
+            {headerName ?
+                <Helmet>
+                    <title>{`${headerName} — Навигатор УрФУ`}</title>
+                    <meta
+                        name="description"
+                        content={`Страница навигации по ${headerName} УрФУ`}
                     />
-                    <ToRenderMap 
-                        instFullName={data.name} 
-                        firstFloor={data.minFloor} 
-                        lastFloor={data.minFloor}
-                        userLoc={approxGps(userLoc)}
-                        heading={heading}
-                    />
-                </>:
+                    <meta 
+                        name="viewport" 
+                        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+                </Helmet>
+            :
                 <>
                     <Helmet>
                         <title>Загрузка</title>
                         <meta
                             name="description"
-                            content={'Страница загрузки'}
+                            content='Страница загрузки'
                         />
                         <meta 
                             name="viewport" 
@@ -83,6 +86,21 @@ function InstitutesPage() {
                         />
                     </Helmet>
                     {t('Wait')}
+                </>
+            }
+            
+            {!isLoading && data &&
+                <>
+                    <MapUI 
+                        instFullName={data.name} 
+                        firstFloor={data.minFloor} 
+                        lastFloor={data.maxFloor} 
+                    />
+                    <ToRenderMap
+                        {...data}
+                        userGps={approxGps(userLoc)}
+                        mapGps={mapGps}
+                    />
                 </>
             }
         </>

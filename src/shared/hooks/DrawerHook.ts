@@ -36,7 +36,6 @@ export function useDrawer(
     breakePoints: [number, number, number],
     orient: DrawerOrient
 ) {
-    initialPosition = translatePart(initialPosition, orient);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     breakePoints = breakePoints.map((e) => translatePart(e, orient));
@@ -46,6 +45,7 @@ export function useDrawer(
     const middlePos = breakePoints[1];
     const maxPos = breakePoints[2];
 
+    initialPosition = translatePart(initialPosition, orient);
 
     const [position, setPosition] = useState(initialPosition);
     const [lastPos, setLastPos] = useState<number | undefined>(undefined);

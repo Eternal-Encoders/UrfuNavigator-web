@@ -1,24 +1,32 @@
 import { EQUATORIAL_RADIUS, POLAR_RADIUS } from "./const";
-import { IFloorGps, IInstituteGps, UserGps, UserLocation } from "./interfaces";
+import { IFloorGps, IInstituteGps, UserGPS, UserLocation } from "./interfaces";
 
-function approxGps(data: UserGps[]): UserGps {
+function approxGps(data: GeolocationCoordinates[]): UserGPS {
     const sumOfData = data.reduce(
-        (e, accum) => ({
-            latitude: accum.latitude + e.latitude,
-            longtitude: accum.longtitude + e.longtitude,
-            altitude: accum.altitude + e.altitude
-        }),
+        (accum, e) => {
+            if (e === undefined) {
+                return accum
+            }
+            return {
+                latitude: accum.latitude + e.latitude,
+                longtitude: accum.longtitude + e.longitude,
+                altitude: accum.altitude + (e.altitude ? e.altitude : 0),
+                heading: accum.heading + (e.heading ? e.heading : 0)
+            }
+        },
         {
             latitude: 0,
             longtitude: 0,
-            altitude: 0
+            altitude: 0,
+            heading: 0
         }
     );
 
     return {
         latitude: sumOfData.latitude / data.length,
-        longtitude: sumOfData.longtitude / data.length,
-        altitude: sumOfData.altitude / data.length
+        longitude: sumOfData.longtitude / data.length,
+        altitude: sumOfData.altitude / data.length,
+        heading: sumOfData.altitude / data.length,
     }
 }
 
@@ -54,7 +62,7 @@ function normalizeVector(x: number, y: number): {x: number, y:number} {
 }
 
 
-function getClosestFloor(floors: IInstituteGps[], loc: UserGps): IInstituteGps {
+function getClosestFloor(floors: IInstituteGps[], loc: UserGPS): IInstituteGps {
     let min_index = 1;
     let min_value = Number.MAX_VALUE;
 
@@ -69,9 +77,9 @@ function getClosestFloor(floors: IInstituteGps[], loc: UserGps): IInstituteGps {
     return floors[min_index];
 }
 
-function flattenSphericalCoord(loc: UserGps): UserLocation {
+function flattenSphericalCoord(loc: UserGPS): UserLocation {
     const lat_rad = deg2rad(loc.latitude);
-    const long_rad = deg2rad(loc.longtitude);
+    const long_rad = deg2rad(loc.longitude);
     // const alt_rad = deg2rad(loc.altitude);
 
     const e2 = (EQUATORIAL_RADIUS**2 - POLAR_RADIUS**2) / EQUATORIAL_RADIUS**2;
@@ -85,10 +93,10 @@ function flattenSphericalCoord(loc: UserGps): UserLocation {
 }
 
 function createPredictor(mapGps: IFloorGps): [
-    (loc: UserGps) => {x: number, y: number},
+    (loc: UserGPS) => {x: number, y: number},
     (heading: number) => number
 ] {
-    function predictor(loc: UserGps): {x: number, y: number} {
+    function predictor(loc: UserGPS): {x: number, y: number} {
         const flatCoord = flattenSphericalCoord(loc);
 
         const linearX = mapGps.linear.x.a + mapGps.linear.x.b1 * flatCoord.x + mapGps.linear.x.b2 * flatCoord.y;

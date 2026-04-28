@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import legal from '../../../../../public/legal.pdf';
+import legal from '../../../../shared/assets/legal.pdf';
 
 import { t } from 'i18next';
 import style from './AgreementBtn.module.scss';

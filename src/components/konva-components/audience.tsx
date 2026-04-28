@@ -27,7 +27,6 @@ function Audience({
     const dispatch = useAppDispatch();
 
     function clickHandle() {
-        console.log(id)
         dispatch(PointSet(id))
     }
 

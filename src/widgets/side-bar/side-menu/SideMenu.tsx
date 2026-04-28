@@ -1,6 +1,8 @@
 
+import { selectScreenSize } from '../../../features/rootData/rootDataSlice';
 import { useDrawer } from '../../../shared/hooks/DrawerHook';
 import { useSideBarHook } from '../../../shared/hooks/sideBarHook';
+import { useAppSelector } from '../../../store/hook';
 import { PHONE_BREAKPOINT } from '../../../utils/const';
 import { DrawerOrient } from '../../../utils/interfaces';
 import DecorDragable from '../../decor-dragable/DecorDragable';
@@ -42,7 +44,9 @@ function SideMenu() {
         isNearMax
     );
 
-    if (window.innerWidth <= PHONE_BREAKPOINT) {
+    const { innerWidth } = useAppSelector(selectScreenSize)
+
+    if (innerWidth <= PHONE_BREAKPOINT) {
         return (
             <>
                 {!isHeadInDrawer &&

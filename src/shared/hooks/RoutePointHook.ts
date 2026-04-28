@@ -1,10 +1,11 @@
+import { useCallback } from 'react';
 import { useGetPointByIdQuery } from '../../features/api/apiSlice';
 import { IGraphPoint } from '../../utils/interfaces';
 
 export function useRoutePoint(id: string) {
     const { data } = useGetPointByIdQuery(id);
 
-    function getRotation(point: IGraphPoint): number {
+    const getRotation = useCallback((point: IGraphPoint) => {
         let rotation = 0
         if (data) {
             const xDif = point.x - data.x;
@@ -17,7 +18,7 @@ export function useRoutePoint(id: string) {
         }
 
         return rotation
-    }
+    }, [data])
 
     return {
         getRotation

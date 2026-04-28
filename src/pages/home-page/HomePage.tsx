@@ -1,49 +1,37 @@
 import { Map, Placemark, YMaps } from '@pbe/react-yandex-maps';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetInstitutesQuery } from '../../features/api/apiSlice';
-import { useAppDispatch } from '../../store/hook';
+import { useAppDispatch, useAppSelector } from '../../store/hook';
 
 import { setContent } from '../../features/sideBar/sideBarSlice';
 import { SideBarContent } from '../../utils/interfaces';
 import SideMenu from '../../widgets/side-bar/side-menu/SideMenu';
 import styles from './HomePage.module.scss';
+import { selectScreenSize } from '../../features/rootData/rootDataSlice';
 
 function HomePage() {
     const navigate = useNavigate();
 
-    const [width, setWidth] = useState(window.innerWidth);
-    const [height, setHeight] = useState(window.innerHeight);
-
+    const { innerWidth, innerHeight } = useAppSelector(selectScreenSize)
 
     const dispatch = useAppDispatch()
     const { data } = useGetInstitutesQuery(undefined)
 
     useEffect(() => {
         dispatch(setContent(SideBarContent.Institutes))
-
-        const handleResize = () => {
-            setWidth(window.innerWidth);
-            setHeight(window.innerHeight);
-        }
-        
-        window.addEventListener('resize', handleResize);
-        
-        return () => {
-            window.removeEventListener('resize', handleResize);
-        };
     }, []);
 
     return(
-        <div className={styles['ContainerHome']} style={{ height: window.innerHeight }}>
+        <div className={styles['ContainerHome']} style={{ height: innerHeight }}>
             <Helmet>
                 <title>Навигатор УрФУ</title>
                 <meta
                     name="description"
                     // eslint-disable-next-line max-len
-                    content="Это навигатор по УрФУ для всех, кто испытывает сложности с ориентированием внутри зданий унивирситета."
+                    content="Интерактивная карта и сервис для навигации по учебным корпусам УрФУ. Найдите аудитории и проложите оптимальный маршрут между ними."
                 />
                 <meta 
                     name="viewport" 
@@ -51,8 +39,8 @@ function HomePage() {
             </Helmet>
             <YMaps>
                 <Map
-                    height={height}
-                    width={width}
+                    height={innerHeight}
+                    width={innerWidth}
                     defaultState={{ 
                         center: [56.842, 60.652], 
                         zoom: 15 

@@ -86,6 +86,11 @@ export const enum Languages {
     Russian = 'russian'
 }
 
+export const enum Themes {
+    dark = 'dark',
+    light = 'light'
+} 
+
 export interface IAuditoriumDoors {
     x: number,
     y: number,
@@ -210,10 +215,11 @@ export interface IPath {
     }
 }
 
-export interface UserGps {
-    latitude: number,
-    longtitude: number,
+export interface UserGPS {
+    latitude: number
+    longitude: number
     altitude: number
+    heading: number
 }
 
 export interface UserLocation {

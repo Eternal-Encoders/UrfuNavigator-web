@@ -6,18 +6,18 @@ interface GpsPointProps {
     rotation: number
 }
 
-const SIZE = 30
+const SIZE = 50
 
 function GpsPoint({ coords, rotation }: GpsPointProps) {
     return (
         <Group
             x={coords.x}
             y={coords.y}
-            rotationDeg={rotation}
+            rotation={rotation}
         >
             <RegularPolygon
                 x={SIZE / 2}
-                rotationDeg={-30}
+                rotation={-30}
                 sides={3}
                 radius={SIZE*0.4}
                 fill={'#DD2020'}
