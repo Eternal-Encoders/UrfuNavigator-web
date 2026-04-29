@@ -1,6 +1,6 @@
 
 import { selectPrevContent, setContent } from '../../features/sideBar/sideBarSlice';
-import { EThemeMiniButton, MiniButton } from '../../shared/ui/MiniButton/MiniButton';
+import { IconButton } from '../../shared/ui/IconButton/IconButton';
 import { XSign } from '../../shared/ui/XSign/XSign';
 import { useAppDispatch, useAppSelector } from '../../store/hook';
 import { PointTypes } from '../../utils/interfaces';
@@ -42,11 +42,14 @@ function SearchCancel({
     }
 
     return (
-        <button onClick={clickHandler}>
-            <MiniButton theme={EThemeMiniButton.CLEAR} className={cls.SearchCancel}>
-                <XSign/>
-            </MiniButton>
-        </button>
+        <IconButton
+            onClick={clickHandler}
+            label='Search Cancel'
+            className={cls.SearchCancel}
+            variant='clear'
+        >
+            <XSign/>
+        </IconButton>
     );
 }
 

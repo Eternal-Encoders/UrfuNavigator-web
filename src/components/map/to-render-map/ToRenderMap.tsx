@@ -40,17 +40,20 @@ function ToRenderMap({ name, userGps, mapGps }: ToRenderMapProps) {
         mapSize
     } = useMapHook({
         name: name,
-        mapGps: mapGps,
         stageRef: stageRef
     });
+
+    const desktopPanelWidth = Math.min(Math.max(innerWidth * 0.27, 340), 430);
+    const mapOffsetX = innerWidth > 1200 ? desktopPanelWidth + 24 : innerWidth * 0.1;
+    const stageScale = Math.min(innerHeight, innerWidth) / 3500;
 
     return (
         <Stage 
             width={innerWidth} 
             height={innerHeight}
-            x={innerWidth > 1200 ? innerWidth * 0.4 : innerWidth * 0.1}
-            scaleX={Math.min(innerHeight, innerWidth) / 3500}
-            scaleY={Math.min(innerHeight, innerWidth) / 3500}
+            x={mapOffsetX}
+            scaleX={stageScale}
+            scaleY={stageScale}
             className={style['to-render-map']}
             draggable={!isTouchEnabled}
             onDragMove={() => {}}

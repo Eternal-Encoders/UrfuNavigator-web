@@ -1,11 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IGraphPoint, IInstitute, IMapObject, IPathRes, PointTypes } from '../../utils/interfaces';
-
-const urlOrigin = import.meta.env.VITE_HOST 
-    ? 
-    `https://${import.meta.env.VITE_HOST}` 
-    : 
-    'https://dev.how-to-navigate.ru/api'
+import runtimeConfig from '../../shared/config/runtime/runtimeConfig';
 
 interface IFloorReq {
     inst: string,
@@ -31,7 +26,7 @@ interface IPathReq {
 export const apiSlice = createApi({
     reducerPath: 'api',
     baseQuery: fetchBaseQuery({
-        baseUrl: urlOrigin,
+        baseUrl: runtimeConfig.apiBaseUrl,
     }),
     endpoints: build => ({
         getFloor: build.query<IMapObject, IFloorReq>({

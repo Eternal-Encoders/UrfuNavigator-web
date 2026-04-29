@@ -1,0 +1,16 @@
+.TextInput {
+    width: 100%;
+    padding: var(--space-md) 14px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-soft);
+}
+
+.TextInput::placeholder {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+}

@@ -1,16 +1,17 @@
-import { useGetPointByIdQuery } from "../../features/api/apiSlice";
-import { PointClear } from "../../features/descMenu/descMenuSlice"
-import { useAppDispatch, useAppSelector } from "../../store/hook";
-import { PointTranslation } from "../../utils/interfaces"
-import { XSign } from "../../shared/ui/XSign/XSign";
-import { MiniButton } from "../../shared/ui/MiniButton/MiniButton";
-import { PHONE_BREAKPOINT } from "../../utils/const";
-import { useDrawer } from "../../shared/hooks/DrawerHook";
-import { DrawerOrient } from "../../utils/interfaces";
-import DecorDragable from "../decor-dragable/DecorDragable";
+import { useGetPointByIdQuery } from '../../features/api/apiSlice';
+import { PointClear } from '../../features/descMenu/descMenuSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hook';
+import { PointTranslation } from '../../utils/interfaces'
+import { XSign } from '../../shared/ui/XSign/XSign';
+import { IconButton } from '../../shared/ui/IconButton/IconButton';
+import { PHONE_BREAKPOINT } from '../../utils/const';
+import { useDrawer } from '../../shared/hooks/DrawerHook';
+import { DrawerOrient } from '../../utils/interfaces';
+import DecorDragable from '../decor-dragable/DecorDragable';
 
 import style from './DescriptionMenui.module.scss'
-import { selectScreenSize } from "../../features/rootData/rootDataSlice";
+import { selectScreenSize } from '../../features/rootData/rootDataSlice';
+import { Panel } from '../../shared/ui/Panel/Panel';
 
 interface DescriptionMenuProps {
     pointId: string
@@ -48,20 +49,17 @@ function DescriptionMenu({ pointId }: DescriptionMenuProps) {
 
     const content = (
         <>
-            <div className={style['desc-header']}>
+            <Panel className={style['desc-header']} elevated>
                 <div className={style['header-name']}>
                     {data.names[0]}
                 </div>
-                {}
-                <button onClick={onClickHandler}>
-                    <MiniButton>
-                        <XSign/>
-                    </MiniButton>
-                </button>
-            </div>
-            <div>
+                <IconButton onClick={onClickHandler} label="Close description">
+                    <XSign />
+                </IconButton>
+            </Panel>
+            <div className={style['desc-content']}>
                 {other_names &&
-                    <div>
+                    <div className={style['desc-section']}>
                         <h4>
                             Другие названия
                         </h4>
@@ -74,25 +72,25 @@ function DescriptionMenu({ pointId }: DescriptionMenuProps) {
                         </ul>
                     </div>
                 }
-                <div>
+                <div className={style['desc-section']}>
                     <h4>
                         Институт
                     </h4>
                     {data.institute}
                 </div>
-                <div>
+                <div className={style['desc-section']}>
                     <h4>
                         Описание
                     </h4>
                     {data.description}
                 </div>
-                <div>
+                <div className={style['desc-section']}>
                     <h4>
                         Прочая информация
                     </h4>
                     {data.info}
                 </div>
-                <div>
+                <div className={style['desc-section']}>
                     <h4>
                         Тип
                     </h4>
@@ -104,7 +102,7 @@ function DescriptionMenu({ pointId }: DescriptionMenuProps) {
                         ))}
                     </ul>
                 </div>
-                <div>
+                <div className={style['desc-section']}>
                     <h4>
                         Время работы
                     </h4>

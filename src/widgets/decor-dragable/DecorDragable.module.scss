@@ -10,7 +10,7 @@
     width: 50px;
     height: 6px;
     border-radius: 3px;
-    background-color: #CCC;
+    background-color: var(--text-muted);
 }
 
 @media (width <= 1200px) {

@@ -1,0 +1,23 @@
+.ChangeLanguageContainer {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.change-language-title {
+    margin: 0;
+    margin-bottom: 10px;
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.change-language-div {
+    display: flex;
+    gap: var(--space-xs);
+    padding: var(--space-xs);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-subtle);
+    border: 1px solid var(--border-soft);
+}

@@ -1,22 +1,19 @@
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useGetPointsByTypeQuery, useSearchPointsQuery } from '../../features/api/apiSlice';
 import { IGraphPoint, PointTypes } from '../../utils/interfaces';
 
 
 export function usePointsUIListHook(name: string | undefined, type: PointTypes | undefined) {
-    let res: IGraphPoint[] | undefined = undefined;
-
-    if (type) {
-        const { data } = useGetPointsByTypeQuery({
-            type: type
-        });
-        res = data;
-    } else {
-        const { data } = useSearchPointsQuery({
-            name: name ? name : '',
-            length: 40
-        });
-        res = data;
-    }
+    const { data: pointsByType } = useGetPointsByTypeQuery(type ? { type } : skipToken);
+    const { data: pointsByName } = useSearchPointsQuery(
+        type
+            ? skipToken
+            : {
+                name: name ?? '',
+                length: 40
+            }
+    );
+    const res: IGraphPoint[] | undefined = type ? pointsByType : pointsByName;
 
     return res;
 };

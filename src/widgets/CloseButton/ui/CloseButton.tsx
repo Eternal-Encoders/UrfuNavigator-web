@@ -1,6 +1,6 @@
 import { selectPrevContent, setContent } from '../../../features/sideBar/sideBarSlice';
 import { classNames } from '../../../shared/lib/classNames/classNames';
-import { MiniButton } from '../../../shared/ui/MiniButton/MiniButton';
+import { IconButton } from '../../../shared/ui/IconButton/IconButton';
 import { XSign } from '../../../shared/ui/XSign/XSign';
 import { useAppDispatch, useAppSelector } from '../../../store/hook';
 import cls from './CloseButton.module.scss';
@@ -18,10 +18,12 @@ export const CloseButton = ({className}: ICloseButtonProps) => {
     }
 
     return (
-        <button onClick={onClickHandler}>
-            <MiniButton className={classNames(cls.CloseButton, {}, [className || ''])}>
-                <XSign/>
-            </MiniButton>
-        </button>
+        <IconButton
+            onClick={onClickHandler}
+            label="Close"
+            className={classNames(cls.CloseButton, {}, [className || ''])}
+        >
+            <XSign />
+        </IconButton>
     );
 };

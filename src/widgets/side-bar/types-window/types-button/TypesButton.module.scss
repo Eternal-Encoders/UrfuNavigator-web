@@ -8,7 +8,8 @@
 
 .tip-icon {
     margin-bottom: 8px;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-subtle);
 }
 
 .tip-name {
@@ -16,5 +17,5 @@
     font-weight: 500;
     font-size: 12px;
     line-height: normal;
-    color: #6D6D6D;
+    color: var(--text-secondary);
 }

@@ -1,5 +1,6 @@
 import pluginJs from '@eslint/js';
 import pluginReact from 'eslint-plugin-react';
+import pluginReactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -10,6 +11,9 @@ export default [
     pluginReact.configs.flat.recommended,
     {
         files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
+        plugins: {
+            'react-hooks': pluginReactHooks
+        },
         settings: {
             react: {
                 version: 'detect',
@@ -39,6 +43,8 @@ export default [
             'no-unused-vars': 'off',
             'no-console': 'off',
             'react/react-in-jsx-scope': 'off',
+            'react-hooks/rules-of-hooks': 'error',
+            'react-hooks/exhaustive-deps': 'warn',
             '@typescript-eslint/no-unused-vars': ['warn', {
                 'argsIgnorePattern': '^_',
                 'varsIgnorePattern': '^_',

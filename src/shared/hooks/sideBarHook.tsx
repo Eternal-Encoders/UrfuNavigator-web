@@ -20,6 +20,7 @@ import PointsUI from '../../widgets/side-bar/points-windows/points-ui/PointsUI';
 import SettingsUI from '../../widgets/side-bar/settings-window/settings-ui/SettingsUi';
 import TypesUi from '../../widgets/side-bar/types-window/types-ui/TypesUi';
 import searchImg from '../assets/icons/search.svg';
+import styles from '../../widgets/side-bar/side-menu/SideMenu.module.scss';
 
 export function useSideBarHook(
     setPosToMin: () => void,
@@ -88,7 +89,7 @@ export function useSideBarHook(
         case SideBarContent.PointsList:
             return (
                 <>
-                    <img style={{width: 40, height: 40}} src={ searchImg } alt='Поиск'/>
+                    <img className={styles['search-icon']} src={ searchImg } alt={t('SearchIconAlt')}/>
                     <SearchField 
                         nameFrom={nameFrom}
                         nameTo={nameTo}

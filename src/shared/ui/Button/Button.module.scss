@@ -1,21 +1,60 @@
 .Button {
     cursor: pointer;
-    width: 50%;
-    font-family: Roboto, sans-serif;
-    color: #6D6D6D;
-    font-size: 14px;
+    width: auto;
+    min-height: var(--control-height);
+    min-width: 108px;
+    padding: 11px 16px;
+    font-family: Inter, sans-serif;
+    font-size: var(--control-font-size);
     font-weight: 500;
-    transition: all 0.3s ease-in-out;
+    line-height: 1.2;
+    color: var(--text-primary);
+    border: 1px solid transparent;
+    border-radius: var(--radius-lg);
+    background: transparent;
 }
 
-.active-russian {
-    color: #EEE;
-    border-radius: 12px;
-    background: #0039A6;
+.Button:disabled {
+    opacity: 0.55;
+    cursor: default;
 }
 
-.active-english {
-    color: #EEE;
-    border-radius: 12px;
-    background: #CF142B;
+.secondary {
+    background: var(--bg-elevated);
+    border-color: var(--border-soft);
+    color: var(--text-secondary);
+}
+
+.primary {
+    background: var(--accent-blue);
+    color: var(--text-on-accent);
+}
+
+.danger {
+    background: var(--accent-red);
+    color: var(--text-on-accent);
+}
+
+.ghost {
+    background: transparent;
+    border-color: var(--border-soft);
+    color: var(--text-secondary);
+}
+
+.sm {
+    min-height: 38px;
+    padding: 9px 13px;
+}
+
+.md {
+    min-height: 40px;
+}
+
+.lg {
+    min-height: 50px;
+    padding: 12px 18px;
+}
+
+.fullWidth {
+    width: 100%;
 }

@@ -31,12 +31,12 @@ function OpenSearchBtn({ isEnd, isHomePage, setIsEnd }: OpenSearchBtnProps) {
                         <div className={style['open-search-btn-circle']} style={{ backgroundColor: color }}/> 
                     }
                     {currentPoint ? 
-                        <p className={`${style['open-search-btn-name']} ${style['not-like-placeholder']}`}>
+                        <span className={`${style['open-search-btn-name']} ${style['not-like-placeholder']}`}>
                             { currentPoint.names.join(', ') }
-                        </p> : 
-                        <p className={`${style['open-search-btn-name']} ${style['like-placeholder']}`}>
+                        </span> : 
+                        <span className={`${style['open-search-btn-name']} ${style['like-placeholder']}`}>
                             { text }
-                        </p> 
+                        </span> 
                     }
                 </div>
             </button>

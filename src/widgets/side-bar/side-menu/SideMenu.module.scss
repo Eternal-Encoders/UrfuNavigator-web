@@ -1,27 +1,30 @@
 .SideMenuContainer {
-  z-index: 99999;
+  z-index: var(--z-layout-panel);
   position: absolute;
   top: 0;
   left: 0;
   box-sizing: border-box;
-  padding: 20px 10px;
-  width: 27%;
-  min-width: 390px;
+  padding: var(--space-lg) var(--space-md);
+  width: var(--panel-width);
+  min-width: 340px;
   height: 100%;
-  background: #FCFCFC;
-  box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
-  animation: new-anim 1s ease-in-out;
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-soft);
+  border-right: 1px solid var(--border-soft);
+  backdrop-filter: blur(6px);
+  animation: new-anim 0.45s var(--ease-standard);
 }
 
 .side-menu-header {
   display: flex;
-  justify-content: flex-start;
-  padding: 5px;
+  justify-content: space-between;
+  padding: var(--space-xs);
   margin-left: auto;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  background: #FCFCFC;
-  box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
+  margin-bottom: var(--space-md);
+  border-radius: var(--radius-xl);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-subtle);
+  border: 1px solid var(--border-soft);
 }
 
 .side-menu-body {
@@ -31,10 +34,11 @@
   box-sizing: border-box;
   width: 100%;
   height: 100%;
-  padding: 20px 10px;
+  padding: var(--space-lg) var(--space-md);
   align-items: center;
   border-radius: 0;
-  background-color: #FCFCFC;
+  background-color: var(--bg-surface);
+  overflow-y: auto;
 }
 
 @keyframes new-anim {
@@ -51,22 +55,36 @@
 
 @media (width <= 1200px) {
   .side-menu-header {
-    z-index: 99999;
+    z-index: var(--z-layout-floating);
     position: absolute;
-    width: calc(100% - 30px);
+    width: calc(100% - 24px);
     top: 0;
-    margin: 20px 10px 0;
+    margin: var(--space-md) var(--space-sm) 0;
   }
 
   .side-menu-body {
-    z-index: 99999;
+    z-index: var(--z-layout-floating);
     position: absolute;
     bottom: 0;
-    padding: 10px;
+    left: 0;
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border-top-left-radius: var(--radius-xl);
+    border-top-right-radius: var(--radius-xl);
+    box-shadow: var(--shadow-elevated);
   }
 }
 
 .side-menu-body .side-menu-header {
   position: relative;
-  margin: 0 auto 25px;
+  margin: 0 auto var(--space-xl);
+}
+
+[data-theme='dark'] .side-menu-header img {
+  filter: invert(0.88);
+}
+
+.search-icon {
+  width: 44px;
+  height: 44px;
 }

@@ -1,13 +1,15 @@
 import AgreementBtn from '../agreement';
 import Contacts from '../contacts/Contacts';
+import ChangeTheme from '../change-theme/ChangeTheme';
 
-import СhangeLanguage from '../change-language/СhangeLanguage';
+import ChangeLanguage from '../change-language/ChangeLanguage';
 import FeedbackForm from '../feedback-form/FeedbackForm';
 
 function SettingsUI() {
     return (
         <>
-            <СhangeLanguage/>
+            <ChangeLanguage/>
+            <ChangeTheme />
             <FeedbackForm />
             <AgreementBtn />
             <Contacts />

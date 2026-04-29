@@ -4,17 +4,17 @@
 }
 
 .map-elements-div {
-  z-index: 99999;
+  z-index: var(--z-layout-panel);
   position: absolute;
   top: 0;
   left: 0;
   box-sizing: border-box;
-  padding: 20px 10px;
-  width: 27%;
-  min-width: 390px;
+  padding: 16px 12px;
+  width: var(--panel-width);
+  min-width: 360px;
   height: 100%;
-  background: #FCFCFC;
-  box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-soft);
 }
 
 .header-div {
@@ -25,16 +25,17 @@
   align-items: center;
   margin-left: auto;
   margin-bottom: 20px;
-  border-radius: 12px;
-  background: #FCFCFC;
-  box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
+  border-radius: var(--radius-xl);
+  background: var(--bg-surface);
+  box-shadow: var(--shadow-subtle);
+  border: 1px solid var(--border-soft);
 }
 
 .floor-list-container {
-  z-index: 1000;
+  z-index: var(--z-layout-floating);
   position: absolute;
-  top: 40px;
-  right: 10px;
+  top: 24px;
+  right: var(--space-md);
   height: calc(100% - 180px);
   max-height: max-content;
   overflow: scroll;
@@ -47,21 +48,22 @@
 .institute-name-div {
   display: flex;
   justify-content: flex-start;
-  z-index: 1000;
+  z-index: var(--z-layout-floating);
   position: absolute;
-  width: 370px;
-  right: calc((100% - (390px + 370px))/ 2);
-  bottom: 10px;
-  border-radius: 12px;
-  background-color: #EEE;
-  box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
+  width: min(370px, calc(100% - 24px));
+  right: calc((100% - (clamp(340px, 27vw, 430px) + min(370px, calc(100% - 24px)))) / 2);
+  bottom: var(--space-sm);
+  border-radius: var(--radius-xl);
+  background-color: var(--bg-elevated);
+  box-shadow: var(--shadow-subtle);
+  border: 1px solid var(--border-soft);
 }
 
 .gps-button-div {
-  z-index: 1000;
+  z-index: var(--z-layout-floating);
   position: absolute;
-  bottom: 10px;
-  right: 10px;
+  bottom: var(--space-sm);
+  right: var(--space-md);
 }
 
 @media (width <= 1200px) {
@@ -76,12 +78,19 @@
   }
 
   .floor-list-container {
-    top: 90px;
+    top: 92px;
+    right: var(--space-sm);
   }
 
   .institute-name-div {
     width: calc(100% - 20px);
-    left: 10px;
+    left: var(--space-sm);
     box-sizing: border-box;
+  }
+
+  .gps-button-div {
+    bottom: calc(var(--space-sm) + var(--mobile-drawer-offset, 0px));
+    right: var(--space-sm);
+    transition: bottom 0.2s var(--ease-standard);
   }
 }

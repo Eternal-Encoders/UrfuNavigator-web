@@ -1,14 +1,15 @@
 .open-search-btn {
+    min-height: var(--control-height);
     padding: 10px 12px;
-    height: 20px;
     width: calc((100% - 98px) / 2);
     cursor: text;
-    border-radius: 8px;
-    background-color: #EEE;
+    border-radius: var(--radius-md);
+    background-color: var(--bg-elevated);
+    border: 1px solid var(--border-soft);
 }
 
 .open-search-btn:not(:last-child) {
-    margin-right: 5px;
+    margin-right: var(--space-xs);
 }
 
 .home-open-search-btn {
@@ -22,20 +23,20 @@
 
 .open-search-btn-name {
     margin: 0;
-    margin-left: 5px;
+    margin-left: var(--space-xs);
     white-space: nowrap;
     overflow: hidden;
-    font-family: Roboto, sans-serif;
-    font-size: 14px;
+    font-family: Inter, sans-serif;
+    font-size: var(--control-font-size);
     font-weight: 500;
 }
 
 .not-like-placeholder {
-    color: #3A3A3A;
+    color: var(--text-primary);
 }
 
 .like-placeholder {
-    color: #CCC;
+    color: var(--text-muted);
 }
 
 .open-search-btn-circle {

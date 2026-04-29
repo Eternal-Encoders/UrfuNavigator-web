@@ -6,8 +6,8 @@
 .feedback-form-title {
     margin: 0;
     margin-bottom: 10px;
-    font-family: Roboto, sans-serif;
-    color: #6D6D6D;
+    font-family: Inter, sans-serif;
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 500;
 }
@@ -17,12 +17,17 @@
     width: 100%;
     height: 44px;
     justify-content: center;
-    font-family: Roboto, sans-serif;
+    font-family: Inter, sans-serif;
     font-size: 14px;
     font-weight: 500;
     line-height: 44px;
-    color: #6D6D6D;
-    border-radius: 12px;
-    background: #EEE;
-    box-shadow: 0 0 3px 0 rgb(0 0 0 / 10%);
+    color: var(--text-secondary);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-soft);
+    box-shadow: var(--shadow-subtle);
+}
+
+.feedback-form-link:hover {
+    color: var(--text-primary);
 }

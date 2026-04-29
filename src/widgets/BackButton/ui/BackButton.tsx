@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { selectSearchPoints, setPoints } from '../../../features/pointsSearch/pointsSearchSlice';
 import { classNames } from '../../../shared/lib/classNames/classNames';
-import { EThemeMiniButton, MiniButton } from '../../../shared/ui/MiniButton/MiniButton';
+import { IconButton } from '../../../shared/ui/IconButton/IconButton';
 import { XSign } from '../../../shared/ui/XSign/XSign';
 import { useAppDispatch, useAppSelector } from '../../../store/hook';
 import cls from './BackButton.module.scss';
@@ -27,13 +27,12 @@ export const BackButton = ({ className }: IBackButtonProps) => {
     }
 
     return (
-        <button onClick={ onClickHandler } >
-            <MiniButton 
-                theme={EThemeMiniButton.PAINTED} 
-                className={classNames(cls.BackButton, {}, [className || ''])}
-            >
-                <XSign/>
-            </MiniButton>
-        </button>
+        <IconButton
+            onClick={onClickHandler}
+            label="Back"
+            className={classNames(cls.BackButton, {}, [className || ''])}
+        >
+            <XSign />
+        </IconButton>
     );
 };

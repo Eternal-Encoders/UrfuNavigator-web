@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { setContentNoHistory } from '../../features/sideBar/sideBarSlice';
 import { useAppDispatch } from '../../store/hook';
+import { TextInput } from '../../shared/ui/TextInput/TextInput';
 import { SideBarContent } from '../../utils/interfaces';
 import styles from './SearchField.module.scss';
 
@@ -25,7 +26,7 @@ function SearchField({
     const name = isEnd ? nameTo : nameFrom;
     const setName = isEnd ? setNameTo : setNameFrom;
 
-    function nameCahngehandler(e: React.ChangeEvent<HTMLInputElement>) {
+    function nameChangeHandler(e: React.ChangeEvent<HTMLInputElement>) {
         setName(e.currentTarget.value);
 
         if (e.currentTarget.value === '') {
@@ -37,12 +38,14 @@ function SearchField({
 
     return (
         <>
-            <input type="text"
+            <TextInput
+                type="text"
                 className={styles['PointsSearchInput']}
-                value={ name }
+                value={ name ? name : '' }
                 placeholder={ t('SearchForAudiencesAndPlaces') }
-                onChange={ (e) => nameCahngehandler(e) }
+                onChange={ (e) => nameChangeHandler(e) }
                 autoFocus
+                aria-label={ t('SearchForAudiencesAndPlaces') }
             />
         </>
     );

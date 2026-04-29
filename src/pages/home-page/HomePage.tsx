@@ -1,6 +1,7 @@
 import { Map, Placemark, YMaps } from '@pbe/react-yandex-maps';
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { useGetInstitutesQuery } from '../../features/api/apiSlice';
@@ -14,6 +15,7 @@ import { selectScreenSize } from '../../features/rootData/rootDataSlice';
 
 function HomePage() {
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const { innerWidth, innerHeight } = useAppSelector(selectScreenSize)
 
@@ -22,20 +24,19 @@ function HomePage() {
 
     useEffect(() => {
         dispatch(setContent(SideBarContent.Institutes))
-    }, []);
+    }, [dispatch]);
 
     return(
         <div className={styles['ContainerHome']} style={{ height: innerHeight }}>
             <Helmet>
-                <title>Навигатор УрФУ</title>
+                <title>{t('UrfuNavigatorTitle')}</title>
                 <meta
                     name="description"
-                    // eslint-disable-next-line max-len
-                    content="Интерактивная карта и сервис для навигации по учебным корпусам УрФУ. Найдите аудитории и проложите оптимальный маршрут между ними."
+                    content={t('HomePageDescription')}
                 />
                 <meta 
                     name="viewport" 
-                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+                    content="width=device-width, initial-scale=1.0" />
             </Helmet>
             <YMaps>
                 <Map
@@ -47,10 +48,11 @@ function HomePage() {
                     }}
                 >
                     {data && data.map((e) => {
+                        const institutePath = `/institute/${e.url[0] === '/' ? e.url.slice(1): e.url}`;
                         return (
                             <Placemark
-                                key={`/institute/${e.url[0] === '/' ? e.url.slice(1): e.url}`}
-                                onClick={() => navigate(`/institute/${e.url[0] === '/' ? e.url.slice(1): e.url}`)}
+                                key={institutePath}
+                                onClick={() => navigate(institutePath)}
                                 geometry={[e.latitude, e.longitude]}
                                 properties={{
                                     iconContent: e.displayableName,

@@ -1,0 +1,20 @@
+.IconButton {
+    width: var(--control-height);
+    height: var(--control-height);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+}
+
+.painted {
+    background: var(--bg-elevated);
+    border-color: var(--border-soft);
+    box-shadow: var(--shadow-subtle);
+}
+
+.clear {
+    background: transparent;
+}

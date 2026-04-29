@@ -1,0 +1,9 @@
+.Panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-xl);
+}
+
+.elevated {
+    box-shadow: var(--shadow-soft);
+}

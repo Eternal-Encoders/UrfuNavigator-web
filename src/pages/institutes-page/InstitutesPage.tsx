@@ -39,21 +39,21 @@ function InstitutesPage() {
             floor: 1,
             priority: 0
         }))
-    })
+    }, [])
 
     useEffect(() => {
         if (data) {
             if (data.gps && userGPSState) {
                 setMapGps(data.gps)
-                floorSet({
+                dispatch(floorSet({
                     floor: getClosestFloor(data.gps, approxGps(userLoc)).floor,
                     priority: 0
-                })
+                }))
             } else if (mapGps) {
                 setMapGps(undefined)
             }
         }
-    }, [data, userGPSState])
+    }, [data, mapGps, userGPSState, userLoc])
 
 
     let headerName = params.intstName
@@ -61,33 +61,33 @@ function InstitutesPage() {
 
     return (
         <>
-            {headerName ?
+            {headerName ? (
                 <Helmet>
-                    <title>{`${headerName} — Навигатор УрФУ`}</title>
+                    <title>{t('InstitutePageTitle', { name: headerName })}</title>
                     <meta
                         name="description"
-                        content={`Страница навигации по ${headerName} УрФУ`}
+                        content={t('InstitutePageDescription', { name: headerName })}
                     />
                     <meta 
                         name="viewport" 
-                        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+                        content="width=device-width, initial-scale=1.0" />
                 </Helmet>
-            :
+            ) : (
                 <>
                     <Helmet>
-                        <title>Загрузка</title>
+                        <title>{t('LoadingPageTitle')}</title>
                         <meta
                             name="description"
-                            content='Страница загрузки'
+                            content={t('LoadingPageDescription')}
                         />
                         <meta 
                             name="viewport" 
-                            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" 
+                            content="width=device-width, initial-scale=1.0" 
                         />
                     </Helmet>
-                    {t('Wait')}
+                    {t('Loading')}
                 </>
-            }
+            )}
             
             {!isLoading && data &&
                 <>

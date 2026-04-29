@@ -6,8 +6,8 @@
 .contacts-title {
     margin: 0;
     margin-bottom: 10px;
-    font-family: Roboto, sans-serif;
-    color: #6D6D6D;
+    font-family: Inter, sans-serif;
+    color: var(--text-secondary);
     font-size: 14px;
     font-weight: 500;
 }
@@ -32,8 +32,8 @@
 .contacts-text {
     margin: 0;
     text-align: center;
-    font-family: Roboto, sans-serif;
+    font-family: Inter, sans-serif;
     font-size: 14px;
     font-weight: 500;
-    color: #6D6D6D;
+    color: var(--text-secondary);
 }

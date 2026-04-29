@@ -1,0 +1,19 @@
+.GpsButton {
+  width: 44px;
+  height: 44px;
+}
+
+.GpsButton img {
+  width: 20px;
+  height: 20px;
+  opacity: 0.82;
+}
+
+.enabled {
+  border-color: var(--accent-primary);
+  box-shadow: var(--shadow-subtle);
+}
+
+.enabled img {
+  opacity: 1;
+}

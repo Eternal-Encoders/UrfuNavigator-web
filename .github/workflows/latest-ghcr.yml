@@ -8,10 +8,42 @@ on:
 jobs:
     build_and_publish:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
         steps:
-            - uses: actions/checkout@v3
-            - name: Build an push an image
-              run: |
-                docker login --username Roaoch --password ${{ secrets.PACKAGER }} ghcr.io
-                docker build . --tag ghcr.io/eternal-encoders/urfunavigator-web:latest
-                docker push ghcr.io/eternal-encoders/urfunavigator-web:latest
+            - uses: actions/checkout@v4
+
+            - uses: pnpm/action-setup@v4
+              with:
+                  version: 10
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Lint
+              run: pnpm lint
+
+            - name: Build
+              run: pnpm build
+
+            - name: Login to GHCR
+              uses: docker/login-action@v3
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Build and push image
+              uses: docker/build-push-action@v6
+              with:
+                  context: .
+                  push: true
+                  tags: ghcr.io/eternal-encoders/urfunavigator-web:latest
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
