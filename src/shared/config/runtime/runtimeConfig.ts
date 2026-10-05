@@ -2,11 +2,22 @@ interface RuntimeConfig {
     apiBaseUrl: string
 }
 
-const defaultApiBaseUrl = 'https://dev.how-to-navigate.ru/api';
+const defaultApiBaseUrl = import.meta.env.DEV
+    ? 'http://127.0.0.1:5000'
+    : 'https://dev.how-to-navigate.ru';
 const envHost = import.meta.env.VITE_HOST as string | undefined;
 
-const runtimeConfig: RuntimeConfig = {
-    apiBaseUrl: (envHost ? `https://${envHost}` : defaultApiBaseUrl)
-};
+function resolveApiBaseUrl(host: string | undefined): string {
+    if (!host) {
+        return defaultApiBaseUrl;
+    }
+    const trimmed = host.replace(/\/+$/, '');
+    if (/^https?:\/\//i.test(trimmed)) {
+        return trimmed;
+    }
+    return `https://${trimmed}`;
+}
 
-export default runtimeConfig;
+export const runtimeConfig: RuntimeConfig = {
+    apiBaseUrl: resolveApiBaseUrl(envHost)
+};
