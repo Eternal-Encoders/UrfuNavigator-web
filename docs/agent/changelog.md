@@ -1,5 +1,11 @@
 # Agent changelog
 
+## 2026-10-06 — Floor map icons from local files
+
+- Shape `icon` filenames load from `src/shared/assets/icons/floor/` via `floorIconSrc`.
+- `RoomIcon` no longer calls `GET /api/icons`, which serves building icons.
+- Unknown filenames still fall back to `shared/assets/icons/map/placeholder.svg`.
+
 ## 2026-10-05 — Floor loading skeleton
 
 - `useFloorData` reads RTK Query `currentData`, so a floor change no longer keeps the previous floor's rooms on the canvas.

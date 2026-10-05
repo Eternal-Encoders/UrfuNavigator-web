@@ -42,7 +42,7 @@ src/
     config/                runtimeConfig, i18n, lngs, PHONE_BREAKPOINT, GPS_BUFFER
     lib/                   cn, typed Redux hooks, useDrawer, GPS math
     ui/                    shadcn primitives + Panel, DragHandle
-    assets/                fonts, icons (point-types/, map/), legal.pdf
+    assets/                fonts, icons (point-types/, map/, floor/), legal.pdf
 ```
 
 ## State
@@ -65,7 +65,8 @@ in `app/store`, so `shared` never imports from `app`.
 All endpoints are injected into `shared/api/baseApi`:
 
 - `entities/building`: `GET /api/buildings`, `GET /api/building?id=`
-- `entities/floor`: `GET /api/floor?id=`, `GET /api/icons/:name`
+- `entities/floor`: `GET /api/floor?id=`, `GET /api/icons/:name` (building icons in object storage)
+- Floor-plan shape icons are filenames resolved from `shared/assets/icons/floor/` (`floorIconSrc`), not `/api/icons`.
 - `entities/point`: `GET /api/points`, `GET /api/point?id=`, `GET /api/search`
 - `entities/route`: `GET /api/path?from=&to=`
 

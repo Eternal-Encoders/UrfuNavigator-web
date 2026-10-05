@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image } from 'react-konva';
 import useImage from 'use-image';
-import { useGetIconQuery } from '@/entities/floor';
+import { floorIconSrc } from '@/shared/assets/icons/floor';
 import placeholderIcon from '@/shared/assets/icons/map/placeholder.svg';
 
 interface RoomIconProps {
@@ -13,9 +13,8 @@ interface RoomIconProps {
 }
 
 function RoomIcon({ icon, x, y, width, height }: RoomIconProps) {
-    const filename = icon.endsWith('.svg') ? icon : `${icon}.svg`;
-    const { data } = useGetIconQuery(filename);
-    const [image] = useImage(data?.url || placeholderIcon);
+    const [image] = useImage(floorIconSrc(icon) ?? placeholderIcon);
+
     return (
         <Image
             image={image}
