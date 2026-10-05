@@ -1,5 +1,10 @@
 # Agent changelog
 
+## 2026-10-05 — Floor loading skeleton
+
+- `useFloorData` reads RTK Query `currentData`, so a floor change no longer keeps the previous floor's rooms on the canvas.
+- While the selected floor is not resolved, `FloorMap` renders `FloorMapSkeleton` instead of the Konva stage.
+
 ## 2026-10-05 — Move to shadcn/Tailwind and finish FSD
 
 - Replaced all SCSS modules, `normalize.css` and `style.css` with Tailwind

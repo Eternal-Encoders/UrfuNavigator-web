@@ -12,6 +12,7 @@ import { buildingBackground } from '../lib/mapColors';
 import { useFloorData } from '../model/useFloorData';
 import { useMapGestures } from '../model/useMapGestures';
 import GpsMarker from './konva/GpsMarker';
+import { FloorMapSkeleton } from './FloorMapSkeleton';
 import { getRooms, getServices } from './MapShapes';
 import { RouteLayer } from './RouteLayer';
 import { RoutePoint } from './RoutePoint';
@@ -28,7 +29,14 @@ export function FloorMap({ building, userGps, mapGps }: FloorMapProps) {
     const currentFloor = useAppSelector(selectFloor);
     const points = useAppSelector(selectRoutePoints);
 
-    const { rooms, services, mapSize, coordsPredictor, headingPredictor } = useFloorData(currentFloor);
+    const {
+        rooms,
+        services,
+        mapSize,
+        coordsPredictor,
+        headingPredictor,
+        isResolving
+    } = useFloorData(currentFloor);
     const {
         innerWidth,
         innerHeight,
@@ -45,6 +53,10 @@ export function FloorMap({ building, userGps, mapGps }: FloorMapProps) {
 
     const isOnCurrentFloor = (point: typeof points.from) =>
         point && point.floorId === currentFloor && point.buildingId === building.id;
+
+    if (isResolving) {
+        return <FloorMapSkeleton />;
+    }
 
     return (
         <Stage

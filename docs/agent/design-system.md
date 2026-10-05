@@ -81,4 +81,4 @@ Composed components:
 - `widgets/side-menu`: `SideMenu` (+ internal `SideMenuHeader`, `SideMenuBody`,
   `InstitutesList`, `SettingsPanel`).
 - `widgets/point-details`: `PointDetails`.
-- `widgets/floor-map`: `FloorMap`.
+- `widgets/floor-map`: `FloorMap`, `FloorMapSkeleton` (shown while the selected floor has no resolved data).

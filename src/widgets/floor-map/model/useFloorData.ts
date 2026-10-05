@@ -1,5 +1,5 @@
 import { skipToken } from '@reduxjs/toolkit/query';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useGetFloorQuery } from '@/entities/floor';
 import type { IRoom, IService } from '@/shared/api';
 import { createPredictor, type UserGPS } from '@/shared/lib';
@@ -13,37 +13,44 @@ interface FloorData {
     mapSize: Size
 }
 
+const emptyFloor: FloorData = {
+    coordsPredictor: null,
+    headingPredictor: null,
+    rooms: [],
+    services: [],
+    mapSize: {
+        width: 0,
+        height: 0
+    }
+}
+
 export function useFloorData(floorId: string) {
-    const { data } = useGetFloorQuery(floorId || skipToken)
+    const { currentData } = useGetFloorQuery(floorId || skipToken)
+    const isReady = Boolean(floorId) && currentData?.id === floorId
 
-    const [floorData, setFloorData] = useState<FloorData>({
-        coordsPredictor: null,
-        headingPredictor: null,
-        rooms: [],
-        services: [],
-        mapSize: {
-            width: 0,
-            height: 0
-        }
-    })
-
-    useEffect(() => {
-        if (!data || data.id !== floorId) {
-            return;
+    const floorData = useMemo<FloorData>(() => {
+        if (!isReady || !currentData) {
+            return emptyFloor
         }
 
-        const [coordsPredictor, headingPredictor] = data.gps ? createPredictor(data.gps) : [null, null]
-        setFloorData({
+        const [coordsPredictor, headingPredictor] = currentData.gps
+            ? createPredictor(currentData.gps)
+            : [null, null]
+
+        return {
             coordsPredictor,
             headingPredictor,
-            rooms: data.rooms ?? [],
-            services: data.services ?? [],
+            rooms: currentData.rooms ?? [],
+            services: currentData.services ?? [],
             mapSize: {
-                width: data.width,
-                height: data.height
+                width: currentData.width,
+                height: currentData.height
             }
-        })
-    }, [data, floorId])
+        }
+    }, [currentData, isReady])
 
-    return floorData;
+    return {
+        ...floorData,
+        isResolving: !isReady
+    }
 }
