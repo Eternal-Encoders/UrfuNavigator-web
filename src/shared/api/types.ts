@@ -1,3 +1,5 @@
+import type { IColorSchema, IRoom, IService } from '@eternal-encoders/konva-floor-plan';
+
 export enum PointTypes {
     Corridor = 'corridor',
     Auditorium = 'auditorium',
@@ -17,95 +19,22 @@ export enum PointTypes {
     Other = 'other'
 }
 
-export type AlignX = 'LEFT' | 'RIGHT' | 'CENTER'
-export type AlignY = 'TOP' | 'BOTTOM' | 'CENTER'
-
-export interface IPointShape {
-    type: 'point',
-    x: number,
-    y: number
-}
-
-export interface IRectangleShape {
-    type: 'rectangle',
-    x: number,
-    y: number,
-    width: number,
-    height: number
-}
-
-export interface IPolyShape {
-    type: 'poly',
-    x: number,
-    y: number,
-    points: Array<{ x: number, y: number }>
-}
-
-export interface IContainerShape {
-    type: 'container',
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    alignX: AlignX,
-    alignY: AlignY,
-    children: IShape[]
-}
-
-export interface ITextShape {
-    type: 'text',
-    x: number,
-    y: number,
-    alignX: AlignX,
-    alignY: AlignY,
-    text: string
-}
-
-export interface IIconShape {
-    type: 'icon',
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    icon: string
-}
-
-export interface IDoorShape {
-    type: 'door',
-    wallId: number,
-    length: number,
-    offset: number
-}
-
-export type IShape =
-    | IPointShape
-    | IRectangleShape
-    | IPolyShape
-    | IContainerShape
-    | ITextShape
-    | IIconShape
-    | IDoorShape
-
-export interface IRoom {
-    id: string,
-    displayableName: string,
-    shape: IShape,
-    pointId?: string | null,
-    type?: string | null,
-    children?: Array<IShape | IRoom>,
-    colorSchema?: string | null,
-    isBorder?: boolean,
-    isFill?: boolean
-}
-
-export interface IService {
-    id: string,
-    displayableName: string,
-    shape: IShape,
-    colorSchema?: string | null,
-    isBorder?: boolean,
-    isFill?: boolean
-}
+export type {
+    AlignX,
+    AlignY,
+    IColorSchema,
+    IColorTheme,
+    IContainerShape,
+    IDoorShape,
+    IIconShape,
+    IPointShape,
+    IPolyShape,
+    IRectangleShape,
+    IRoom,
+    IService,
+    IShape,
+    ITextShape
+} from '@eternal-encoders/konva-floor-plan';
 
 export interface IPointName {
     name: string,
@@ -189,26 +118,6 @@ export interface IFloor {
     services: IService[],
     graph: IGraphPoint[],
     gps?: IFloorGps
-}
-
-export interface IColorTheme {
-    buildingBorder?: string,
-    buildingFill?: string,
-    buildingBackground?: string,
-    roomBorder?: string,
-    roomFill?: string,
-    roomText?: string,
-    roomTypeBorder?: Record<string, string>,
-    roomTypeFill?: Record<string, string>,
-    roomTypeText?: Record<string, string>
-}
-
-export interface IColorSchema {
-    id: string,
-    displayableName: string,
-    accentColor: string,
-    whiteColorTheme?: IColorTheme,
-    darkColorTheme?: IColorTheme
 }
 
 export interface IIconUrl {

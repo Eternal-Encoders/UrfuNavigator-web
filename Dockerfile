@@ -8,8 +8,12 @@ WORKDIR /app
 
 COPY ./package.json ./package.json
 COPY ./pnpm-lock.yaml ./pnpm-lock.yaml
+COPY ./.npmrc ./.npmrc
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    --mount=type=secret,id=NODE_AUTH_TOKEN \
+    NODE_AUTH_TOKEN="$(cat /run/secrets/NODE_AUTH_TOKEN)" \
+    pnpm install --frozen-lockfile
 
 COPY ./public ./public
 COPY ./src ./src

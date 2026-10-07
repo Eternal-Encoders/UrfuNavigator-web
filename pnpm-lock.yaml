@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@eternal-encoders/konva-floor-plan':
+        specifier: 1.0.0
+        version: 1.0.0(konva@10.2.5)(react-dom@19.2.5(react@19.2.5))(react-konva@19.2.3(@types/react@19.2.14)(konva@10.2.5)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)(use-image@1.1.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5))
       '@fontsource-variable/inter':
         specifier: ^5.3.0
         version: 5.3.0
@@ -135,6 +138,39 @@ importers:
       typescript-eslint:
         specifier: ^8.59.0
         version: 8.59.0(eslint@10.2.1(jiti@2.7.0))(typescript@6.0.3)
+      vite:
+        specifier: ^8.0.10
+        version: 8.0.10(@types/node@25.6.0)(jiti@2.7.0)(sass@1.99.0)
+
+  packages/floor-plan:
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      '@vitejs/plugin-react-swc':
+        specifier: ^4.3.0
+        version: 4.3.0(vite@8.0.10(@types/node@25.6.0)(jiti@2.7.0)(sass@1.99.0))
+      konva:
+        specifier: ^10.2.5
+        version: 10.2.5
+      react:
+        specifier: ^19.2.5
+        version: 19.2.5
+      react-dom:
+        specifier: ^19.2.5
+        version: 19.2.5(react@19.2.5)
+      react-konva:
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.14)(konva@10.2.5)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+      use-image:
+        specifier: ^1.1.4
+        version: 1.1.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       vite:
         specifier: ^8.0.10
         version: 8.0.10(@types/node@25.6.0)(jiti@2.7.0)(sass@1.99.0)
@@ -379,6 +415,15 @@ packages:
   '@eslint/plugin-kit@0.7.1':
     resolution: {integrity: sha512-rZAP3aVgB9ds9KOeUSL+zZ21hPmo8dh6fnIFwRQj5EAZl9gzR7wxYbYXYysAM8CTqGmUGyp2S4kUdV17MnGuWQ==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
+
+  '@eternal-encoders/konva-floor-plan@1.0.0':
+    resolution: {integrity: sha512-nbivL0rwggVrMXnMK2UwReQfjVUzNlkAYXg5O2qUyW7WiygaV9XQVDlIcie7ce+ZUbdKg8Nc0yTGAxAZw6Wmag==, tarball: https://npm.pkg.github.com/download/@eternal-encoders/konva-floor-plan/1.0.0/9b9e61acd8d433dbf7daa84c0920079403e359b8}
+    peerDependencies:
+      konva: ^10.2.5
+      react: ^19.2.5
+      react-dom: ^19.2.5
+      react-konva: ^19.2.3
+      use-image: ^1.1.4
 
   '@floating-ui/core@1.8.0':
     resolution: {integrity: sha512-0CIZ5itps/8x7BG8dEIhs53BvCUH2PCoogtakwRTut+Arm58sJooJ0AuZhLw2HJYIR5cMLNPBSS728sPho2khQ==}
@@ -4136,6 +4181,14 @@ snapshots:
     dependencies:
       '@eslint/core': 1.2.1
       levn: 0.4.1
+
+  '@eternal-encoders/konva-floor-plan@1.0.0(konva@10.2.5)(react-dom@19.2.5(react@19.2.5))(react-konva@19.2.3(@types/react@19.2.14)(konva@10.2.5)(react-dom@19.2.5(react@19.2.5))(react@19.2.5))(react@19.2.5)(use-image@1.1.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5))':
+    dependencies:
+      konva: 10.2.5
+      react: 19.2.5
+      react-dom: 19.2.5(react@19.2.5)
+      react-konva: 19.2.3(@types/react@19.2.14)(konva@10.2.5)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      use-image: 1.1.4(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
 
   '@floating-ui/core@1.8.0':
     dependencies:

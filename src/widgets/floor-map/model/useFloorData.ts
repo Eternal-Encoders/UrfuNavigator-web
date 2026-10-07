@@ -3,14 +3,13 @@ import { useMemo } from 'react';
 import { useGetFloorQuery } from '@/entities/floor';
 import type { IRoom, IService } from '@/shared/api';
 import { createPredictor, type UserGPS } from '@/shared/lib';
-import type { Size } from '../lib/geometry';
 
 interface FloorData {
     coordsPredictor: ((loc: UserGPS) => { x: number, y: number }) | null,
     headingPredictor: ((heading: number) => number) | null,
     rooms: IRoom[],
     services: IService[],
-    mapSize: Size
+    mapSize: { width: number, height: number }
 }
 
 const emptyFloor: FloorData = {

@@ -12,7 +12,9 @@ jobs:
             - uses: actions/checkout@v4
 
             - name: Build an push an image
+              env:
+                PACKAGER: ${{ secrets.PACKAGER }}
               run: |
-                docker login --username Roaoch --password ${{ secrets.PACKAGER }} ghcr.io
-                docker build . --tag ghcr.io/eternal-encoders/urfunavigator-web:latest
+                docker login --username Roaoch --password "$PACKAGER" ghcr.io
+                DOCKER_BUILDKIT=1 docker build --secret id=NODE_AUTH_TOKEN,env=PACKAGER . --tag ghcr.io/eternal-encoders/urfunavigator-web:latest
                 docker push ghcr.io/eternal-encoders/urfunavigator-web:latest
