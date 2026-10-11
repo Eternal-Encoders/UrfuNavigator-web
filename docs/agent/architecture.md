@@ -22,7 +22,7 @@ src/
       model/useInstituteBuilding.ts  resolves building from slug, initial floor, GPS floor
   widgets/
     side-menu/             Left panel / mobile drawer; switches content by sidebar state
-    floor-map/             Konva stage: rooms, services, route, route points, GPS marker
+    floor-map/             Loads floor data and renders @eternal-encoders/konva-floor-plan (docs/floor-plan.md)
     point-details/         Right panel / mobile drawer with info about selected point
   features/
     point-search/          Search state slice, SearchTrigger, SearchBar, SearchResults, QuickTypes
@@ -66,7 +66,7 @@ All endpoints are injected into `shared/api/baseApi`:
 
 - `entities/building`: `GET /api/buildings`, `GET /api/building?id=`
 - `entities/floor`: `GET /api/floor?id=`, `GET /api/icons/:name` (building icons in object storage)
-- Floor-plan shape icons are filenames resolved from `shared/assets/icons/floor/` (`floorIconSrc`), not `/api/icons`.
+- Floor-plan shape icons ship inside `@eternal-encoders/konva-floor-plan` (`floorIconSrc`), not `/api/icons`.
 - `entities/point`: `GET /api/points`, `GET /api/point?id=`, `GET /api/search`
 - `entities/route`: `GET /api/path?from=&to=`
 
