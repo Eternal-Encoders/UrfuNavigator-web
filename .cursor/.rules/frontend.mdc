@@ -1,0 +1,25 @@
+---
+alwaysApply: true
+---
+
+- For installing dependecies, build and test use pnpm
+- If possible use Radix as headless components
+- If possible use styles from Tailwind
+- For building disgin dsystem use shadcn/ui
+- For work with api use Redux RTK
+- For app state managment use Redux
+- For page routing use React-Router
+- You must organize all code following FSD layers (`app`, `pages`, `widgets`, `features`, `entities`, `shared`). Flat component directories (e.g., `src/components/`, `src/hooks/`) are strictly forbidden outside of these layers.
+- You must enforce a strict top-down import flow. A layer can only import from layers strictly below it (`app` -> `pages` -> `widgets` -> `features` -> `entities` -> `shared`). Cross-importing between slices on the same layer is strictly prohibited.
+- Always use `@/*` absolute paths targeting `src/*` (e.g., `@/shared/ui`, `@/entities/user`). Never use relative paths like `../../../../` when crossing FSD layer boundaries.
+- If asked to add a new UI element using the shadcn CLI, assume or generate configurations matching `components.json` where:
+    - Components/UI go to `@/shared/ui`
+    - Lib utils go to `@/shared/lib/utils`
+- When creating business-specific components (e.g., a Profile Card, an Add-to-Cart button), do NOT modify the raw shadcn primitives in `@/shared/ui`. Instead, compose them inside the appropriate `entities/`, `features/`, or `widgets/` slice.
+- Every slice (`pages/*`, `widgets/*`, `features/*`, `entities/*`) must split its technical concerns into standardized segments inside its folder:
+    - `ui/`: For presentational elements and UI layouts.
+    - `model/`: For state management, custom React hooks, actions, and data-stores (Zustand, Redux, etc.).
+    - `api/`: For API endpoints, RTK Query setups, or Axios fetch operations unique to this domain.
+    - `lib/`: For standalone helper utilities used strictly within this slice.
+- Every single FSD layer slice or segment must expose its contents *exclusively* via a central `index.ts` file at the slice root.
+- Deep imports from outside a slice (e.g., `import { X } from '@/entities/user/ui/Card'`) are completely forbidden. The agent must export `X` via `entities/user/index.ts` and import it as `import { X } from '@/entities/user'`.

@@ -4,6 +4,9 @@
   "From": "От",
   "SearchForAudiencesAndPlaces": "Поиск аудиторий и мест",
   "Language": "Язык",
+  "Theme": "Тема",
+  "DarkTheme": "Темная",
+  "LightTheme": "Светлая",
   "Settings": "Настройки",
   "AreYouHavingAnyProblemsWithOurSite": "У вас возникли проблемы? Хотите оставить комментарий или задать вопрос? Заполните форму.",
   "FeedbackForm": "Форма обратной связи",
@@ -20,5 +23,13 @@
   "Head Office": "Деканат",
   "Student Union": "Союз студентов",
   "Canteen": "Столовая",
-  "QuickSearch": "Быстрый поиск"
+  "QuickSearch": "Быстрый поиск",
+  "Loading": "Загрузка...",
+  "UrfuNavigatorTitle": "Навигатор УрФУ",
+  "HomePageDescription": "Интерактивная карта и сервис для навигации по учебным корпусам УрФУ. Найдите аудитории и проложите оптимальный маршрут между ними.",
+  "InstitutePageTitle": "{{name}} — Навигатор УрФУ",
+  "InstitutePageDescription": "Страница навигации по {{name}} УрФУ",
+  "LoadingPageTitle": "Загрузка",
+  "LoadingPageDescription": "Страница загрузки",
+  "SearchIconAlt": "Поиск"
 }

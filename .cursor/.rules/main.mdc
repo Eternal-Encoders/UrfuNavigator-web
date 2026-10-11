@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+
+- Main folder where you store inormation about project is docs/agent
+- Write relevant information about project and your work to docs/agent in MarkDown
+- Update information about latest Components, Design Tokens, Pages and Connections between pages

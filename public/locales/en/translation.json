@@ -4,6 +4,9 @@
   "From": "From",
   "SearchForAudiencesAndPlaces": "Search for audiences and places",
   "Language": "Language",
+  "Theme": "Theme",
+  "DarkTheme": "Dark",
+  "LightTheme": "Light",
   "Settings": "Settings",
   "AreYouHavingAnyProblemsWithOurSite": "Are you having any problems with our site? Want to leave a comment or ask a question? Fill out this form!",
   "FeedbackForm": "Feedback form",
@@ -20,5 +23,13 @@
   "Head Office": "Head Office",
   "Student Union": "Student Union",
   "Canteen": "Canteen",
-  "QuickSearch": "Quick search"
+  "QuickSearch": "Quick search",
+  "Loading": "Loading...",
+  "UrfuNavigatorTitle": "UrFU Navigator",
+  "HomePageDescription": "Interactive map and navigation service for UrFU academic buildings. Find classrooms and build an optimal route between them.",
+  "InstitutePageTitle": "{{name}} — UrFU Navigator",
+  "InstitutePageDescription": "Navigation page for {{name}} in UrFU",
+  "LoadingPageTitle": "Loading",
+  "LoadingPageDescription": "Loading page",
+  "SearchIconAlt": "Search"
 }

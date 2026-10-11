@@ -1,6 +1,6 @@
-import { Ilngs } from '../../../utils/interfaces';
-
-export const lngs: Ilngs = {
+export const lngs = {
     en: 'English',
     ru: 'Русский'
-}
+} as const;
+
+export type Lng = keyof typeof lngs;
