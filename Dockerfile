@@ -9,19 +9,19 @@ WORKDIR /app
 COPY ./package.json ./package.json
 COPY ./pnpm-lock.yaml ./pnpm-lock.yaml
 COPY ./.npmrc ./.npmrc
+COPY ./docker/install-deps.sh ./docker/install-deps.sh
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     --mount=type=secret,id=NODE_AUTH_TOKEN \
-    NODE_AUTH_TOKEN="$(cat /run/secrets/NODE_AUTH_TOKEN)" \
-    pnpm install --frozen-lockfile
+    sh ./docker/install-deps.sh
 
 COPY ./public ./public
 COPY ./src ./src
+COPY ./index.html ./index.html
+COPY ./vite.config.ts ./vite.config.ts
 COPY ./tsconfig.json ./tsconfig.json
 COPY ./tsconfig.node.json ./tsconfig.node.json
-COPY ./index.html ./index.html
 COPY ./docker/nginx.conf ./nginx.conf
-COPY ./docker/.env.production ./.env.production
 
 RUN pnpm run build
 

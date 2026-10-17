@@ -4,8 +4,16 @@ interface RuntimeConfig {
 
 const defaultApiBaseUrl = import.meta.env.DEV
     ? 'http://127.0.0.1:5000'
-    : 'https://dev.how-to-navigate.ru';
-const envHost = import.meta.env.VITE_HOST as string | undefined;
+    : 'https://test.how-to-navigate.ru';
+
+function readHost(runtimeValue: string | undefined, builtValue: string | undefined): string | undefined {
+    const runtime = runtimeValue?.trim();
+    if (runtime) {
+        return runtime;
+    }
+    const built = builtValue?.trim();
+    return built || undefined;
+}
 
 function resolveApiBaseUrl(host: string | undefined): string {
     if (!host) {
@@ -17,6 +25,8 @@ function resolveApiBaseUrl(host: string | undefined): string {
     }
     return `https://${trimmed}`;
 }
+
+const envHost = readHost(window.__APP_CONFIG__?.VITE_HOST, import.meta.env.VITE_HOST);
 
 export const runtimeConfig: RuntimeConfig = {
     apiBaseUrl: resolveApiBaseUrl(envHost)
