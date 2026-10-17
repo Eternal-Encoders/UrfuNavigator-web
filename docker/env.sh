@@ -1,12 +1,27 @@
 #!/bin/sh
-for i in $(env | grep MY_APP_)
-do
-    key=$(echo $i | cut -d '=' -f 1)
-    value=$(echo $i | cut -d '=' -f 2-)
-    echo $key=$value
-    # sed All files
-    # find /usr/share/nginx/html -type f -exec sed -i "s|${key}|${value}|g" '{}' +
+set -eu
 
-    # sed JS and CSS only
-    find /usr/share/nginx/html -type f \( -name '*.js' -o -name '*.css' \) -exec sed -i "s|${key}|${value}|g" '{}' +
-done
+json_string() {
+  printf '%s' "$1" | awk '
+    BEGIN { ORS = "" }
+    {
+      if (NR > 1) printf "\\n"
+      gsub(/\\/, "\\\\")
+      gsub(/"/, "\\\"")
+      gsub(/\r/, "\\r")
+      gsub(/\t/, "\\t")
+      gsub(/</, "\\u003c")
+      printf "%s", $0
+    }
+  '
+}
+
+emit() {
+  printf '  %s: "%s",\n' "$1" "$(json_string "$2")"
+}
+
+{
+  printf 'window.__APP_CONFIG__ = {\n'
+  emit VITE_HOST "${API_BASE:-}"
+  printf '};\n'
+} > /usr/share/nginx/html/config.js
