@@ -372,7 +372,7 @@ packages:
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
   '@eternal-encoders/konva-floor-plan@1.0.0':
-    resolution: {integrity: sha512-FG1E/r+77E9ho3VciEVE05XEJqC5pY49KdZGjZ/dVkdipHqD94Ok5PNJljYiOXtj/16hGOXM4J+P5P7X2Wri2g==, tarball: https://npm.pkg.github.com/download/@eternal-encoders/konva-floor-plan/1.0.0/a8db061ac94e8276d02e9867f093ec20a5d39379}
+    resolution: {integrity: sha512-baYr/Gy04zKx9B3emhV2ruwWTn7UQoYsNUy+nFa5EwP3LMvHl/aveTHnVGKES71FFHX5v0b+wpB3y3McXJtPzw==, tarball: https://npm.pkg.github.com/download/@eternal-encoders/konva-floor-plan/1.0.0/bb44c0a399b82bb36fbd9f1fea7f9da98e607d8b}
     peerDependencies:
       konva: ^10.2.5
       react: ^19.2.5
