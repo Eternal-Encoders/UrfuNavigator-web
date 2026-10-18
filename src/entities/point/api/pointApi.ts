@@ -10,7 +10,11 @@ interface IPointsReq {
 
 interface ISearchReq {
     name: string,
-    length?: number
+    length?: number,
+    offset?: number,
+    type?: PointTypes,
+    buildingId?: string,
+    floorId?: string
 }
 
 export const pointApi = baseApi.injectEndpoints({
@@ -30,9 +34,16 @@ export const pointApi = baseApi.injectEndpoints({
             })
         }),
         searchPoints: build.query<IGraphPoint[], ISearchReq>({
-            query: ({ name, length }) => ({
+            query: ({ name, length, offset, type, buildingId, floorId }) => ({
                 url: '/api/search',
-                params: { name, length },
+                params: {
+                    name,
+                    ...(length !== undefined ? { length } : {}),
+                    ...(offset !== undefined ? { offset } : {}),
+                    ...(type !== undefined ? { type } : {}),
+                    ...(buildingId !== undefined ? { buildingId } : {}),
+                    ...(floorId !== undefined ? { floorId } : {}),
+                },
                 method: 'GET',
             })
         }),

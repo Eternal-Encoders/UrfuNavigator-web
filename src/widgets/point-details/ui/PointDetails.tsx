@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useGetBuildingsQuery } from '@/entities/building';
 import {
     clearSelectedPoint,
@@ -10,6 +11,7 @@ import {
     weekRows
 } from '@/entities/point';
 import { selectScreenSize } from '@/entities/viewer';
+import { useSelectPoint, type SearchDirection } from '@/features/point-search';
 import { PHONE_BREAKPOINT } from '@/shared/config';
 import { cn, DrawerOrient, useAppDispatch, useAppSelector, useDrawer } from '@/shared/lib';
 import { Button, DragHandle, Panel } from '@/shared/ui';
@@ -37,6 +39,8 @@ function DetailsList({ items }: { items: ReactNode[] }) {
 
 export function PointDetails({ pointId }: PointDetailsProps) {
     const dispatch = useAppDispatch()
+    const { t } = useTranslation()
+    const selectAsRoutePoint = useSelectPoint()
     const { data } = useGetPointByIdQuery(pointId)
     const { data: buildings } = useGetBuildingsQuery()
     const { innerWidth } = useAppSelector(selectScreenSize)
@@ -56,6 +60,14 @@ export function PointDetails({ pointId }: PointDetailsProps) {
 
     function close() {
         dispatch(clearSelectedPoint())
+    }
+
+    function addToRoute(direction: SearchDirection) {
+        if (!data) {
+            return
+        }
+        selectAsRoutePoint(data, direction)
+        close()
     }
 
     if (data === undefined) {
@@ -83,6 +95,14 @@ export function PointDetails({ pointId }: PointDetailsProps) {
                     isPhone ? 'h-[calc(100%-92px)] py-2' : 'h-[calc(100%-72px)] py-4'
                 )}
             >
+                <div className="flex gap-2">
+                    <Button type="button" variant="secondary" className="flex-1" onClick={() => addToRoute('from')}>
+                        {t('FromHere')}
+                    </Button>
+                    <Button type="button" variant="secondary" className="flex-1" onClick={() => addToRoute('to')}>
+                        {t('ToHere')}
+                    </Button>
+                </div>
                 {otherNames &&
                     <DetailsSection title="Другие названия">
                         <DetailsList items={otherNames} />

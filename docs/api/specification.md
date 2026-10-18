@@ -117,14 +117,25 @@ All query parameters optional.
 `400` if `id` is missing or invalid.
 `500` on store failure, including a missing point.
 
-### `GET /api/search?name={text}&length={n}`
+### `GET /api/search?name={text}&length={n}&offset={n}&type={type}&buildingId={id}&floorId={id}`
 
-`name` required. `length` optional, clamped to `1..40`, default `40`.
+| Query | Meaning |
+| --- | --- |
+| `name` | required search string |
+| `length` | page size, clamped to `1..40`, default `40` |
+| `offset` | matches to skip after filtering, default `0` |
+| `type` | keep a point only when `types` contains this value |
+| `buildingId` | ObjectID used only to order results |
+| `floorId` | ObjectID used only to order results |
 
-Uses MongoDB Atlas Search index `point_search`. Returns only points that have `names[0]`.
+`buildingId` and `floorId` do not filter. When either is set, results are grouped as: the requested floor, then other points in the requested building, then the rest. A point on the requested floor stays in the first group. Inside each group the Atlas relevance order is kept, with `_id` as a tie-break. When neither id is set, results stay in Atlas order.
+
+Paging (`offset`, then `length`) is applied after the name match and the optional type filter.
+
+Uses MongoDB Atlas Search index `point_search` (autocomplete on `names.name`, text on description, info, types, displayableName). Returns only points that have `names[0]`.
 
 `200` array of Graph point (public), possibly empty.
-`400` if `name` is missing.
+`400` if `name` is missing, an ObjectID is invalid, or `offset` is negative.
 `500` if the search index is missing or the query fails.
 
 ### `GET /api/path?from={pointId}&to={pointId}`
