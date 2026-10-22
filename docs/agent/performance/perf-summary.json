@@ -1,0 +1,39 @@
+{
+  "before": {
+    "initialJsBytes": 565357,
+    "initialJsGzipBytes": 180551,
+    "mediansMs": {
+      "panel": 391.9,
+      "buildings": 834.7,
+      "map": 567
+    },
+    "floorTransitionMs": 690.3,
+    "samples": 3,
+    "viewport": "393x852",
+    "files": [
+      "index-DKVxg81g.js",
+      "rolldown-runtime-hePW80VL.js",
+      "HomePage-uy6MaAyN.js"
+    ]
+  },
+  "after": {
+    "initialJsBytes": 525398,
+    "initialJsGzipBytes": 169428,
+    "mediansMs": {
+      "panel": 101.8,
+      "buildings": 474,
+      "map": 581.9
+    },
+    "floorTransitionMs": 551,
+    "samples": 3,
+    "viewport": "393x852",
+    "files": [
+      "rolldown-runtime-hePW80VL.js",
+      "index-COvmd6x6.js",
+      "sidebar-B5jNge_G.js",
+      "point-CGY0IeqP.js",
+      "building-CRgxU4ah.js",
+      "HomePage-BArRmt7g.js"
+    ]
+  }
+}

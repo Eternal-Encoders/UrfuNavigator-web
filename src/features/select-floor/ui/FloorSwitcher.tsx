@@ -16,8 +16,8 @@ export function FloorSwitcher({ buildingId, floors }: FloorSwitcherProps) {
     const points = useAppSelector(selectRoutePoints)
 
     return (
-        <ul className="flex flex-col gap-1.5 rounded-xl border bg-card p-1.5 shadow-subtle">
-            {sortedFloors(floors).map((floor) => {
+        <ul className="floor-switcher">
+            {sortedFloors(floors).reverse().map((floor) => {
                 const isActive = currentFloor === floor.id
                 const onTheWay =
                     (points.from?.floorId === floor.id && points.from.buildingId === buildingId) ||
@@ -26,12 +26,11 @@ export function FloorSwitcher({ buildingId, floors }: FloorSwitcherProps) {
                 return (
                     <li key={floor.id}>
                         <Button
-                            variant={isActive ? 'default' : 'outline'}
+                            variant={isActive ? 'secondary' : 'ghost'}
                             size="icon-lg"
                             aria-pressed={isActive}
                             className={cn(
-                                'font-medium',
-                                !isActive && 'bg-secondary text-muted-foreground',
+                                'text-muted-foreground',
                                 onTheWay && 'ring-2 ring-route ring-offset-1 ring-offset-card'
                             )}
                             onClick={() => dispatch(floorSet({ floor: floor.id, priority: 1 }))}

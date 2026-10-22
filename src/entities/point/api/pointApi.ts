@@ -34,7 +34,14 @@ export const pointApi = baseApi.injectEndpoints({
             })
         }),
         searchPoints: build.query<IGraphPoint[], ISearchReq>({
-            query: ({ name, length, offset, type, buildingId, floorId }) => ({
+            query: ({ name, length = 40, offset = 0, type, buildingId, floorId }) => type !== undefined ? {
+                url: '/api/points',
+                // The points endpoint has no offset: fetch the prefix and return this page below.
+                params: { type, length: offset + length,
+                    ...(buildingId !== undefined ? { buildingId } : {}),
+                    ...(floorId !== undefined ? { floorId } : {}) },
+                method: 'GET',
+            } : ({
                 url: '/api/search',
                 params: {
                     name,
@@ -45,7 +52,9 @@ export const pointApi = baseApi.injectEndpoints({
                     ...(floorId !== undefined ? { floorId } : {}),
                 },
                 method: 'GET',
-            })
+            }),
+            transformResponse: (points: IGraphPoint[] | null, _meta, { type, offset = 0, length = 40 }) =>
+                type !== undefined ? (points ?? []).slice(offset, offset + length) : (points ?? []),
         }),
     })
 })

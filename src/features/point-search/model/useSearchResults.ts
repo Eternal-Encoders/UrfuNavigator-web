@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useMatch } from 'react-router-dom';
 import { matchBuilding, useGetBuildingsQuery } from '@/entities/building';
 import { selectFloor } from '@/entities/floor';
 import { useSearchPointsQuery } from '@/entities/point';
@@ -13,6 +13,8 @@ const PAGE_SIZE = 40;
 interface SearchResultsState {
     points: IGraphPoint[] | undefined,
     isFetchingNext: boolean,
+    isLoading: boolean,
+    isError: boolean,
     loadMore: () => void
 }
 
@@ -23,7 +25,7 @@ function searchKey(name: string, type: PointTypes | undefined, buildingId?: stri
 export function useSearchResults(): SearchResultsState {
     const { name, type } = useAppSelector(selectActiveSearchQuery);
     const floorValue = useAppSelector(selectFloor);
-    const { intstName } = useParams<{ intstName: string }>();
+    const intstName = useMatch('/institute/:intstName')?.params.intstName;
     const { data: buildings } = useGetBuildingsQuery(intstName ? undefined : skipToken);
 
     const building = intstName && buildings ? matchBuilding(buildings, intstName) : undefined;
@@ -47,7 +49,7 @@ export function useSearchResults(): SearchResultsState {
     const loadedPages = queryChanged ? [] : pages;
     const active = trimmedName.length > 0;
 
-    const { currentData, isFetching, originalArgs } = useSearchPointsQuery(
+    const { currentData, isFetching, isError, originalArgs } = useSearchPointsQuery(
         active
             ? {
                 name: trimmedName,
@@ -98,6 +100,8 @@ export function useSearchResults(): SearchResultsState {
 
     return {
         points,
+        isLoading: isFetching && loadedPages.length === 0,
+        isError,
         isFetchingNext: isFetching && pageOffset > 0 && loadedPages.length > 0,
         loadMore,
     };

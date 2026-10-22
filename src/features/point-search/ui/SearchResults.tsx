@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { buildingAccent, useGetBuildingsQuery } from '@/entities/building';
+import { useGetBuildingsQuery } from '@/entities/building';
 import { pointNameList } from '@/entities/point';
+import { ListSkeleton } from '@/shared/ui';
 import { useSearchResults } from '../model/useSearchResults';
 import { useSelectPoint } from '../model/useSelectPoint';
 
 const NEAR_BOTTOM_PX = 80;
 
 function preventPassThrough(e: React.TouchEvent<HTMLUListElement>) {
-    e.preventDefault();
     e.stopPropagation();
 }
 
@@ -35,7 +35,7 @@ function scrollParent(element: HTMLElement): HTMLElement {
 }
 
 export function SearchResults() {
-    const { points, isFetchingNext, loadMore } = useSearchResults();
+    const { points, isFetchingNext, loadMore, isLoading, isError } = useSearchResults();
     const selectPoint = useSelectPoint();
     const { data: buildings } = useGetBuildingsQuery();
     const { t } = useTranslation();
@@ -58,6 +58,12 @@ export function SearchResults() {
         return () => scroller.removeEventListener('scroll', onScroll);
     }, [loadMore, points]);
 
+    if (isLoading) return <ListSkeleton label={t('Loading')} />;
+    if (isError || points?.length === 0) {
+        return <p className="navigator-message" role="status">
+            {t(isError ? 'SearchLoadError' : 'NoResults')}
+        </p>;
+    }
     if (!points) {
         return null;
     }
@@ -65,7 +71,7 @@ export function SearchResults() {
     return (
         <ul
             ref={listRef}
-            className="size-full overflow-auto px-5"
+            className="point-list"
             onTouchStart={preventPassThrough}
             onTouchMove={preventPassThrough}
         >
@@ -75,29 +81,23 @@ export function SearchResults() {
                     <li key={point.id}>
                         <button
                             type="button"
-                            className="flex w-full flex-col gap-0.5 border-b py-2 text-left outline-none hover:bg-muted/60 focus-visible:bg-muted"
+                            className="outline-none focus-visible:bg-muted"
                             onClick={() => selectPoint(point)}
                         >
-                            <span className="text-sm font-medium text-foreground">
+                            <img src="/remake/7b59f.svg" alt="" width="24" height="24" />
+                            <span><strong>
                                 {pointNameList(point).join(', ')}
-                            </span>
-                            <span className="flex items-center gap-1">
-                                <span
-                                    className="size-2.5 rounded-full"
-                                    style={{ backgroundColor: buildingAccent(building) }}
-                                />
-                                <span className="text-xs font-medium text-muted-foreground">
-                                    {building?.displayableName}
-                                </span>
+                            </strong>
+                            <small>
+                                {building?.displayableName}
+                            </small>
                             </span>
                         </button>
                     </li>
                 );
             })}
             {isFetchingNext &&
-                <li className="py-2 text-center text-xs font-medium text-muted-foreground">
-                    {t('Loading')}
-                </li>
+                <li><ListSkeleton label={t('Loading')} rows={2} /></li>
             }
         </ul>
     );

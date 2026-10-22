@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { PointTypes } from '@/shared/api';
+import { readSearchHistory } from '../lib/searchHistoryStorage';
+import type { IGraphPoint, PointTypes } from '@/shared/api';
 
 export type SearchDirection = 'from' | 'to';
+type SearchTarget = SearchDirection | 'browse';
 
 interface SearchQuery {
     name: string,
@@ -9,22 +11,30 @@ interface SearchQuery {
 }
 
 interface PointSearchState {
-    direction: SearchDirection,
+    direction: SearchTarget,
+    browse: SearchQuery,
     from: SearchQuery,
-    to: SearchQuery
+    to: SearchQuery,
+    recentPoints: IGraphPoint[]
 }
 
 const initialState: PointSearchState = {
-    direction: 'from',
+    direction: 'browse',
+    browse: { name: '' },
     from: { name: '' },
-    to: { name: '' }
+    to: { name: '' },
+    recentPoints: readSearchHistory()
 }
 
 export const pointSearchSlice = createSlice({
     name: 'pointSearch',
     initialState,
     reducers: {
-        setSearchDirection: (state, action: PayloadAction<SearchDirection>) => {
+        rememberPoint: (state, action: PayloadAction<IGraphPoint>) => {
+            state.recentPoints = [action.payload, ...state.recentPoints.filter(p => p.id !== action.payload.id)]
+                .slice(0, 5);
+        },
+        setSearchDirection: (state, action: PayloadAction<SearchTarget>) => {
             state.direction = action.payload
         },
         setSearchName: (state, action: PayloadAction<string>) => {
@@ -38,6 +48,7 @@ export const pointSearchSlice = createSlice({
         }
     },
     selectors: {
+        selectRecentPoints: state => state.recentPoints,
         selectSearchDirection: state => state.direction,
         selectActiveSearchQuery: state => state[state.direction]
     }
@@ -47,10 +58,12 @@ export const {
     setSearchDirection,
     setSearchName,
     setSearchType,
-    resetSearchQuery
+    resetSearchQuery,
+    rememberPoint
 } = pointSearchSlice.actions
 
 export const {
     selectSearchDirection,
-    selectActiveSearchQuery
+    selectActiveSearchQuery,
+    selectRecentPoints
 } = pointSearchSlice.selectors

@@ -1,74 +1,62 @@
-import { cn } from '@/shared/lib';
-import { DragHandle, Panel } from '@/shared/ui';
+import { Suspense } from 'react';
+import { useNavigate, useMatch } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { SideBarContent, setContent } from '@/entities/sidebar';
+import { useAppDispatch } from '@/shared/lib';
+import { GpsToggle } from '@/features/user-location';
+import { ListSkeleton } from '@/shared/ui';
 import { useSideMenu } from '../model/useSideMenu';
 import { SideMenuBody } from './SideMenuBody';
 import { SideMenuHeader } from './SideMenuHeader';
 
-const headerClass = 'flex items-center justify-start gap-1 p-1';
-const bodyClass = 'flex w-full flex-col items-center justify-start overflow-y-auto bg-card';
-
 export function SideMenu() {
     const {
-        content,
-        isPhone,
-        isEmpty,
-        isHeadInDrawer,
-        position,
-        touchStartHandle,
-        touchMoveHandle,
-        touchEndHandle
+        content, isPhone, position, panelRef, isDragging, panelHeight, campusProgress, isCampus,
+        isBuildingsDrawer, searchOnlyHeight, toggleDrawer
     } = useSideMenu();
-
-    const header = <SideMenuHeader content={content} />;
-    const body = <SideMenuBody content={content} />;
-
-    if (isPhone) {
-        return (
-            <>
-                {!isHeadInDrawer &&
-                    <Panel elevated className={cn(headerClass, 'absolute top-0 z-20 mx-2 mt-3 w-[calc(100%-24px)]')}>
-                        {header}
-                    </Panel>
-                }
-                {!isEmpty &&
-                    <div
-                        className={cn(
-                            bodyClass,
-                            'absolute bottom-(--keyboard-offset) left-0 z-20 rounded-t-xl px-3 py-2 shadow-elevated'
-                        )}
-                        onTouchStart={touchStartHandle}
-                        onTouchMove={touchMoveHandle}
-                        onTouchEnd={touchEndHandle}
-                        role="dialog"
-                        aria-modal="false"
-                        style={{ height: position }}
-                    >
-                        <DragHandle />
-                        {isHeadInDrawer &&
-                            <Panel elevated className={cn(headerClass, 'relative mx-auto mb-6 w-full')}>
-                                {header}
-                            </Panel>
-                        }
-                        {body}
-                    </div>
-                }
-            </>
-        );
-    }
-
+    const intstName = useMatch('/institute/:intstName')?.params.intstName;
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { t } = useTranslation();
+    const expanded = [
+        SideBarContent.ExpandedInstitutes, SideBarContent.TypeList, SideBarContent.Categories,
+        SideBarContent.PointsList,
+        SideBarContent.Route
+    ].includes(content);
+    const isCollapsed = isPhone && position <= searchOnlyHeight;
+    const floorClass = content === SideBarContent.Empty ? 'is-floor' : '';
     return (
-        <aside
-            className={cn(
-                'absolute top-0 left-0 z-10 h-full w-(--panel-width) min-w-85 border-r bg-card px-3 py-4',
-                'shadow-soft backdrop-blur-sm animate-in fade-in slide-in-from-left duration-500'
-            )}
-        >
-            <Panel elevated className={cn(headerClass, 'mb-3')}>
-                {header}
-            </Panel>
-            <div className={cn(bodyClass, 'h-full px-3 py-4')}>
-                {body}
+        <aside ref={panelRef} className={`navigator-panel ${floorClass} ${expanded ? 'is-expanded' : ''} ${isDragging ? 'is-dragging' : ''} ${isCampus ? 'is-campus' : ''}`}
+            aria-label={t('SearchForAudiencesAndPlaces')} style={isPhone ? { height: panelHeight } : undefined}>
+            {!expanded && <div className="navigator-actions" style={isCampus ? {
+                opacity: Math.max(0, 1 - campusProgress * 4),
+                transform: `translateY(${-12 * campusProgress}px)`,
+                pointerEvents: campusProgress > 0.1 ? 'none' : undefined
+            } : undefined}>
+                {!intstName && <button type="button" onClick={() => { navigate('/'); dispatch(setContent(SideBarContent.Institutes)); }}>
+                    <img src="/remake/ef628.svg" alt="" width="20" height="20" />{t('Campus')}
+                </button>}
+                {intstName && <div data-map-interaction><GpsToggle /></div>}
+                <button type="button" onClick={() => dispatch(setContent(SideBarContent.Route))}>
+                    <img src="/remake/80d8f.svg" alt="" width="20" height="20" />{t('Route')}
+                </button>
+            </div>}
+            <div className="navigator-header">
+                {isPhone && <div className="navigator-handle">
+                    <button type="button" aria-label={t('TogglePanel')} aria-expanded={expanded} onClick={toggleDrawer}>
+                        {isCampus && <img src="/remake/3a06c.svg" width="24" height="4" alt="" />}
+                    </button>
+                </div>}
+                <div className="navigator-search-row"><SideMenuHeader campusProgress={isCampus ? campusProgress : undefined} content={isCollapsed ? (intstName ? SideBarContent.Empty : SideBarContent.Institutes) : content} /></div>
             </div>
+            <div className="navigator-body" style={isPhone ? {
+                display: isCollapsed ? 'none' : undefined,
+                opacity: isCampus
+                    ? Math.min(1, Math.max(0, (position - searchOnlyHeight) / (244 - searchOnlyHeight))) : undefined,
+                paddingBlock: Math.min(16, Math.max(0, (position - searchOnlyHeight) / 2)),
+                overflowX: 'hidden',
+                overflowY: isCampus && campusProgress < 0.999 ? 'hidden' : isBuildingsDrawer ? 'hidden' : undefined
+            } : undefined}><Suspense fallback={<ListSkeleton label={t('Loading')} />}><SideMenuBody content={content} campusProgress={campusProgress} /></Suspense></div>
         </aside>
     );
 }

@@ -1,6 +1,6 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useRef, useState } from 'react';
-import { matchBuilding, sortedFloors, useGetBuildingQuery, useGetBuildingsQuery } from '@/entities/building';
+import { matchBuilding, defaultFloor, useGetBuildingQuery, useGetBuildingsQuery } from '@/entities/building';
 import { floorReset, floorSet } from '@/entities/floor';
 import { selectRoutePoints } from '@/entities/route';
 import { useUserLocation } from '@/features/user-location';
@@ -37,7 +37,7 @@ export function useInstituteBuilding(slug: string) {
             dispatch(floorSet({ floor: selected.floorId, priority: 1 }))
             return
         }
-        const nextFloor = sortedFloors(building.floors)[0]
+        const nextFloor = defaultFloor(building.floors)
         if (nextFloor) {
             dispatch(floorReset(nextFloor.id))
         }

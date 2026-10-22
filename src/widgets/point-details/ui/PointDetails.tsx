@@ -14,7 +14,7 @@ import { selectScreenSize } from '@/entities/viewer';
 import { useSelectPoint, type SearchDirection } from '@/features/point-search';
 import { PHONE_BREAKPOINT } from '@/shared/config';
 import { cn, DrawerOrient, useAppDispatch, useAppSelector, useDrawer } from '@/shared/lib';
-import { Button, DragHandle, Panel } from '@/shared/ui';
+import { Button, DragHandle, Panel, ListSkeleton } from '@/shared/ui';
 
 interface PointDetailsProps {
     pointId: string
@@ -41,7 +41,7 @@ export function PointDetails({ pointId }: PointDetailsProps) {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
     const selectAsRoutePoint = useSelectPoint()
-    const { data } = useGetPointByIdQuery(pointId)
+    const { currentData: data, isFetching, isError } = useGetPointByIdQuery(pointId)
     const { data: buildings } = useGetBuildingsQuery()
     const { innerWidth } = useAppSelector(selectScreenSize)
     const isPhone = innerWidth <= PHONE_BREAKPOINT
@@ -71,7 +71,10 @@ export function PointDetails({ pointId }: PointDetailsProps) {
     }
 
     if (data === undefined) {
-        return null
+        if (!isFetching || isError) return null;
+        return <aside className="absolute bottom-0 z-20 w-full rounded-t-lg bg-card p-4 desktop:top-0 desktop:right-0 desktop:w-(--panel-width)">
+            <ListSkeleton label={t('Loading')} />
+        </aside>;
     }
 
     const names = pointNameList(data)
@@ -132,7 +135,7 @@ export function PointDetails({ pointId }: PointDetailsProps) {
     if (isPhone) {
         return (
             <div
-                className="absolute bottom-(--keyboard-offset) z-20 flex w-full flex-col bg-card p-2"
+                className="absolute bottom-0 max-h-full z-20 flex w-full flex-col bg-card p-2"
                 onTouchStart={touchStartHandle}
                 onTouchMove={touchMoveHandle}
                 onTouchEnd={() => {

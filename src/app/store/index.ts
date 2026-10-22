@@ -5,7 +5,7 @@ import { selectedPointSlice } from '@/entities/point';
 import { routeSlice } from '@/entities/route';
 import { sidebarSlice } from '@/entities/sidebar';
 import { viewerSlice } from '@/entities/viewer';
-import { pointSearchSlice } from '@/features/point-search';
+import { pointSearchSlice, searchHistoryMiddleware } from '@/features/point-search';
 import { baseApi } from '@/shared/api';
 
 const rootReducer = combineSlices(
@@ -21,7 +21,7 @@ const rootReducer = combineSlices(
 export const store = configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(baseApi.middleware)
+        getDefaultMiddleware().prepend(searchHistoryMiddleware.middleware).concat(baseApi.middleware)
 })
 
 setupListeners(store.dispatch)

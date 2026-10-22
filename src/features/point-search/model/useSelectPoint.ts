@@ -1,11 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { instituteRoute, useGetBuildingsQuery } from '@/entities/building';
 import { floorSet } from '@/entities/floor';
-import { setFromPoint, setToPoint } from '@/entities/route';
+import { selectPoint } from '@/entities/point';
+import { clearRoute, setFromPoint, setToPoint } from '@/entities/route';
 import { SideBarContent, selectContent, selectPrevContent, setContent } from '@/entities/sidebar';
 import type { IGraphPoint } from '@/shared/api';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
 import {
+    rememberPoint,
     resetSearchQuery,
     selectSearchDirection,
     setSearchDirection,
@@ -23,13 +25,19 @@ export function useSelectPoint() {
     const direction = useAppSelector(selectSearchDirection);
 
     return (point: IGraphPoint, directionOverride?: SearchDirection) => {
+        dispatch(rememberPoint(point));
         const target = directionOverride ?? direction;
         if (directionOverride) {
             dispatch(setSearchDirection(directionOverride));
         }
-        dispatch(target === 'to' ? setToPoint(point) : setFromPoint(point));
+        if (target === 'browse') {
+            dispatch(clearRoute());
+            dispatch(selectPoint(point.id));
+        } else {
+            dispatch(target === 'to' ? setToPoint(point) : setFromPoint(point));
+        }
         if (SEARCH_CONTENT.includes(content)) {
-            dispatch(setContent(prevContent));
+            dispatch(setContent(target === 'browse' ? SideBarContent.Empty : prevContent));
             dispatch(resetSearchQuery());
         }
         dispatch(floorSet({ floor: point.floorId, priority: 1 }));

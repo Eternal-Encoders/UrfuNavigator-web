@@ -3,7 +3,6 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
 
-import react from '@vitejs/plugin-react-swc';
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
@@ -11,17 +10,26 @@ const rootDir = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig(() => {
     return {
         envPrefix: ['VITE_', 'API_', 'DEFAULT_'],
-        plugins: [react(), tailwindcss()],
+        // Prebundle the renderer with React interop; refresh local tarballs on server startup.
+        optimizeDeps: { include: ['@eternal-encoders/konva-floor-plan'], force: true },
+        plugins: [tailwindcss()],
         resolve: {
             alias: {
                 '@': path.resolve(rootDir, 'src'),
             },
         },
         server: {
-            open: true,
+            open: false,
             strictPort: true,
-            host: true,
+            host: '0.0.0.0',
             port: 3000,
+            proxy: {
+                '/backend': {
+                    target: 'https://api.test.how-to-navigate.ru',
+                    changeOrigin: true,
+                    rewrite: path => path.replace(/^\/backend/, ''),
+                },
+            },
         }
     }
 })

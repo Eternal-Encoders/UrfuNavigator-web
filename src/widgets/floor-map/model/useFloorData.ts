@@ -5,6 +5,7 @@ import type { IRoom, IService } from '@/shared/api';
 import { createPredictor, type UserGPS } from '@/shared/lib';
 
 interface FloorData {
+    gpsAltitude: number,
     coordsPredictor: ((loc: UserGPS) => { x: number, y: number }) | null,
     headingPredictor: ((heading: number) => number) | null,
     rooms: IRoom[],
@@ -13,6 +14,7 @@ interface FloorData {
 }
 
 const emptyFloor: FloorData = {
+    gpsAltitude: 0,
     coordsPredictor: null,
     headingPredictor: null,
     rooms: [],
@@ -37,6 +39,7 @@ export function useFloorData(floorId: string) {
             : [null, null]
 
         return {
+            gpsAltitude: currentData.gps?.altitude ?? 0,
             coordsPredictor,
             headingPredictor,
             rooms: currentData.rooms ?? [],

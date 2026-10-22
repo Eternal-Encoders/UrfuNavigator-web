@@ -1,96 +1,39 @@
-import { Settings, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { clearRoute, selectRoutePoints } from '@/entities/route';
-import { SideBarContent, selectPrevContent, setContent } from '@/entities/sidebar';
+import { SideBarContent, setContent, setContentNoHistory, setSettingsOpen } from '@/entities/sidebar';
 import { SearchBar, SearchTrigger } from '@/features/point-search';
-import { useAppDispatch, useAppSelector } from '@/shared/lib';
+import { useAppDispatch } from '@/shared/lib';
 import { Button } from '@/shared/ui';
 
-function SettingsButton() {
+export function SideMenuHeader({ content, campusProgress }: { content: SideBarContent, campusProgress?: number }) {
     const dispatch = useAppDispatch();
-    const { t } = useTranslation();
-
-    return (
-        <Button
-            variant="outline"
-            size="icon-lg"
-            aria-label={t('Settings')}
-            className="text-muted-foreground"
-            onClick={() => dispatch(setContent(SideBarContent.Settings))}
-        >
-            <Settings className="size-5" />
-        </Button>
-    );
-}
-
-function CloseButton() {
-    const dispatch = useAppDispatch();
-    const prevContent = useAppSelector(selectPrevContent);
-
-    return (
-        <Button variant="outline" size="icon-lg" aria-label="Close" onClick={() => dispatch(setContent(prevContent))}>
-            <X className="size-5" />
-        </Button>
-    );
-}
-
-function BackButton() {
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
-    const points = useAppSelector(selectRoutePoints);
-
-    function onClickHandler() {
-        if (points.from || points.to) {
-            dispatch(clearRoute());
-        } else {
-            navigate('/');
-        }
-    }
-
-    return (
-        <Button variant="outline" size="icon-lg" aria-label="Back" onClick={onClickHandler}>
-            <X className="size-5" />
-        </Button>
-    );
-}
-
-function HeaderTitle({ text }: { text: string }) {
-    return (
-        <div className="flex h-10 w-full items-center justify-center rounded-md border bg-secondary text-sm font-medium text-muted-foreground">
-            {text}
-        </div>
-    );
-}
-
-export function SideMenuHeader({ content }: { content: SideBarContent }) {
     const { t } = useTranslation();
-
-    switch (content) {
-    case SideBarContent.Institutes:
-        return (
-            <>
-                <SettingsButton />
-                <SearchTrigger direction="to" isHomePage />
-            </>
-        );
-    case SideBarContent.TypeList:
-    case SideBarContent.PointsList:
-        return <SearchBar />;
-    case SideBarContent.Settings:
-        return (
-            <>
-                <HeaderTitle text={t('Settings')} />
-                <CloseButton />
-            </>
-        );
-    case SideBarContent.Empty:
-        return (
-            <>
-                <SearchTrigger direction="from" />
-                <SearchTrigger direction="to" />
-                <BackButton />
-            </>
-        );
+    if (campusProgress !== undefined) return <>
+        <SearchTrigger direction="to" isHomePage />
+        <Button variant="secondary" size="icon-lg" className="relative" aria-label={t(campusProgress > 0.5 ? 'Close' : 'Settings')}
+            onClick={() => dispatch(campusProgress > 0.5
+                ? setContentNoHistory(SideBarContent.Institutes) : setSettingsOpen(true))}>
+            <span className="absolute" style={{ opacity: 1 - campusProgress, transform: `rotate(${campusProgress * 90}deg)` }}>
+                <img src="/remake/ff6fa.svg" alt="" width="20" height="20" />
+            </span>
+            <span className="absolute" style={{ opacity: campusProgress, transform: `rotate(${(1 - campusProgress) * -90}deg)` }}>
+                <img src="/remake/f17f3.svg" alt="" width="20" height="20" />
+            </span>
+        </Button>
+    </>;
+    if (content === SideBarContent.TypeList || content === SideBarContent.PointsList) return <SearchBar />;
+    if (content === SideBarContent.Route) {
+        return <><span className="navigator-heading">{t('Route')}</span>
+            <Button variant="secondary" size="icon-lg" aria-label={t('Close')} onClick={() => dispatch(setContent(window.location.pathname === '/' ? SideBarContent.Institutes : SideBarContent.Empty))}>
+                <img src="/remake/f17f3.svg" alt="" width="20" height="20" />
+            </Button></>;
     }
+    return <>
+        <SearchTrigger direction="to" isHomePage />
+        <Button variant="secondary" size="icon-lg" aria-label={t(content === SideBarContent.Empty ? 'Campus' : 'Settings')}
+            onClick={() => content === SideBarContent.Empty ? navigate('/') : dispatch(setSettingsOpen(true))}>
+            <img src={content === SideBarContent.Empty ? '/remake/03b09.svg' : '/remake/ff6fa.svg'} alt="" width="20" height="20" />
+        </Button>
+    </>;
 }

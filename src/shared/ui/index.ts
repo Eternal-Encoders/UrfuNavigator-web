@@ -4,3 +4,4 @@ export { Switch } from './switch';
 export { Separator } from './separator';
 export { Panel } from './panel';
 export { DragHandle } from './drag-handle';
+export { Skeleton, ListSkeleton, MapSkeleton } from './skeleton';

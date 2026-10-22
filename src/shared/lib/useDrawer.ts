@@ -1,11 +1,13 @@
-import { TouchEvent, TouchList, useState } from 'react';
+import { useState } from 'react';
+
+type DrawerTouches = ArrayLike<{ clientX: number, clientY: number }>;
 
 export enum DrawerOrient {
     Horizontal = 'h',
     Vertical = 'v'
 }
 
-function touchesToPos(touches: TouchList, orient: DrawerOrient): number {
+function touchesToPos(touches: DrawerTouches, orient: DrawerOrient): number {
     let sumOf = 0;
 
     for (let i=0; i < touches.length; i++) {
@@ -55,11 +57,11 @@ export function useDrawer(
         return position <= point + threshold && position >= point - threshold;
     }
 
-    function touchStartHandle(e: TouchEvent<HTMLDivElement>) {
+    function touchStartHandle(e: { touches: DrawerTouches }) {
         setLastPos(touchesToPos(e.touches, orient));
     }
 
-    function touchMoveHandle(e: TouchEvent<HTMLDivElement>) {
+    function touchMoveHandle(e: { touches: DrawerTouches }) {
         if (!lastPos) {
             return;
         }

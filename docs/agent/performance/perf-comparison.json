@@ -1,0 +1,105 @@
+{
+  "before": [
+    {
+      "marks": {
+        "buildings": 889.3000000119209,
+        "map": 569.6000000238419,
+        "panel": 391.9000000357628
+      },
+      "origin": 1792616864560.1,
+      "photos": 6,
+      "resources": [
+        "index-DKVxg81g.js",
+        "rolldown-runtime-hePW80VL.js",
+        "HomePage-uy6MaAyN.js"
+      ],
+      "width": 393
+    },
+    {
+      "marks": {
+        "buildings": 834.7000000476837,
+        "map": 567,
+        "panel": 397.9000000357628
+      },
+      "origin": 1792616865484.9,
+      "photos": 6,
+      "resources": [
+        "index-DKVxg81g.js",
+        "rolldown-runtime-hePW80VL.js",
+        "HomePage-uy6MaAyN.js"
+      ],
+      "width": 393
+    },
+    {
+      "marks": {
+        "buildings": 799.6000000238419,
+        "map": 529.6999999880791,
+        "panel": 377.699999988079
+      },
+      "origin": 1792616866351.1,
+      "photos": 6,
+      "resources": [
+        "index-DKVxg81g.js",
+        "rolldown-runtime-hePW80VL.js",
+        "HomePage-uy6MaAyN.js"
+      ],
+      "width": 393
+    }
+  ],
+  "after": [
+    {
+      "marks": {
+        "buildings": 550.4000000357628,
+        "map": 632.8000000119209,
+        "panel": 150.60000002384186
+      },
+      "origin": 1792616867203.5,
+      "photos": 4,
+      "resources": [
+        "rolldown-runtime-hePW80VL.js",
+        "index-COvmd6x6.js",
+        "sidebar-B5jNge_G.js",
+        "point-CGY0IeqP.js",
+        "building-CRgxU4ah.js",
+        "HomePage-BArRmt7g.js"
+      ],
+      "width": 393
+    },
+    {
+      "marks": {
+        "buildings": 474,
+        "map": 581.8999999761581,
+        "panel": 101.79999995231628
+      },
+      "origin": 1792616867852.4,
+      "photos": 4,
+      "resources": [
+        "rolldown-runtime-hePW80VL.js",
+        "index-COvmd6x6.js",
+        "sidebar-B5jNge_G.js",
+        "building-CRgxU4ah.js",
+        "point-CGY0IeqP.js",
+        "HomePage-BArRmt7g.js"
+      ],
+      "width": 393
+    },
+    {
+      "marks": {
+        "buildings": 463.199999988079,
+        "map": 565.1000000238419,
+        "panel": 94.39999997615814
+      },
+      "origin": 1792616868453.4,
+      "photos": 4,
+      "resources": [
+        "rolldown-runtime-hePW80VL.js",
+        "building-CRgxU4ah.js",
+        "sidebar-B5jNge_G.js",
+        "index-COvmd6x6.js",
+        "point-CGY0IeqP.js",
+        "HomePage-BArRmt7g.js"
+      ],
+      "width": 393
+    }
+  ]
+}
