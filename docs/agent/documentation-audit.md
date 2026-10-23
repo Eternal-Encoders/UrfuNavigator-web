@@ -1,4 +1,4 @@
-# Documentation audit — 2026-10-22
+# Documentation audit — 2026-10-24
 
 ## Coverage and corrections
 
@@ -13,15 +13,19 @@
 
 ## Validation
 
-- `pnpm test`: 24 automated tests (compass, search/selection/categories, haptic dispatch, carousel end-pull and history controller).
+- `pnpm test`: 56 automated tests (compass, search/selection/categories, haptic dispatch, carousel end-pull and history controller).
 - `pnpm build`: TypeScript and Vite production build.
 - `pnpm lint`: FSD checker and full ESLint, no warnings allowed.
 - `git diff --check`: whitespace validation.
 - `pnpm install --frozen-lockfile --ignore-scripts`: lockfile/install consistency.
-- Active archive: 28 dist/README files match renderer checkout byte-for-byte; packed package manifest matches after pnpm removes packageManager. Source commit: 75709efe3bbd7f2b0264c937e0ea6507f47a6f81.
+- Active renderer archive: 1.13.0; dist parity, SHA-256 and exact source revision are recorded in vendor/README.md.
 
 Build may report third-party `use client` directive warnings; pnpm reports existing peer/auth configuration warnings. No registry credential was added. Historical performance numbers are not remeasured or presented as current results.
 
 ## Limits requiring device/production verification
 
-See the full [known-limit list](current-state.md). In particular, automated tests cannot verify physical vibration/compass, Safari native permission UI, Android hardware Back with keyboard, real mobile gesture feel, or server production behavior. Empty campus content and pending Yandex API 3 migration are intentional unfinished scope, not undocumented features. No deployment/publication is included.
+See the full [known-limit list](current-state.md). In particular, automated tests cannot verify physical vibration/compass, Safari native permission UI, Android hardware Back with keyboard, real mobile gesture feel, or server production behavior. Campus selection now contains cards/filtering; unavailable campuses remain disabled. Yandex API 3 migration is pending. Route UX is unfinished: see [route-ux.md](route-ux.md). No deployment/publication is included.
+
+
+## Current delivery audit
+Both repositories have separate local commits; no push, package publication or deployment is included. Library tests: 45; web tests: 56. Current route rules and superseded historical descriptions are reconciled in route-ux.md and the current-state index. Historical renderer archives and unused 95bdb.svg are retained; only 1.13.0 is active. Android/Safari device acceptance is pending.

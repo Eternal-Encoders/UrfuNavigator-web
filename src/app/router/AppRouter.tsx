@@ -6,13 +6,18 @@ import { InstitutePage } from '@/pages/institute';
 import { setPageReady } from '@/entities/viewer';
 import { useAppDispatch } from '@/shared/lib';
 import { MapSkeleton } from '@/shared/ui';
-import { SideMenu, SettingsOverlay, CampusOverlay } from '@/widgets/side-menu';
+import { PointDetails } from '@/widgets/point-details';
+import { SideMenu, SettingsOverlay, CampusOverlay, RouteOverlay } from '@/widgets/side-menu';
 import { usePanelBack } from '../model/usePanelBack';
 import { usePagePreload } from '../model/usePagePreload';
+import { useBuildingVisits } from '../model/useBuildingVisits';
+import { useRoutePresentation } from '../model/useRoutePresentation';
 
 function NavigatorLayout() {
     const { t } = useTranslation();
     usePagePreload();
+    useBuildingVisits();
+    useRoutePresentation();
     usePanelBack();
     const { pathname } = useLocation();
     const dispatch = useAppDispatch();
@@ -24,6 +29,8 @@ function NavigatorLayout() {
         <SideMenu />
         <SettingsOverlay />
         <CampusOverlay />
+        <RouteOverlay />
+        <PointDetails />
     </div>;
 }
 

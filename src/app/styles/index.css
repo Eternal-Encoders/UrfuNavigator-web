@@ -554,3 +554,185 @@ body [contenteditable]:not([contenteditable="false"]) * {
 @media (min-width: 1201px) {
   .campus-picker-list .campus-picker-button { flex-direction: row; }
 }
+
+/* Room details share the independent settings/campus overlay shell. */
+.point-details-overlay { color: var(--foreground); }
+.point-details-body { gap: 16px; }
+.point-details-section { display: flex; flex-direction: column; gap: 6px; }
+.point-details-section h2 { @apply px-2 text-xs font-normal leading-4 text-muted-foreground; }
+.point-details-value { @apply rounded-lg bg-card p-4 text-sm leading-5 text-foreground; overflow-wrap: anywhere; white-space: pre-wrap; }
+.point-details-actions { @apply grid grid-cols-2 gap-2; }
+.point-details-actions button { @apply h-[47px] rounded-lg text-xs font-normal; }
+.point-details-schedule > div { display: flex; justify-content: space-between; gap: 16px; }
+.point-details-schedule dd { text-align: end; }
+
+.point-details-overlay .navigator-heading { max-width: calc(100% - 56px); }
+
+/* Room information can be selected/copied, unlike the surrounding app chrome. */
+.point-details-overlay, .point-details-overlay * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+.point-details-overlay button, .point-details-overlay button * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Search preview fits the heading and route actions without a section teaser. */
+.point-details-overlay.is-preview {
+  top: auto;
+  bottom: 0;
+  /* Header: 40px controls + 32px padding; body: 16px top padding + 47px actions. */
+  height: calc(135px + var(--point-preview-pull, 0px));
+  max-height: 90%;
+}
+.point-details-overlay.is-preview .point-details-body { overflow: hidden; }
+.point-details-overlay { transition: transform 180ms ease-out, height 220ms ease-out; }
+.point-details-overlay.is-dragging { transition: none; }
+@media (min-width: 1201px) {
+  .point-details-overlay.is-preview { bottom: 16px; left: 16px; border-radius: 12px; overflow: hidden; }
+}
+
+@media (max-width: 1200px) {
+  /* Mobile header also includes the shared 24px swipe handle. */
+  .point-details-overlay.is-preview { height: calc(var(--room-preview-height, 159px) + var(--point-preview-pull, 0px)); }
+}
+.point-details-actions { flex-shrink: 0; }
+
+/* The main panel and its action buttons return together beneath the exiting details. */
+.main-navigator-panel {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 180ms ease-out, translate 180ms ease-out, visibility 0s;
+  translate: 0 0;
+}
+.main-navigator-panel.is-room-covered {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  translate: 0 12px;
+  transition: opacity 180ms ease-out, translate 180ms ease-out, visibility 0s 180ms;
+}
+.map-panel-controls { opacity: 1; visibility: visible; transition: opacity 180ms ease-out, visibility 0s; }
+.map-panel-controls.is-hidden {
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 180ms ease-out, visibility 0s 180ms;
+}
+.floor-switcher-position { transition: none; }
+@media (max-width: 1200px) {
+  :root { --room-preview-height: 159px; }
+  .floor-switcher-position.is-room-attached {
+    bottom: calc(var(--room-preview-height) + var(--room-panel-lift, 0px) + 8px);
+    max-height: max(0px, calc(100% - var(--room-preview-height) - var(--room-panel-lift, 0px) - 24px));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .main-navigator-panel, .main-navigator-panel.is-room-covered,
+  .map-panel-controls, .map-panel-controls.is-hidden, .floor-switcher-position { transition: none; }
+}
+
+/* Track the finger directly; animate only settled panel changes. */
+html:has(.point-details-overlay.is-dragging) .floor-switcher-position { transition: none; }
+
+/* Measure the space above the active panel, rather than clipping the floor list. */
+.floor-switcher-position {
+  height: max(0px, calc(100% - var(--mobile-drawer-offset) - 24px));
+  display: flex;
+  align-items: flex-end;
+  overflow: visible;
+  pointer-events: none;
+}
+.floor-switcher-position > .floor-switcher {
+  flex-shrink: 0;
+  pointer-events: auto;
+  opacity: 1;
+  translate: 0 0;
+  visibility: visible;
+  transition: opacity 160ms ease-out, translate 160ms ease-out, visibility 0s;
+}
+.floor-switcher-position.is-overflowing > .floor-switcher {
+  opacity: 0;
+  translate: 0 6px;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 160ms ease-out, translate 160ms ease-out, visibility 0s 160ms;
+}
+@media (max-width: 1200px) {
+  .floor-switcher-position.is-room-attached {
+    height: max(0px, calc(100% - var(--room-preview-height) - var(--room-panel-lift, 0px) - 24px));
+  }
+}
+@media (min-width: 1201px) {
+  .floor-switcher-position { height: calc(100% - 48px); align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .floor-switcher-position > .floor-switcher,
+  .floor-switcher-position.is-overflowing > .floor-switcher { transition: none; }
+}
+
+/* Five total rows: scroll indicators reserve a row each. */
+.floor-switcher-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  height: calc(var(--floor-visible-rows) * 39px - 5px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  scrollbar-width: none;
+  scroll-snap-type: y proximity;
+}
+.floor-switcher-scroll::-webkit-scrollbar { display: none; }
+.floor-switcher-scroll > li { height: 34px; flex-shrink: 0; scroll-snap-align: start; }
+.floor-switcher > button { flex-shrink: 0; }
+
+.campus-selection-list { display: flex; flex-direction: column; gap: 8px; }
+.campus-selection-list .building-card { display: flex; flex-direction: row; width: 100%; height: 100px; text-align: start; }
+.campus-selection-list .building-photo { flex-shrink: 0; }
+.campus-selection-list .building-card-info { flex: 1; height: 100%; min-width: 0; gap: 5px; justify-content: flex-start; padding-block: 12px; }
+.campus-selection-list .building-card:disabled { color: var(--subtle-foreground); cursor: default; }
+.campus-selection-list .building-card:disabled .building-photo { filter: grayscale(1); }
+.campus-unavailable { color: var(--subtle-foreground); font-size: 12px; }
+.campus-selection-list .building-card[aria-pressed=true] { outline: 1px solid var(--border); outline-offset: -1px; }
+
+/* Expanded titles are explicit card metadata, independent of punctuation in names. */
+.building-card-title:has(.building-title-expanded) { display: grid; }
+.building-card-title > span { grid-area: 1 / 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.building-title-expanded { visibility: hidden; }
+@media (max-width: 1200px) {
+  .building-list.campus-morph .building-title-compact { opacity: calc(1 - var(--detail-progress)); }
+  .building-list.campus-morph .building-title-expanded {
+    visibility: var(--details-visibility);
+    opacity: var(--detail-progress);
+    transform: translateY(calc(6px * (1 - var(--detail-progress))));
+  }
+}
+@media (min-width: 1201px) {
+  .building-list.campus-morph .building-title-compact { visibility: hidden; }
+  .building-list.campus-morph .building-title-expanded { visibility: visible; }
+}
+
+.building-card.is-unavailable { color: var(--subtle-foreground); cursor: default; text-align: start; }
+.building-card.is-unavailable .building-icon { filter: grayscale(1); }
+
+/* Route editor: Figma 2900:1776, two fields in the shared white header. */
+.route-fields { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.route-search-field { gap: 8px; width: 100%; }
+.route-field-value { flex: 1; min-width: 0; text-align: start; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.route-field-value.is-placeholder { color: var(--subtle-foreground); }
+.route-field-clear { flex-shrink: 0; width: 20px; height: 20px; }
+.route-editor-overlay .point-list, .is-route-panel .point-list { box-shadow: 0 0 20px rgb(0 0 0 / 4%); }
+@media (max-width: 1200px) {
+  .route-editor-overlay .navigator-header { width: 100%; }
+  .is-route-panel .navigator-header { box-shadow: 0 0 20px rgb(0 0 0 / 4%); }
+}
+
+.route-fields .navigator-input { flex: none; height: 40px; }
+
+/* Empty route starts at its two-field header; focusing a field reveals search. */
+.route-editor-overlay.is-empty-route { height: auto; }
+
+
+.is-route-panel .navigator-search-row { align-items: flex-start; }
+.is-route-panel.is-expanded { --navigator-header-height: 126px; }

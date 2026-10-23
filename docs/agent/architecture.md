@@ -278,3 +278,31 @@ Home campus selection: InstitutesList appends a Choose campus entry, included in
 ### Mobile panel Back history
 
 NavigatorLayout installs app/model/usePanelBack only at phone widths. app/lib/panelHistory owns one same-URL history guard and a stack of settled UI snapshots; it preserves BrowserRouter history state. Snapshots include sidebar content/history, settings/campus flags, selected point ID and drawer resting height. Back restores a checkpoint before page navigation; manual closes prune it. Entities/sidebar exposes setRestingHeight and restorePanel (revision-based), and useSideMenu restores height while cancelling gesture/map-restore ownership. Drawer animation frames do not create checkpoints. Desktop has no panel guard; keyboard Back handling remains browser-owned.
+
+
+Room details: NavigatorLayout mounts the lazy point-details widget layer independently of the map page and main panel. It selects the existing pointId state, renders a Radix portal, and retains the loaded component for exit animations. It is no longer inside the map-controls visibility wrapper. Description data uses currentData per point; closing preserves its last payload only for the exit display. Route actions reuse point-search/useSelectPoint; clearing selectedPoint closes the modal and remains compatible with mobile panel history.
+
+
+Settings and room details share shared/lib/useModalSwipe. useSettingsSwipe is now only the settings state/route adapter; room details passes its selected-point close action. Native capture listeners cover the entire portal content, yield to scrolled body/text selection and use the same 6px/32px settings thresholds. There is no separate header-only room swipe.
+
+
+Floor-selector input is distinct from map-surface input: its wrapper has no data-map-interaction attribute. Room details is an independent non-modal Radix dialog; it allows floor controls to receive pointer input and prevents outside dismissal for targets within data-floor-switcher. Settings/campus remain modal. This supersedes earlier room-modal focus-trap descriptions.
+
+
+Search focus: entities/point stores the graph point, monotonically increasing focusVersion, same-floor animation flag and detailsCollapsed. Browse selection uses focusPoint; explicit route selection is unchanged. FloorMap filters by floor/building and passes public renderer focus props. Shared useModalSwipe accepts optional expand/collapse callbacks, retaining default settings behavior. Room preview measures its content and main SideMenu stays mounted but hidden/inert; its automatic map collapse is paused during focus. Closing removes the highlight and reveals the previous main panel. Mobile Back includes preview/full state. Consumer centers use a 244px mobile preview reservation; renderer respects drag bounds.
+
+
+### 2026-10-23 — Independent route overlay
+`UrfuNavigator-web`: Route action opens a lazy independent modal using the settings shell/shared full-surface mobile swipe. Sidebar routeOpen/routeContent hold route and endpoint-search screens separately from main content, which remains unchanged under the overlay. Existing setContent(Route) entry points open the overlay; endpoint search/selection/cancel return inside it. Mobile Back snapshots restore route modal and nested search state; desktop closes by explicit close control. Closing overlay retains chosen route endpoints. No backend/library changes.
+
+
+### 2026-10-23 — Local building visit ranking
+`UrfuNavigator-web`: navigator.building-visits.v1 stores versioned per-canonical-building-slug counters in localStorage, with input validation and storage-error fallback. App-level route observer counts once on building entry (cards/map markers/search/direct entry); same-building searches/floor changes/re-renders do not increment. Returning home or entering another building allows another visit. Shared map destinations combine INMIT/HTI and UralENIN/InFO. InstitutesList snapshots counts at mount so visible cards do not jump; ranks descending within selected campus, ties use existing order, FTI remains last and campus picker stays outside sorting. Device/browser-local only, no backend/analytics calls. Clear storage key to reset.
+
+
+### 2026-10-24 — Completed route replaces the main panel
+`UrfuNavigator-web`: incomplete route remains an independent builder overlay. With both endpoints present and search finished, app presentation coordinator closes the overlay and marks routeDocked; main panel renders compact route fields in its normal footprint, keeping underlying page content. Editing an endpoint reopens search overlay; completion returns to docked route. Header Back clears route and restores normal panel. Mobile browser Back from docked route clears route and prunes builder/search history; nested overlays/search close first. Route docking does not expand panel to 90% or auto-collapse from map interaction. Added sidebar/history regressions.
+
+
+### 2026-10-24 — Inline route endpoint search
+`UrfuNavigator-web`: activating route From/To edits that field in place with autofocus; other endpoint remains visible. RoutePanel owns inline categories/history and results for both builder overlay and docked main panel. Docked endpoint editing no longer opens a modal; routeContent is independent of routeOpen. Mobile docked panel expands for results and settles after selection. QuickTypes expandable=false removes all-categories action and end-pull gesture; category choice preserves route direction/endpoints. Escape/header Back/system Back finish search before resetting route. Supersedes earlier separate endpoint-search overlay design. Shared general search remains unchanged.

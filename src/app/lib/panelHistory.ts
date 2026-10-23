@@ -1,7 +1,8 @@
 /** One same-URL browser entry protects the current mobile panel stack. */
 export function createPanelHistory<T>(
     browser: Window, key: (value: T) => string, active: (value: T) => boolean,
-    restore: (value: T) => void
+    restore: (value: T) => void, backOverride?: (value: T, previous: T) => T | undefined,
+    checkpoint?: (value: T, previous: T) => boolean
 ) {
     let path = browser.location.href;
     let stack: T[] = [];
@@ -18,7 +19,12 @@ export function createPanelHistory<T>(
         browser.history.replaceState({ ...(browser.history.state ?? {}), [marker]: { path, stack } }, '', path);
     }
     function pop() {
-        if (removing) { removing = false; return; }
+        if (removing) {
+            if (browser.location.href === path && browser.history.state?.[marker]?.path === path) {
+                browser.history.back();
+            } else removing = false;
+            return;
+        }
         if (browser.location.href !== path) {
             path = browser.location.href;
             const saved = browser.history.state?.[marker];
@@ -33,6 +39,31 @@ export function createPanelHistory<T>(
             return;
         }
         if (!armed || stack.length < 2) return;
+        const saved = browser.history.state?.[marker];
+        if (saved?.path === path && Array.isArray(saved.stack) && saved.stack.length > 1
+            && saved.stack.length < stack.length
+            && key(saved.stack[saved.stack.length - 1]) === key(stack[stack.length - 2])) {
+            stack = saved.stack;
+            const previous = stack[stack.length - 1];
+            // A floor return consumes the whole floor trail; the next Back exits the route.
+            let start = stack.length - 1;
+            while (start > 0 && checkpoint?.(stack[start], stack[start - 1])) start--;
+            if (start < stack.length - 1) stack = [...stack.slice(0, start), previous];
+            armed = true;
+            save();
+            restoring = key(previous);
+            restore(previous);
+            return;
+        }
+        const override = backOverride?.(stack[stack.length - 1], stack[stack.length - 2]);
+        if (override) {
+            armed = false; stack = [override]; restoring = key(override); restore(override);
+            if (browser.history.state?.[marker]?.path === path) {
+                removing = true;
+                browser.history.back();
+            }
+            return;
+        }
         armed = false;
         stack.pop();
         const previous = stack[stack.length - 1];
@@ -61,10 +92,12 @@ export function createPanelHistory<T>(
                 return;
             }
             if (!stack.length) stack.push(base);
+            const previous = stack[stack.length - 1];
+            const addCheckpoint = armed && previous !== undefined && checkpoint?.(value, previous);
             const index = stack.findIndex(item => key(item) === valueKey);
             if (index >= 0) stack = [...stack.slice(0, index), value];
             else stack.push(value);
-            if (!armed) arm();
+            if (!armed || addCheckpoint) arm();
             else save();
         },
         dispose() {

@@ -11,3 +11,5 @@ export {
 } from './gps';
 
 export { useCarouselEndPull } from './useCarouselEndPull';
+
+export { useModalSwipe } from './useModalSwipe';

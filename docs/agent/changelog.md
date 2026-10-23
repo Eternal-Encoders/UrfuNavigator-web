@@ -538,3 +538,273 @@ Repository: UrfuNavigator-web; paired source changes: konva-floor-plan (feat/map
 ## 2026-10-22 — Delivery documentation audit
 
 - Reconciled current README/contracts with implemented defaults and consumer overrides, added documentation-audit.md with coverage, reproducible validation and device/integration limitations. Historical entries remain identifiable as history. Prepared a cohesive local commit for this repository; no remote publication/deployment.
+
+
+## 2026-10-23 — Active gesture right-angle attraction
+
+- Added optional rotationSnapDuringGesture (default false) in renderer 1.5.0; web enables it with range 25°. A continuous monotone curve attracts the shown angle, holding exactly within the inner 20% of the range. Raw finger angle stays independent, preserving reversal and preventing accumulated drift. Release settling is retained and uses the raw angle to check range.
+- Existing consumers retain release-only behavior unless opting in.
+
+
+## 2026-10-23 — Room information as independent modal
+
+- UrfuNavigator-web: moved room details out of the building map controls container into a lazy widget layer alongside Settings/Campus overlays. Radix portal preserves the main panel and handles focus/modal semantics. Selected point state continues to integrate with mobile Back.
+- Unified 90% mobile/356px desktop shell, header/close, palette/typography, card sections and route buttons. Mobile header supports downward dismissal; desktop dismisses through close button only. Retained last loaded data during exit to avoid flashing empty content.
+- Added localized section/error labels for all four locales, loading skeleton and retryable error state. Route endpoint actions and room metadata/schedule remain functional. Existing type/schedule value translations remain unchanged.
+- Browser verified search-result opening for M-139, room metadata/schedule and ToHere dismissal. Build/lint/FSD and existing regression tests checked; physical mobile swipe needs device verification.
+
+
+## 2026-10-23 — Share settings/room modal swipes
+
+- UrfuNavigator-web: extracted the existing settings full-surface touch mechanism into shared/lib/useModalSwipe. Settings and room details both use its 6px directional threshold, 32px dismissal threshold, scroller guard, reset and touchcancel behavior. Removed the separate room-header pointer gesture implementation.
+- Room handle now uses the exact settings asset/button markup. Removed Institute section and its building lookup. Room title/body text can be selected/copied; buttons remain nonselectable. Shared swipe yields when a text selection exists, preserving selection interaction.
+- Added shared-hook regressions for full-surface dismiss, scrolled body, text selection, horizontal input, desktop disable, short swipe, cancellation and cleanup.
+
+
+## 2026-10-23 — Preserve floor-switch taps beside panels
+
+- UrfuNavigator-web: floor selector no longer carries data-map-interaction, so pressing it does not trigger the main drawer auto-collapse/hide its controls between touchstart and click. Map surface interactions retain automatic collapse.
+- Room details uses a non-modal Radix dialog so visible map controls can receive input. Outside-interaction dismissal explicitly exempts the floor selector; desktop outside dismissal remains disabled. Other mobile outside interactions still dismiss details. Settings/campus remain modal.
+- Added data-floor-switcher marker on the feature root to avoid coupling to button text or CSS layout.
+
+
+## 2026-10-23 — Search room focus and collapsed details preview
+
+- Renderer 1.6.0 exposes optional focus camera/highlight props. Camera translates for 300ms on the same floor, preserving scale/rotation and drag bounds, interruptible by input, with reduced-motion support. Cross-floor/building searches use duration 0 after data loads. Room fills/strokes are overridden only where room.pointId matches; unlinked service/graph points cannot receive a room tint.
+- Web browse selection stores a versioned focus request and opens collapsed information instead of full details. Main menu stays mounted but hidden/inert while focus owns the view. Closing clears the override and restores it; route selection does not enter this scenario.
+- Preview height measures the header/actions plus the next section label and 28px of its content. Shared settings swipe now optionally supports upward expand and downward collapse. Preview content can also be tapped to expand. Search preview ignores outside clicks so the map remains usable. Direct map-room taps open full information.
+- Mobile Back checkpoints include collapsed/full details state. Preview display is retained through exit animation. Camera center reserves an initial 244px mobile preview area; exact room centering remains subject to bounds.
+
+
+### 2026-10-23 — Search-only room preview
+- Repository: `UrfuNavigator-web`. Search-origin room details collapse to the measured header and route buttons, including body padding; the previous information-section teaser is removed.
+- `previewEnabled` records the entry scenario independently of the retained map focus. A direct map selection always opens full details and disables the preview, including when selecting the same room after search. Shared settings swipe dismisses this panel directly.
+- Mobile panel history restores the entry scenario and collapsed state together. Reducers reject collapse for map-origin details.
+- No map rendering or admin-data overrides were added.
+
+
+### 2026-10-23 — Stable room preview opening
+- `UrfuNavigator-web`: preview height is available from the first render (151px desktop, 175px mobile: shared header, 47px route actions, padding). Removed asynchronous content measurement and its visible height correction during loading.
+- Each search focus version starts a fresh details instance, resetting gesture and exit state even for the same room. Compact-body clicks no longer expand the panel; expansion uses the handle or shared upward swipe.
+- Regression coverage verifies a repeated search after expansion restores the compact state and increments the presentation version. No library/admin overrides changed.
+
+
+### 2026-10-23 — Room selection highlight and search zoom
+- Repositories: `UrfuNavigator-web` and `konva-floor-plan` (existing `feat/map-label-rotation` branch). Web consumes local renderer 1.7.0.
+- Map-origin selected point now highlights matching room.pointId with the same light/dark fill and blue stroke as search, without camera movement. Dismissal clears selection and restores scheme colors. Room geometry and saved admin data are unchanged; graph points lacking a linked room cannot tint a room.
+- Search sets focus.minScale=0.9; renderer animates translation and zoom together over 300ms on the same floor, preserves rotation and an already closer zoom, respects drag bounds and user interruption. Cross-floor focus remains immediate.
+- Temporary paint overrides are controlled by FloorMap focus fill/stroke; remove those fields to restore admin schemes. Omit minScale to preserve prior search zoom.
+
+
+### 2026-10-23 — Reduced search focus zoom
+`UrfuNavigator-web`: search focus.minScale reduced from 0.9 to 0.6 (one third lower). A closer existing zoom remains unchanged. Camera policy only; no admin data or library defaults changed. Omit minScale to preserve the current zoom.
+
+
+### 2026-10-23 — Search focus zoom 0.3
+`UrfuNavigator-web`: search focus.minScale is now 0.3, superseding 0.6. Existing closer zoom is preserved. Consumer camera setting only; admin data and renderer defaults are unchanged.
+
+
+### 2026-10-23 — Hide information sections in compact room details
+`UrfuNavigator-web`: compact preview explicitly hides body children other than route actions, so section headings such as Type cannot appear in the bottom padding. Visibility preserves layout for the shared expansion gesture; full details retain selectable content.
+
+
+### 2026-10-23 — Compact room panel ends at route buttons
+`UrfuNavigator-web`: removed the visibility override. Reduced compact height by the 16px body bottom padding: 135px desktop / 159px mobile. The viewport ends at the route buttons; subsequent sections retain their normal visibility and are clipped by the compact body overflow. This supersedes the prior 151/175px dimensions and hiding workaround.
+
+
+### 2026-10-23 — Smooth room color transitions
+Repositories: `konva-floor-plan` (feat/map-label-rotation) and `UrfuNavigator-web`. Local renderer 1.7.1 animates fill/stroke over 220ms for both search/map selection, deselection and scheme/theme changes. Interrupted transitions continue from displayed paint; reduced motion is immediate. No additional admin overrides or saved-data changes.
+
+
+### 2026-10-23 — Panel return and room-attached floor controls
+`UrfuNavigator-web`: main panel and its actions fade/translate back over 180ms after room details close. Covered panels remain mounted and inert. Map controls fade instead of display:none. In mobile compact room details, floor controls anchor 8px above the visible room panel using shared --room-preview-height and live --room-panel-lift, ignoring hidden main-panel height/expanded state. Full room details hide map controls. Desktop floor controls retain their top placement; reduced motion disables transitions.
+
+
+### 2026-10-23 — Floor controls follow panel without lag
+`UrfuNavigator-web`: removed bottom/max-height transitions from floor-switcher-position. Floor controls immediately follow the panel offset, matching other attached controls. Visibility fades remain unchanged.
+
+
+### 2026-10-23 — Floor-list overflow anticipation
+`UrfuNavigator-web`: ResizeObserver compares the complete floor list with the space above the active panel. Hide with 160ms opacity/6px translation when less than 24px spare space remains; show again with at least 32px spare (8px hysteresis). Hidden controls are inert. Available space follows the panel without position easing; list is no longer clipped while fading. Reduced motion removes animation.
+
+
+### 2026-10-23 — Five-row scrolling floor selector
+`UrfuNavigator-web`: floor selector has at most five visible rows including ▲/▼ controls. Top/bottom indicators appear only when more floors remain in that direction, reserving one row each (three floor rows between two indicators). Native touch/wheel scrolling and clickable paging arrows; selected floor is brought into view after external floor changes. Rows remain 34px with 5px gaps. Overflow-fit observer measures this compact selector rather than every floor. Arrow labels localized ru/en/zh/ar.
+
+
+### 2026-10-23 — Initial floor camera position
+Repositories: `UrfuNavigator-web`, `konva-floor-plan` (feat/map-label-rotation), local renderer 1.8.0. All floors open with floor rectangle center in the visible map region (desktop excludes 356px sidebar; mobile excludes 244px main panel). Floor numbered 1 queries explicit type=exit points; valid in-bounds entries preferred by explicit main-entrance name then stable ID. No entrance/network failure falls back to center; no inferred entrance from geometry. Initial first-floor map waits for the entrance query unless search already supplies a target. Existing RTK cache reused. initialView applies once per floor key, without selection/highlight changes, and before search focus. Camera setting only; no admin-data changes. Omit initialView to restore legacy placement.
+
+
+### 2026-10-23 — Fit actual floor geometry rather than empty plan canvas
+Repositories: `konva-floor-plan` (feat/map-label-rotation), `UrfuNavigator-web`; renderer 1.9.0. Library floorContentView determines the bounds of rooms/corridors/spatial services, ignoring decorative labels/icons. Web centers these bounds and fits them into the visible map region with 24px padding; mobile region excludes resting panel height, desktop excludes sidebar. Floor 1 retains explicit entrance anchor, with geometry-center fallback. Search retains camera priority. Initial view is one-time per floor; transitions between floors still use skeletons. Empty geometry falls back to declared dimensions. No admin-data changes; remove initialView.scale and pass dimension center to restore prior camera framing.
+
+
+### 2026-10-23 — Preserve a consistent initial floor scale
+`UrfuNavigator-web`: no longer passes contentView.scale to initialView. Actual geometry still determines the center (explicit entrance retains priority on floor 1), but floor changes use the common renderer initial scale based on viewport, independent of floor bounds. Search zoom remains unchanged. Library fit helpers remain available, unused for automatic zoom. Supersedes automatic content-fit scale from the prior entry.
+
+
+### 2026-10-23 — Preserve camera between floors
+Repositories: `konva-floor-plan` (feat/map-label-rotation), `UrfuNavigator-web`, renderer 1.10.0. FloorMap keeps the latest x/y/scale/rotation per building in a ref outside the conditionally mounted renderer. Floor changes restore it through initialCamera/cameraKey across skeletons and cached-floor updates; no per-frame React/Redux updates. Initial geometry/entrance centering only applies without a snapshot. Search focus runs after restoration and retains priority. Snapshots live for this map-page instance, not persisted across reloads; no admin-data changes.
+
+
+### 2026-10-23 — Reference silhouette of floor 1
+Repositories: `konva-floor-plan` (feat/map-label-rotation), `UrfuNavigator-web`, renderer 1.11.0. On other floors, web loads explicit floor number 1 through cached floor query without blocking current floor, validates building/floor identity and supplies a memoized referenceFloor. No floor 1 or failed reference request means no silhouette. Floor 1 never duplicates itself. Library unions spatial surfaces and draws only exterior rings, omitting interior shared walls/labels/icons/fill; noninteractive 20% outline below current geometry, light #60636C / dark #A5ABB6, 1.25px screen-width. Does not affect content centering/camera/drag bounds. Reference outline uses presentation colors rather than admin scheme for a neutral comparison layer; remove referenceFloor to restore prior rendering. No saved-data edits.
+
+
+### 2026-10-23 — Align cropped floor origins with reference floor
+Repositories: `konva-floor-plan` (feat/map-label-rotation), `UrfuNavigator-web`, renderer 1.12.0. INMIT/HTI floors 2–4 author stair coordinates 185 units left of floor 1 (despite different canvas widths). Web requests library alignment against cached reference floor and passes floorOffset; three or more uniquely agreeing stair landmarks required, otherwise original coordinates retained. Current rooms/services/routes/GPS/markers and search camera translate consistently; silhouette remains in reference coordinates. Initial geometry/entrance anchor includes offset. This presentation translation overrides raw local placement but never mutates backend/admin geometry; omit floorOffset to restore raw coordinates. No stretching or canvas-width heuristic.
+
+
+### 2026-10-23 — Lift/icon-based floor alignment
+Repositories: `konva-floor-plan` (feat/map-label-rotation), `UrfuNavigator-web`, renderer 1.13.0. Alignment recognizes lift/stair icons as well as stair types; explicit lift icon overrides mislabeled type=stair. Different landmark kinds cannot match; duplicate icons count once. Unique consensus still needs at least three room anchors. Verified against actual UralENIN floors 1–12 and INMIT/HTI floors -1–4. UralENIN offset +190 X for floor 2 and +2375 X for floors 3–12; no per-building hardcoded offsets, no saved-data mutation.
+
+
+### 2026-10-23 — Campus selection
+`UrfuNavigator-web`: campus entity owns selected campus and focus request version. Independent expanded campus overlay now uses 100px institute-style cards with admin SVGs (Mira/GUK, Lenina/UGI, unavailable Novokoltsovsky/IRIT). Unavailable card disabled, grayscale icon, weak text and localized status. Existing shared full-panel mobile swipe and Back handling retained. Choosing an available campus closes overlay and centers Yandex map at zoom 15 (Mira original 56.842,60.652; Lenina 56.840429,60.616079) with 350ms move; repeated selection refocuses. No filtering of institute list, backend writes or map API migration. Selection lasts for current app session.
+
+
+### 2026-10-23 — Campus-scoped institute list
+`UrfuNavigator-web`: InstitutesList filters the building list by selected campus: Mira excludes slug ugi, Lenina includes only ugi. Morph/carousel card counts use the filtered list; campus picker remains available in both. Map markers and global search data are unchanged. This explicit client-side campus mapping supplements backend building data; remove the filter to restore the full list.
+
+
+### 2026-10-23 — Campus action button
+`UrfuNavigator-web`: the Campus action next to Route now opens the existing campus selector overlay via setCampusOpen(true), sharing the institute-list picker flow and mobile Back handling. It no longer resets underlying content or navigates home.
+
+
+### 2026-10-23 — Independent route overlay
+`UrfuNavigator-web`: Route action opens a lazy independent modal using the settings shell/shared full-surface mobile swipe. Sidebar routeOpen/routeContent hold route and endpoint-search screens separately from main content, which remains unchanged under the overlay. Existing setContent(Route) entry points open the overlay; endpoint search/selection/cancel return inside it. Mobile Back snapshots restore route modal and nested search state; desktop closes by explicit close control. Closing overlay retains chosen route endpoints. No backend/library changes.
+
+
+### 2026-10-23 — External link opening policy
+`UrfuNavigator-web`: audited all application-owned anchors. Social links, feedback forms, privacy PDF and Yandex terms use target=_blank; standardized rel=noopener noreferrer. Internal institute links retain SPA navigation. Future external navigation links must use the same target/rel.
+
+
+### 2026-10-23 — Campus card text alignment
+`UrfuNavigator-web`: campus card text aligns to the top with 12px vertical padding rather than vertical center. Institute cards remain unchanged.
+
+
+### 2026-10-23 — Explicit expanded building titles and descriptions
+`UrfuNavigator-web`: building card metadata now has optional expandedTitle, distinct from compact label; no parentheses parsing. Expanded titles crossfade/translate with existing per-card detail progress during mobile expansion; desktop full list shows expanded title directly. GUK: ГУК (ГУК, Э, И, М); ISA: ИСА (С, СП); UralENIN: УралЭНИН (Т); INMIT/HTI: ИНМиТ / ХТИ (МТ, Х). Added user-provided ISA/UralENIN/INMIT full descriptions and addresses; retained GUK/IRIT details and explicit ИРИТ-РТФ (Р) expanded title. Local presentation metadata overrides API display name for these cards; remove expandedTitle/fullName/address entries to restore default labels/details. No API/admin writes or icon changes.
+
+
+### 2026-10-23 — Separate FTI/HTI catalog cards
+`UrfuNavigator-web`: shared BuildingCard supports expanded title, icon-by-name and disabled status. Mira catalog adds unavailable ФТИ (fti.svg) and ХТИ (Х), Химико-технологический институт, ул. Мира, 28 (hti.svg), linking to existing /institute/inmit-hti. Existing combined card becomes ИНМиТ (МТ), Институт новых материалов и технологий; HTI wording removed there. Named icons use a building-slice RTK query to /api/icons/:name, no floor-slice cross-import or stored signed URLs. Catalog additions/presentation overrides are local only; API building list, map markers and admin records unchanged.
+
+
+### 2026-10-23 — Unavailable institute card details
+`UrfuNavigator-web`: unavailable BuildingCard now displays its full institute name and unavailable status in the expanded details block, with status replacing the address. Compact FTI card shows only ФТИ; expanded card shows Физико-технологический институт and Недоступен. Existing detail morph controls visibility; disabled navigation remains unchanged.
+
+
+### 2026-10-23 — FTI catalog order
+`UrfuNavigator-web`: unavailable FTI card sorts after all institute cards in the Mira catalog, before the campus-picker action. Other institute ordering remains unchanged.
+
+
+### 2026-10-23 — Unavailable Kuibysheva campus
+`UrfuNavigator-web`: campus chooser adds localized ул. Куйбышева, disabled with unavailable status, weak text and grayscale ienim.svg. Named icon comes from cached building icon query only while chooser is open. No map destination or selectable state for this campus.
+
+
+### 2026-10-23 — Campus names and InFO card
+`UrfuNavigator-web`: display names changed from ул. Мира to Втузгородок and р-н Новокольцовский to Новокольцовский (locale labels updated; stable campus IDs retained). Verified info.svg returns HTTP 200 from storage via named-icon API. Added ИнФО card to Vtuzgorodok catalog, using info.svg and existing /institute/uralenin route. FTI remains last. No invented institute description/address or backend changes.
+
+
+### 2026-10-23 — Local building visit ranking
+`UrfuNavigator-web`: navigator.building-visits.v1 stores versioned per-canonical-building-slug counters in localStorage, with input validation and storage-error fallback. App-level route observer counts once on building entry (cards/map markers/search/direct entry); same-building searches/floor changes/re-renders do not increment. Returning home or entering another building allows another visit. Shared map destinations combine INMIT/HTI and UralENIN/InFO. InstitutesList snapshots counts at mount so visible cards do not jump; ranks descending within selected campus, ties use existing order, FTI remains last and campus picker stays outside sorting. Device/browser-local only, no backend/analytics calls. Clear storage key to reset.
+
+
+### 2026-10-23 — InFO card details
+`UrfuNavigator-web`: ИнФО expanded title is ИнФО (Т), description Институт фундаментального образования, address ул. Софьи Ковалевской, 5. Existing info.svg and /institute/uralenin destination retained. Details follow the standard expanded-card morph.
+
+
+### 2026-10-23 — Preserve searched room floor on building entry
+`UrfuNavigator-web`: useInstituteBuilding initialization considers the ordinary-search focus before route endpoints/default floor. A matching building and valid floor ID are required; unrelated focus is ignored. This prevents floorReset(first) from overriding useSelectPoint after home search. Initialization guard still permits manual floor changes afterward; GPS priority remains lower. Added browse/route/unrelated-focus regression scenarios.
+
+
+### 2026-10-23 — Room route actions open route overlay
+`UrfuNavigator-web`: explicit from/to selection (room Отсюда/Сюда buttons) populates the requested endpoint and opens the independent route overlay; opposite endpoint is preserved. Room details close as before and do not restore focus behind the newly opened route modal. Regular route-search selection retains its existing flow. Added explicit direction regression assertions for both endpoints.
+
+
+### 2026-10-23 — Default route origin from current building entrance
+`UrfuNavigator-web`: selecting To while viewing /institute/:slug asynchronously queries explicit Exit points on floor numbered 1 of the source/viewed building. Empty From fills with main-named entrance, otherwise stable ID choice. Home selection never autofills; existing manual From is preserved. Source captured before destination navigation. Route revision guard discards stale responses after manual changes, clear or destination changes. Missing entrance/floor/network failure leaves From empty. Applies to room Сюда and route endpoint search; destination floor is unchanged. No backend writes.
+
+
+### 2026-10-24 — Completed route replaces the main panel
+`UrfuNavigator-web`: incomplete route remains an independent builder overlay. With both endpoints present and search finished, app presentation coordinator closes the overlay and marks routeDocked; main panel renders compact route fields in its normal footprint, keeping underlying page content. Editing an endpoint reopens search overlay; completion returns to docked route. Header Back clears route and restores normal panel. Mobile browser Back from docked route clears route and prunes builder/search history; nested overlays/search close first. Route docking does not expand panel to 90% or auto-collapse from map interaction. Added sidebar/history regressions.
+
+
+### 2026-10-24 — Inline route endpoint search
+`UrfuNavigator-web`: activating route From/To edits that field in place with autofocus; other endpoint remains visible. RoutePanel owns inline categories/history and results for both builder overlay and docked main panel. Docked endpoint editing no longer opens a modal; routeContent is independent of routeOpen. Mobile docked panel expands for results and settles after selection. QuickTypes expandable=false removes all-categories action and end-pull gesture; category choice preserves route direction/endpoints. Escape/header Back/system Back finish search before resetting route. Supersedes earlier separate endpoint-search overlay design. Shared general search remains unchanged.
+
+
+### 2026-10-24 — Browser autofill disabled
+`UrfuNavigator-web`: shared Input sets autoComplete=off for all current text fields (general search and both route endpoints), after forwarded props so callers cannot accidentally re-enable it. Application search history remains available; no changes to spellcheck or keyboard suggestions.
+
+
+### 2026-10-24 — Route search field semantics for Android
+`UrfuNavigator-web`: route fields previously defaulted to type=text despite being room search. They now use type=search, inputMode=search, enterKeyHint=search, neutral room-query names, no autocorrect/capitalization/spellcheck and existing autocomplete=off. Native search clear decoration hidden to avoid duplicate controls. Android Chrome keyboard accessory bar is browser-owned; HTML attributes are best-effort and do not guarantee its suppression. Physical-device verification pending.
+
+
+### 2026-10-24 — Figma route editor 2900:1776
+`UrfuNavigator-web`: route fields move into shared white header with 6px gap, 40px inputs, exact 10px dot asset 95bdb.svg and existing 20px clear icons. Body contains only history or search results; route categories removed entirely. No visible Route heading in expanded mobile editor. Docked mobile route settles at standard 80px search-only panel, showing destination summary with search icon and Back/reset control; activate row to edit. Expanded header uses both editable fields. Endpoint clear preserves opposite point and stays in editor. Figma session 614225e6-233d-4974-bb98-c98a93ed43d4; reference map imagery remains dynamic, not a design screenshot asset.
+
+Visual QA: browser viewport 393×852 verified against Figma: 40px fields/6px gap in header, history with search icons, no categories. Selected two points, verified 80px compact destination row, reopened and cleared origin in-place without a modal. Existing cross-building controls may overlap floor selector outside this task; left unchanged.
+
+
+### 2026-10-24 — Пустая панель маршрута
+В полях маршрута удалены SVG-точки. Крестик отображается только при видимом содержимом поля (запрос при редактировании, выбранная точка в остальном состоянии). При открытии пустого маршрута панель ограничена заголовком с двумя полями, история не монтируется. Активация поля раскрывает поиск с историей; завершение поиска без выбранных точек возвращает компактную высоту. Используются существующие состояния routeContent и общий свайп модальных панелей.
+
+
+### 2026-10-24 — Документирование дефекта поиска аудитории
+В current-state.md добавлена открытая проблема: запросы с дефисом/пробелом (`р-202`, `р 202`) возвращают нерелевантный список, слитный запрос (`р202`) не находит аудитории. Зафиксированы ожидаемое поведение и условия проверки; причина не установлена, код не менялся.
+
+
+### 2026-10-24 — Маршрут скрывает основную панель
+В UrfuNavigator-web при routeOpen основная панель скрыта общим состоянием is-room-covered, исключена из accessibility tree и взаимодействий через inert. Сохраняется смонтированной для восстановления прежнего состояния. В редактор маршрута добавлена видимая кнопка «Назад» на мобильном и десктопе: сбрасывает маршрут, закрывает редактор и возвращает обычную панель. В компактном построенном маршруте кнопка возврата также использует стрелку вместо крестика. Существующая обработка системной кнопки назад на мобильном сохраняется.
+
+
+### 2026-10-24 — Вход при открытии маршрута
+UrfuNavigator-web: при открытии редактора маршрута на странице корпуса поле «Откуда» заполняется явным входом первого этажа текущего корпуса из API, даже до выбора «Куда». Используется общий fillRouteEntrance: главный вход приоритетен, иначе стабильный выбор по ID. Ручная начальная точка сохраняется; revision и destinationId защищают от запоздалого ответа после очистки или изменения маршрута. Повторный рендер не заполняет вручную очищенное поле заново. На главной без определённого корпуса вход не подставляется; при отсутствии данных входа поле остаётся пустым. Координаты входов не захардкожены.
+
+
+### 2026-10-24 — Удаление кнопки «Назад» из редактора маршрута
+В UrfuNavigator-web убрана отдельная стрелка возврата рядом с двумя полями редактора маршрута; поля снова занимают всю доступную ширину. Системный возврат на мобильном, общий свайп закрытия и скрытие основной панели сохраняются. На десктопе доступна кнопка закрытия крестиком. Кнопка сброса уже построенного маршрута в компактной основной панели не менялась.
+
+
+### 2026-10-24 — Иконки истории в маршруте
+UrfuNavigator-web: недавние места в редакторе маршрута используют стандартную иконку истории 8942d.svg. Удалён неиспользуемый вариант SearchHistory с иконкой поиска (searchIcon), ранее введённый для макета маршрута. Содержимое истории и выбор точки не менялись.
+
+
+### 2026-10-24 — История маршрута выбирает назначение
+UrfuNavigator-web: RoutePanel передаёт SearchHistory явное направление to. Выбор недавнего места в маршруте заполняет «Куда», независимо от активного поля; «Откуда» сохраняется. Обычная история поиска без direction продолжает использовать текущий сценарий выбора. Результаты текстового поиска по-прежнему заполняют активное поле.
+
+
+### 2026-10-24 — Условие назначения истории маршрута
+UrfuNavigator-web: история заполняет «Куда» только при наличии выбранной точки route.from (в том числе входа из API). Если начальная точка не выбрана или очищена, история заполняет «Откуда». Введённый поисковый текст сам по себе не считается выбранной точкой. Это уточняет предыдущую запись о безусловном выборе назначения; текстовые результаты сохраняют направление активного поля. Регрессионная проверка покрывает пустое поле, выбранный вход и последующую очистку.
+
+
+### 2026-10-24 — Возврат по этажам построенного маршрута
+UrfuNavigator-web: мобильная история панелей сохраняет выбранный этаж для построенного (routeDocked) маршрута. Системный Back сначала восстанавливает предыдущий этаж того же маршрута, не очищая точки. Когда смен этажей в истории больше нет, Back сбрасывает маршрут как раньше. Проверка revision отделяет состояния разных маршрутов; вложенный поиск, настройки и карточки сохраняют прежний приоритет возврата. Переход на другую страницу изолирует стек существующим механизмом panelHistory. Добавлен регрессионный тест возврата через два этажа до отмены маршрута.
+
+
+### 2026-10-24 — Два поля в сложенном маршруте
+UrfuNavigator-web: компактный построенный маршрут показывает оба RouteSearchField («Откуда» и «Куда») вместо одной сводной строки. Высота каждого поля 40px, промежуток 6px; нижняя граница мобильной панели маршрута увеличена с 80 до 126px. История/результаты в сложенном состоянии скрыты, активация любого поля раскрывает встроенный поиск. Минимальная высота жеста и расчёт доступной области учитывают новый размер. Кнопка сброса компактного маршрута сохранена.
+
+
+### 2026-10-24 — Переключение на назначение после заполнения начала
+UrfuNavigator-web: координатор маршрута отслеживает изменение выбранной начальной точки и переключает направление поиска на to независимо от источника заполнения (вход API, история, ручной выбор). Если открыт поиск и назначение ещё не выбрано, показывается история и автофокус переходит в «Куда». В сложенном редакторе переключается направление без принудительного вызова клавиатуры. Последующие рендеры не мешают вручную вернуться к редактированию «Откуда»; очистка начала не переводит фокус.
+
+
+### 2026-10-24 — Устойчивый Back после возврата этажа
+UrfuNavigator-web: смены этажей одного построенного маршрута создают собственные записи browser history заранее, при смене этажа. Возврат на прошлый этаж восстанавливает сохранённый стек из существующей записи и не требует создания защитной записи внутри popstate. Это устраняет зависимость последовательного Back по этажам от повторного pushState при возврате. После последнего этажа следующее нажатие отменяет маршрут внутри сайта. Добавлен тест нескольких последовательных возвратов без добавления записей в popstate; физическое устройство не проверялось.
+
+
+### 2026-10-24 — Текстовый фокус назначения после заполнения начала
+UrfuNavigator-web: после изменения выбранного «Откуда», если «Куда» ещё не выбрано, координатор открывает редактирование назначения (TypeList) даже из сложенного редактора. RouteSearchField монтирует Input с autoFocus: это текстовый фокус с курсором и запросом экранной клавиатуры, а не только смена direction. Отменяет прежнее ограничение «без вызова клавиатуры в сложенном состоянии». Уже полностью заполненный маршрут не раскрывается повторно. Фактическое открытие клавиатуры при асинхронном заполнении входа зависит от ограничений мобильного браузера; физическое устройство не проверялось.
+
+
+### 2026-10-24 — Только один возврат этажа
+UrfuNavigator-web: первое системное «Назад» после смен этажей возвращает непосредственно предыдущий этаж и потребляет всю цепочку этажей маршрута. Следующее нажатие выходит из маршрута, не перебирая более ранние этажи. Оставшиеся служебные записи этажей удаляются при выходе, чтобы последующие нажатия не открывали старые состояния. Это заменяет прежнее последовательное прохождение всех этажей. Регрессионный сценарий: 1 → 2 → 3 → Назад (2) → Назад (обычная панель).
+
+
+### 2026-10-24 — Подготовка коммитов и статус UX маршрута
+Добавлен route-ux.md: UX маршрута явно отмечен как требующий доработки, описаны актуальные состояния, ограничения и сценарии приёмки. Обновлены current-state, design-system и documentation-audit, чтобы отличать последние требования от исторических промежуточных реализаций. Подготовлены отдельные локальные коммиты web и renderer; удалённая публикация не выполняется.

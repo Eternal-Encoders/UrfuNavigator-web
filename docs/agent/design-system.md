@@ -157,3 +157,56 @@ Category end-pull motion: list offset is -32 × progress / (progress + 0.5) px, 
 
 
 The circular All/Fewer categories button surface also uses 0 0 10px rgb(0 0 0 / 4%) in both themes.
+
+
+Room details now share the settings/campus modal shell: background surface, card header, 14px title, 40px close button, 90% mobile height and fixed desktop sidebar width. Sections use 12px muted labels and 14px card content; route actions are 47px high. Schedule rows align values to inline end. Data remains visible during the close animation.
+
+
+Room panel refinement: use the same /remake/3a06c.svg handle and button as settings, omit Institute section, and allow user-select text within room details except buttons. Full-surface swipe is shared with settings, yielding to existing text selection and body scrolling.
+
+
+### 2026-10-23 — Search-only room preview
+- Repository: `UrfuNavigator-web`. Search-origin room details collapse to the measured header and route buttons, including body padding; the previous information-section teaser is removed.
+- `previewEnabled` records the entry scenario independently of the retained map focus. A direct map selection always opens full details and disables the preview, including when selecting the same room after search. Shared settings swipe dismisses this panel directly.
+- Mobile panel history restores the entry scenario and collapsed state together. Reducers reject collapse for map-origin details.
+- No map rendering or admin-data overrides were added.
+
+
+### 2026-10-23 — Preview dimensions available before paint
+Room preview no longer measures loaded sections. Desktop height is 151px, mobile 175px (extra 24px handle); both include 47px route actions and shared padding. Upward swipe adds its live offset to this base. Expand via handle/swipe, not body click.
+
+
+### 2026-10-23 — Hide information sections in compact room details
+`UrfuNavigator-web`: compact preview explicitly hides body children other than route actions, so section headings such as Type cannot appear in the bottom padding. Visibility preserves layout for the shared expansion gesture; full details retain selectable content.
+
+
+### 2026-10-23 — Compact room panel ends at route buttons
+`UrfuNavigator-web`: removed the visibility override. Reduced compact height by the 16px body bottom padding: 135px desktop / 159px mobile. The viewport ends at the route buttons; subsequent sections retain their normal visibility and are clipped by the compact body overflow. This supersedes the prior 151/175px dimensions and hiding workaround.
+
+
+### 2026-10-23 — Panel return and room-attached floor controls
+`UrfuNavigator-web`: main panel and its actions fade/translate back over 180ms after room details close. Covered panels remain mounted and inert. Map controls fade instead of display:none. In mobile compact room details, floor controls anchor 8px above the visible room panel using shared --room-preview-height and live --room-panel-lift, ignoring hidden main-panel height/expanded state. Full room details hide map controls. Desktop floor controls retain their top placement; reduced motion disables transitions.
+
+
+### 2026-10-23 — Floor-list overflow anticipation
+`UrfuNavigator-web`: ResizeObserver compares the complete floor list with the space above the active panel. Hide with 160ms opacity/6px translation when less than 24px spare space remains; show again with at least 32px spare (8px hysteresis). Hidden controls are inert. Available space follows the panel without position easing; list is no longer clipped while fading. Reduced motion removes animation.
+
+
+### 2026-10-23 — Five-row scrolling floor selector
+`UrfuNavigator-web`: floor selector has at most five visible rows including ▲/▼ controls. Top/bottom indicators appear only when more floors remain in that direction, reserving one row each (three floor rows between two indicators). Native touch/wheel scrolling and clickable paging arrows; selected floor is brought into view after external floor changes. Rows remain 34px with 5px gaps. Overflow-fit observer measures this compact selector rather than every floor. Arrow labels localized ru/en/zh/ar.
+
+
+### 2026-10-23 — Campus selection
+`UrfuNavigator-web`: campus entity owns selected campus and focus request version. Independent expanded campus overlay now uses 100px institute-style cards with admin SVGs (Mira/GUK, Lenina/UGI, unavailable Novokoltsovsky/IRIT). Unavailable card disabled, grayscale icon, weak text and localized status. Existing shared full-panel mobile swipe and Back handling retained. Choosing an available campus closes overlay and centers Yandex map at zoom 15 (Mira original 56.842,60.652; Lenina 56.840429,60.616079) with 350ms move; repeated selection refocuses. No filtering of institute list, backend writes or map API migration. Selection lasts for current app session.
+
+
+### 2026-10-23 — Explicit expanded building titles and descriptions
+`UrfuNavigator-web`: building card metadata now has optional expandedTitle, distinct from compact label; no parentheses parsing. Expanded titles crossfade/translate with existing per-card detail progress during mobile expansion; desktop full list shows expanded title directly. GUK: ГУК (ГУК, Э, И, М); ISA: ИСА (С, СП); UralENIN: УралЭНИН (Т); INMIT/HTI: ИНМиТ / ХТИ (МТ, Х). Added user-provided ISA/UralENIN/INMIT full descriptions and addresses; retained GUK/IRIT details and explicit ИРИТ-РТФ (Р) expanded title. Local presentation metadata overrides API display name for these cards; remove expandedTitle/fullName/address entries to restore default labels/details. No API/admin writes or icon changes.
+
+
+### 2026-10-24 — Figma route editor 2900:1776
+`UrfuNavigator-web`: route fields move into shared white header with 6px gap, 40px inputs, exact 10px dot asset 95bdb.svg and existing 20px clear icons. Body contains only history or search results; route categories removed entirely. No visible Route heading in expanded mobile editor. Docked mobile route settles at standard 80px search-only panel, showing destination summary with search icon and Back/reset control; activate row to edit. Expanded header uses both editable fields. Endpoint clear preserves opposite point and stays in editor. Figma session 614225e6-233d-4974-bb98-c98a93ed43d4; reference map imagery remains dynamic, not a design screenshot asset.
+
+
+## 2026-10-24 — Актуальный редактор маршрута
+Два поля 40px с промежутком 6px, без точек; очистка видна при содержимом. Сложенный построенный маршрут также содержит оба поля, минимальная мобильная высота 126px вместо исторических 80px. Пустой редактор — только заголовок с полями, без истории. Иконка недавних мест — 8942d.svg (история), прежняя 95bdb.svg больше не используется. В редакторе нет отдельной стрелки «Назад», на десктопе есть крестик. UX требует доработки: см. [route-ux.md](route-ux.md).

@@ -1,21 +1,34 @@
-import type { CSSProperties } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useBuildingCardMorph } from '../model/useBuildingCardMorph';
 import { selectScreenSize } from '@/entities/viewer';
 import { PHONE_BREAKPOINT } from '@/shared/config';
 import { setCampusOpen } from '@/entities/sidebar';
+import { selectCampusState } from '@/entities/campus';
 import { useAppDispatch, useAppSelector, useCarouselEndPull } from '@/shared/lib';
 import { Skeleton } from '@/shared/ui';
-import { BuildingLink, buildingPhoto, useGetBuildingsQuery } from '@/entities/building';
+import { BuildingCard, BuildingLink, buildingPhoto, readBuildingVisits, useGetBuildingsQuery } from '@/entities/building';
 
 export function InstitutesList({ progress: mobileProgress = 0 }: { progress?: number }) {
     const dispatch = useAppDispatch();
+    const [visits] = useState(readBuildingVisits);
     const openCampuses = () => dispatch(setCampusOpen(true));
     const isDesktop = useAppSelector(selectScreenSize).innerWidth > PHONE_BREAKPOINT;
     const progress = isDesktop ? 1 : mobileProgress;
-    const { data: buildings = [], isLoading, isError, refetch } = useGetBuildingsQuery();
+    const { data: allBuildings = [], isLoading, isError, refetch } = useGetBuildingsQuery();
+    const { selected: campus } = useAppSelector(selectCampusState);
+    const buildings = allBuildings.filter(building => {
+        const isUgi = building.url.replace(/^\/+/, '') === 'ugi';
+        return campus === 'lenina' ? isUgi : campus === 'mira' && !isUgi;
+    });
     const { t } = useTranslation();
-    const listRef = useBuildingCardMorph(progress, buildings.length + 1);
+    const extraCards = campus === 'mira' ? [
+        { id: 'fti', title: 'ФТИ', unavailable: true, iconName: 'fti.svg', to: undefined },
+        { id: 'hti', title: 'ХТИ', unavailable: false, iconName: 'hti.svg', to: '/institute/inmit-hti' },
+        { id: 'info', title: 'ИнФО', unavailable: false, iconName: 'info.svg', to: '/institute/uralenin' }
+    ] : [];
+    const count = buildings.length + extraCards.length;
+    const listRef = useBuildingCardMorph(progress, count + 1);
     const { progress: pullProgress } = useCarouselEndPull(
         !isDesktop && progress === 0 && !isLoading, openCampuses, listRef
     );
@@ -27,17 +40,33 @@ export function InstitutesList({ progress: mobileProgress = 0 }: { progress?: nu
         </div>)}
     </div>;
     if (isError) return <div className="navigator-message" role="alert"><p>{t('BuildingsLoadError')}</p><button type="button" onClick={() => refetch()}>{t('Retry')}</button></div>;
-    const sorted = [...buildings].sort((a, b) =>
-        (buildingPhoto(a.displayableName)?.order ?? 99) - (buildingPhoto(b.displayableName)?.order ?? 99));
+    const sorted = [
+        ...buildings.map(building => ({ id: building.id, title: building.displayableName, building })),
+        ...extraCards.map(card => ({ ...card, building: undefined }))
+    ].sort((a, b) => {
+        if (a.id === 'fti') return 1;
+        if (b.id === 'fti') return -1;
+        const key = (card: typeof a) => card.building
+            ? card.building.url.replace(/^\/+/, '') || card.building.id
+            : ('to' in card ? card.to?.split('/').pop() : undefined);
+        const frequency = (visits[key(b) ?? ''] ?? 0) - (visits[key(a) ?? ''] ?? 0);
+        return frequency || (buildingPhoto(a.title)?.order ?? 99) - (buildingPhoto(b.title)?.order ?? 99);
+    });
     return <ul ref={listRef} className="building-list campus-morph campus-picker-list" style={{
-        '--campus-progress': progress, '--card-count': buildings.length + 1,
+        '--campus-progress': progress, '--card-count': count + 1,
         '--details-visibility': progress > 0.38 ? 'visible' : 'hidden',
         '--category-pull-progress': pullProgress,
         '--category-pull-offset': `${-32 * pullProgress / (pullProgress + 0.5)}px`,
         overflowX: progress > 0 ? 'visible' : undefined, overflowY: progress > 0 ? 'visible' : undefined
     } as CSSProperties}>
-        {sorted.map((building, index) => <li key={building.id} data-building-id={building.id}
-            style={{ '--card-index': index } as CSSProperties}><BuildingLink building={building} /></li>)}
+        {sorted.map((card, index) => <li key={card.id} data-building-id={card.id}
+            style={{ '--card-index': index } as CSSProperties}>
+            {card.building ? <BuildingLink building={card.building} /> : <BuildingCard
+                title={card.title} expandedTitle={buildingPhoto(card.title)?.expandedTitle}
+                fullName={buildingPhoto(card.title)?.fullName} address={buildingPhoto(card.title)?.address}
+                iconName={'iconName' in card ? card.iconName : undefined}
+                to={'to' in card ? card.to : undefined} unavailable={'unavailable' in card && card.unavailable} />}
+        </li>)}
         <li data-building-id="campus-picker" style={{ '--card-index': sorted.length } as CSSProperties}>
             <button type="button" className="all-category-button campus-picker-button" onClick={openCampuses}>
                 <span className="category-pull-indicator">

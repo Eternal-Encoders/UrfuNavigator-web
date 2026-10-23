@@ -18,12 +18,12 @@ const remakeIcons: Partial<Record<PointTypes, string>> = {
     [PointTypes.Dinning]: 'b64c0.svg', [PointTypes.Coworking]: 'f0b23.svg',
     [PointTypes.Cafe]: '821ea.svg', [PointTypes.Print]: 'c128b.svg'
 };
-export function QuickTypes() {
+export function QuickTypes({ expandable = true }: { expandable?: boolean }) {
     const dispatch = useAppDispatch();
     const content = useAppSelector(selectContent);
     const { t } = useTranslation();
     const [showAll, setAll] = useState(false);
-    const all = content === SideBarContent.Categories || showAll;
+    const all = expandable && (content === SideBarContent.Categories || showAll);
     const isPhone = useAppSelector(selectScreenSize).innerWidth <= PHONE_BREAKPOINT;
     function toggleCategories() {
         if (content === SideBarContent.Categories) {
@@ -35,7 +35,7 @@ export function QuickTypes() {
             setAll(!all);
         }
     }
-    const { listRef, progress } = useCarouselEndPull(isPhone && !all, toggleCategories);
+    const { listRef, progress } = useCarouselEndPull(expandable && isPhone && !all, toggleCategories);
     const items = all ? QUICK_POINT_TYPES
         : primaryTypes.flatMap(type => QUICK_POINT_TYPES.filter(item => item.tipType === type));
     return <ul ref={listRef} className={`category-list ${all ? 'all-categories' : ''}`}
@@ -55,7 +55,7 @@ export function QuickTypes() {
                 <span>{t(title)}</span>
             </button>
         </li>)}
-        <li><button type="button" className="all-category-button" aria-expanded={all} onClick={toggleCategories}>
+        {expandable && <li><button type="button" className="all-category-button" aria-expanded={all} onClick={toggleCategories}>
             <span className="category-pull-indicator">
                 <svg className="category-pull-ring" viewBox="0 0 44 44" aria-hidden="true">
                     <circle cx="22" cy="22" r="20" pathLength="1" />
@@ -63,6 +63,6 @@ export function QuickTypes() {
                 <img src="/remake/28769.svg" alt="" width="20" height="20" />
             </span>
             {t(all ? 'FewerCategories' : 'AllCategories')}
-        </button></li>
+        </button></li>}
     </ul>;
 }

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { SideBarContent, selectContent, setContentNoHistory, setPanelExpanded, selectSettingsOpen, selectCampusOpen,
+import { selectPointPresentation } from '@/entities/point';
+import { SideBarContent, selectMainContent, setContentNoHistory, setPanelExpanded, selectSettingsOpen, selectCampusOpen,
     selectPanelState, setRestingHeight } from '@/entities/sidebar';
 import { selectScreenSize } from '@/entities/viewer';
 import { PHONE_BREAKPOINT } from '@/shared/config';
@@ -16,8 +17,7 @@ const HEAD_IN_DRAWER = [
     SideBarContent.ExpandedInstitutes,
     SideBarContent.TypeList,
     SideBarContent.Categories,
-    SideBarContent.PointsList,
-    SideBarContent.Route
+    SideBarContent.PointsList
 ];
 
 type Gesture = {
@@ -41,14 +41,17 @@ export function useSideMenu() {
     } | null>(null);
     const mapPointers = useRef(new Set<number>());
     const mapTouchActive = useRef(false);
-    const content = useAppSelector(selectContent);
-    const { restoreVersion, restingHeight } = useAppSelector(selectPanelState);
+    const content = useAppSelector(selectMainContent);
+    const { restoreVersion, restingHeight, routeOpen, routeDocked, routeContent } = useAppSelector(selectPanelState);
+    const searchOnlyHeight = routeDocked ? 126 : SEARCH_ONLY_HEIGHT;
     const settingsOpen = useAppSelector(selectSettingsOpen);
     const campusOpen = useAppSelector(selectCampusOpen);
+    const focusedRoom = useAppSelector(selectPointPresentation).focus;
     const { innerWidth, innerHeight } = useAppSelector(selectScreenSize);
     const isPhone = innerWidth <= PHONE_BREAKPOINT;
     const isBuildingsDrawer = isPhone && content === SideBarContent.Institutes;
-    const isHeadInDrawer = HEAD_IN_DRAWER.includes(content);
+    const routeSearching = routeDocked && [SideBarContent.TypeList, SideBarContent.PointsList].includes(routeContent);
+    const isHeadInDrawer = HEAD_IN_DRAWER.includes(content) || routeSearching;
     const [isDragging, setIsDragging] = useState(false);
     const [isSettling, setIsSettling] = useState(false);
     const panelRef = useRef<HTMLElement>(null);
@@ -62,7 +65,7 @@ export function useSideMenu() {
     const previousLayout = useRef({ content, expandedHeight });
     const drawer = useDrawer(
         BUILDINGS_HEIGHT,
-        [SEARCH_ONLY_HEIGHT, expandedHeight, expandedHeight],
+        [searchOnlyHeight, expandedHeight, expandedHeight],
         DrawerOrient.Vertical
     );
     const { position } = drawer;
@@ -76,7 +79,7 @@ export function useSideMenu() {
         ? Math.max(0, Math.min(1,
             (position - BUILDINGS_HEIGHT) / Math.max(1, innerHeight * 0.9 - BUILDINGS_HEIGHT))) : 0;
     const isFullyExpanded = isPhone && (isHeadInDrawer || campusProgress > 0)
-        && position > SEARCH_ONLY_HEIGHT;
+        && position > searchOnlyHeight;
 
     function cancelMapRestore() {
         if (mapRestoreTimer.current !== null) clearTimeout(mapRestoreTimer.current);
@@ -92,8 +95,8 @@ export function useSideMenu() {
     }, [pathname, isPhone]);
 
     useEffect(() => {
-        if (settingsOpen || campusOpen) cancelMapRestore();
-    }, [settingsOpen, campusOpen]);
+        if (settingsOpen || campusOpen || routeOpen) cancelMapRestore();
+    }, [settingsOpen, campusOpen, routeOpen]);
 
     function setPositionNow(height: number) {
         positionRef.current = height;
@@ -178,6 +181,12 @@ export function useSideMenu() {
     }, [content, expandedHeight]);
 
     useLayoutEffect(() => {
+        if (isPhone && routeDocked) animateTo(routeSearching ? innerHeight * 0.9 : searchOnlyHeight);
+    // Route editing owns the settled height; keyboard changes must not move the camera/panel.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isPhone, routeDocked, routeSearching]);
+
+    useLayoutEffect(() => {
         if (!restoreVersion || !isPhone) return;
         cancelMapRestore();
         gesture.current = null;
@@ -215,7 +224,7 @@ export function useSideMenu() {
         if (isHeadInDrawer) returnToBase();
         else if (isBuildingsDrawer && position >= BUILDINGS_HEIGHT - 1) {
             dispatch(setContentNoHistory(SideBarContent.ExpandedInstitutes));
-        } else settleBase(position <= SEARCH_ONLY_HEIGHT ? BUILDINGS_HEIGHT : SEARCH_ONLY_HEIGHT);
+        } else settleBase(position <= searchOnlyHeight ? BUILDINGS_HEIGHT : searchOnlyHeight);
     }
 
     useEffect(() => {
@@ -235,9 +244,10 @@ export function useSideMenu() {
             }, MAP_RESTORE_DELAY);
         }
         function collapse(event: Event) {
+            if (focusedRoom || routeDocked) return;
             if (!(event.target instanceof Element) || !event.target.closest('[data-map-interaction]')) return;
             // A manually collapsed panel must stay collapsed, even after map input.
-            if (!mapRestore.current && targetRef.current <= SEARCH_ONLY_HEIGHT) return;
+            if (!mapRestore.current && targetRef.current <= searchOnlyHeight) return;
             if (!mapRestore.current) mapRestore.current = {
                 content, height: targetRef.current, base: { ...baseState.current }
             };
@@ -245,10 +255,10 @@ export function useSideMenu() {
             if (event.type === 'touchstart') mapTouchActive.current = true;
             gesture.current = null;
             setIsDragging(false);
-            if (isHeadInDrawer) returnToBase(SEARCH_ONLY_HEIGHT);
+            if (isHeadInDrawer) returnToBase(searchOnlyHeight);
             else {
                 blurSearch();
-                settleBase(SEARCH_ONLY_HEIGHT);
+                settleBase(searchOnlyHeight);
             }
             scheduleRestore();
         }
@@ -321,7 +331,7 @@ export function useSideMenu() {
             if (current.mode === 'drawer') {
                 event.preventDefault();
                 const maximum = isBuildingsDrawer ? innerHeight * 0.9 : expandedHeight;
-                setPositionNow(Math.max(SEARCH_ONLY_HEIGHT, Math.min(current.startHeight - dy, maximum)));
+                setPositionNow(Math.max(searchOnlyHeight, Math.min(current.startHeight - dy, maximum)));
             }
         }
 
@@ -335,14 +345,14 @@ export function useSideMenu() {
                 suppressClickUntil.current = Date.now() + 1000;
                 if (event.type !== 'touchcancel' && Math.abs(current.dy) >= SWIPE_DISTANCE) {
                     if (content === SideBarContent.ExpandedInstitutes && current.dy > 0) {
-                        returnToBase(positionRef.current < (SEARCH_ONLY_HEIGHT + BUILDINGS_HEIGHT) / 2
-                            ? SEARCH_ONLY_HEIGHT : BUILDINGS_HEIGHT);
+                        returnToBase(positionRef.current < (searchOnlyHeight + BUILDINGS_HEIGHT) / 2
+                            ? searchOnlyHeight : BUILDINGS_HEIGHT);
                     } else if (isHeadInDrawer && current.dy > 0) returnToBase();
                     else if (isHeadInDrawer) animateTo(expandedHeight);
                     else if (isBuildingsDrawer && current.dy < 0 && (current.restingHeight >= BUILDINGS_HEIGHT - 1
                         || positionRef.current > (BUILDINGS_HEIGHT + innerHeight * 0.9) / 2)) {
                         dispatch(setContentNoHistory(SideBarContent.ExpandedInstitutes));
-                    } else settleBase(current.dy > 0 ? SEARCH_ONLY_HEIGHT : BUILDINGS_HEIGHT);
+                    } else settleBase(current.dy > 0 ? searchOnlyHeight : BUILDINGS_HEIGHT);
                 } else {
                     animateTo(current.restingHeight);
                 }
@@ -389,7 +399,7 @@ export function useSideMenu() {
         position,
         panelHeight: isHeadInDrawer && !isDragging && !isSettling && position >= expandedHeight - 1 ? '90%' : position,
         isBuildingsDrawer,
-        searchOnlyHeight: SEARCH_ONLY_HEIGHT,
+        searchOnlyHeight: searchOnlyHeight,
         toggleDrawer
     };
 }

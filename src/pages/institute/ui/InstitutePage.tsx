@@ -3,30 +3,37 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { BuildingRedirect } from '@/entities/building';
-import { selectSelectedPointId } from '@/entities/point';
+import { selectPointPresentation } from '@/entities/point';
 import { selectFromPoint, selectToPoint } from '@/entities/route';
-import { SideBarContent, selectPanelExpanded, setContent } from '@/entities/sidebar';
+import { SideBarContent, selectPanelExpanded, setMainContent } from '@/entities/sidebar';
 import { FloorSwitcher } from '@/features/select-floor';
+import { selectScreenSize } from '@/entities/viewer';
+import { PHONE_BREAKPOINT } from '@/shared/config';
 import type { IBuilding } from '@/shared/api';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
 import { MapSkeleton } from '@/shared/ui';
 import { FloorMap } from '@/widgets/floor-map';
-import { PointDetails } from '@/widgets/point-details';
 import { useInstituteBuilding } from '../model/useInstituteBuilding';
+import { useFloorSwitcherFit } from '../model/useFloorSwitcherFit';
 
 function MapOverlay({ building }: { building: IBuilding }) {
+    const floorFit = useFloorSwitcherFit();
     const start = useAppSelector(selectFromPoint)
     const end = useAppSelector(selectToPoint)
-    const pointId = useAppSelector(selectSelectedPointId)
     const panelExpanded = useAppSelector(selectPanelExpanded)
+    const { pointId, detailsCollapsed } = useAppSelector(selectPointPresentation);
+    const isPhone = useAppSelector(selectScreenSize).innerWidth <= PHONE_BREAKPOINT;
+    const controlsHidden = isPhone && pointId ? !detailsCollapsed : panelExpanded;
     const primaryBuildingId = start?.buildingId ?? end?.buildingId ?? building.id
     const showSecond = Boolean(start && end && start.buildingId !== end.buildingId)
 
     return (
         <>
-            <div className={panelExpanded ? 'hidden' : 'contents'}>
-                {pointId && <PointDetails pointId={pointId} />}
-                <div data-map-interaction className="floor-switcher-position">
+            <div className={`map-panel-controls ${controlsHidden ? 'is-hidden' : ''}`}
+                aria-hidden={controlsHidden} inert={controlsHidden}>
+                <div ref={floorFit.ref}
+                    className={`floor-switcher-position ${pointId ? 'is-room-attached' : ''} ${floorFit.hidden ? 'is-overflowing' : ''}`}
+                    aria-hidden={floorFit.hidden} inert={floorFit.hidden}>
                     <FloorSwitcher buildingId={building.id} floors={building.floors} />
                 </div>
                 {showSecond && start && end && <div className="pointer-events-none absolute right-2 bottom-[calc(var(--mobile-drawer-offset)+60px)] left-2 z-20 flex justify-center desktop:left-(--panel-width) desktop:bottom-2">
@@ -49,7 +56,7 @@ export default function InstitutePage() {
     const { building, isLoading, error, mapGps, userGps } = useInstituteBuilding(params.intstName ?? '')
 
     useEffect(() => {
-        dispatch(setContent(SideBarContent.Empty))
+        dispatch(setMainContent(SideBarContent.Empty))
     }, [dispatch])
 
     const headerName = building?.displayableName

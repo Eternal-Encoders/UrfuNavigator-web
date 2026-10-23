@@ -1,9 +1,9 @@
-import { useNavigate } from 'react-router-dom';
-import { instituteRoute, useGetBuildingsQuery } from '@/entities/building';
-import { floorSet } from '@/entities/floor';
-import { selectPoint } from '@/entities/point';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { instituteRoute, matchBuilding, useGetBuildingsQuery } from '@/entities/building';
+import { floorSet, selectFloor } from '@/entities/floor';
+import { focusPoint } from '@/entities/point';
 import { clearRoute, setFromPoint, setToPoint } from '@/entities/route';
-import { SideBarContent, selectContent, selectPrevContent, setContent } from '@/entities/sidebar';
+import { SideBarContent, selectContent, selectPrevContent, setContent, setRouteOpen } from '@/entities/sidebar';
 import type { IGraphPoint } from '@/shared/api';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
 import {
@@ -14,15 +14,19 @@ import {
     type SearchDirection
 } from './pointSearchSlice';
 
+import { fillRouteEntrance } from './fillRouteEntrance';
+
 const SEARCH_CONTENT = [SideBarContent.TypeList, SideBarContent.PointsList];
 
 export function useSelectPoint() {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const { pathname } = useLocation();
     const { data: buildings } = useGetBuildingsQuery();
     const content = useAppSelector(selectContent);
     const prevContent = useAppSelector(selectPrevContent);
     const direction = useAppSelector(selectSearchDirection);
+    const floor = useAppSelector(selectFloor);
 
     return (point: IGraphPoint, directionOverride?: SearchDirection) => {
         dispatch(rememberPoint(point));
@@ -32,9 +36,13 @@ export function useSelectPoint() {
         }
         if (target === 'browse') {
             dispatch(clearRoute());
-            dispatch(selectPoint(point.id));
+            dispatch(focusPoint({ point, animate: floor === point.floorId }));
         } else {
             dispatch(target === 'to' ? setToPoint(point) : setFromPoint(point));
+            if (directionOverride) dispatch(setRouteOpen(true));
+            const slug = /^\/institute\/([^/]+)\/?$/.exec(pathname)?.[1];
+            const source = slug && buildings ? matchBuilding(buildings, slug) : undefined;
+            if (target === 'to' && source) void dispatch(fillRouteEntrance(source, point.id));
         }
         if (SEARCH_CONTENT.includes(content)) {
             dispatch(setContent(target === 'browse' ? SideBarContent.Empty : prevContent));

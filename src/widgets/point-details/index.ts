@@ -1,1 +1,1 @@
-export { PointDetails } from './ui/PointDetails';
+export { PointDetailsLayer as PointDetails } from './ui/PointDetailsLayer';

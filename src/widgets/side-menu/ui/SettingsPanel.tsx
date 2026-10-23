@@ -30,7 +30,7 @@ export function SettingsPanel() {
                 <h2 className="settings-section-title">{group.title}</h2>
                 <div className="settings-links">
                     {group.links.map(link => <Button asChild variant="outline" className="settings-link" key={link.href}>
-                        <a href={link.href} target="_blank" rel="noreferrer">
+                        <a href={link.href} target="_blank" rel="noopener noreferrer">
                             {link.label}<img src="/remake/5c1d5.svg" width="12" height="12" alt="" />
                         </a>
                     </Button>)}
@@ -39,7 +39,7 @@ export function SettingsPanel() {
         </div>
         <footer className="navigator-footer">
             <p>from Eternal Encoders with love 💖</p>
-            <p>© Яндекс — <a href="https://yandex.ru/legal/maps_termsofuse/" target="_blank" rel="noreferrer">{t('TermsOfUse')}</a></p>
+            <p>© Яндекс — <a href="https://yandex.ru/legal/maps_termsofuse/" target="_blank" rel="noopener noreferrer">{t('TermsOfUse')}</a></p>
         </footer>
     </div>;
 }

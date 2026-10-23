@@ -29,7 +29,7 @@ The lint command checks FSD boundaries and ESLint. Tests exercise gestures, hapt
 
 ## Floor-plan dependency
 
-The published floor-plan package requires GitHub Packages authentication. For reproducible local installation, vendor/eternal-encoders-konva-floor-plan-1.4.0.tgz contains the built local renderer from the sibling konva-floor-plan repository. No access token is needed. See vendor/README.md for provenance.
+The published floor-plan package requires GitHub Packages authentication. For reproducible local installation, vendor/eternal-encoders-konva-floor-plan-1.6.0.tgz contains the built local renderer from the sibling konva-floor-plan repository. No access token is needed. See vendor/README.md for provenance.
 
 ## Interface
 

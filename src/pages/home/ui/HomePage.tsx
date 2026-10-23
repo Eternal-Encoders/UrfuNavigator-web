@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { CAMPUSES, selectCampusState } from '@/entities/campus';
 import { instituteRoute, useGetBuildingsQuery } from '@/entities/building';
-import { SideBarContent, setContent } from '@/entities/sidebar';
+import { SideBarContent, setMainContent } from '@/entities/sidebar';
 import { selectScreenSize, setPageReady } from '@/entities/viewer';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
 import { MapSkeleton } from '@/shared/ui';
@@ -12,6 +13,12 @@ import { MapSkeleton } from '@/shared/ui';
 export default function HomePage() {
     const navigate = useNavigate();
     const [mapLoading, setMapLoading] = useState(true);
+    const [map, setMap] = useState<ymaps.Map | null>(null);
+    const { selected, version } = useAppSelector(selectCampusState);
+    const campus = CAMPUSES.find(item => item.id === selected && item.available) ?? CAMPUSES[0];
+    useEffect(() => {
+        if (map && campus.center) void map.setCenter([...campus.center], 15, { duration: version ? 350 : 0 });
+    }, [map, campus, version]);
     const { t } = useTranslation();
     const dispatch = useAppDispatch()
     const { innerWidth, innerHeight } = useAppSelector(selectScreenSize)
@@ -22,7 +29,7 @@ export default function HomePage() {
     }, [dispatch, mapLoading, isLoading]);
 
     useEffect(() => {
-        dispatch(setContent(SideBarContent.Institutes))
+        dispatch(setMainContent(SideBarContent.Institutes))
     }, [dispatch]);
 
     return (
@@ -35,12 +42,13 @@ export default function HomePage() {
             <div data-map-interaction>
                 <YMaps>
                     <Map
+                        instanceRef={setMap}
                         onLoad={() => setMapLoading(false)}
                         onError={() => setMapLoading(false)}
                         height={innerHeight}
                         width={innerWidth}
                         defaultState={{
-                            center: [56.842, 60.652],
+                            center: campus.center ? [...campus.center] : [56.842, 60.652],
                             zoom: 15
                         }}
                     >

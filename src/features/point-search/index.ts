@@ -3,6 +3,7 @@ import { lazy } from 'react';
 export {
     pointSearchSlice,
     setSearchDirection,
+    resetSearchQuery,
     type SearchDirection
 } from './model/pointSearchSlice';
 export { useSelectPoint } from './model/useSelectPoint';
@@ -12,3 +13,7 @@ export const SearchResults = lazy(() => import('./ui/SearchResults').then(module
 export { QuickTypes } from './ui/QuickTypes';
 export { SearchHistory } from './ui/SearchHistory';
 export { searchHistoryMiddleware } from './model/searchHistoryMiddleware';
+
+export { RouteSearchField } from './ui/RouteSearchField';
+
+export { fillRouteEntrance } from './model/fillRouteEntrance';

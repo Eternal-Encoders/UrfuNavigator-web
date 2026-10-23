@@ -1,11 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { SideBarContent, setContent, setContentNoHistory, setSettingsOpen } from '@/entities/sidebar';
+import { SideBarContent, setContentNoHistory, setSettingsOpen } from '@/entities/sidebar';
 import { SearchBar, SearchTrigger } from '@/features/point-search';
 import { useAppDispatch } from '@/shared/lib';
 import { Button } from '@/shared/ui';
+import { RouteHeader } from './RouteHeader';
 
-export function SideMenuHeader({ content, campusProgress }: { content: SideBarContent, campusProgress?: number }) {
+export function SideMenuHeader({ content, campusProgress, compactRoute = false }: {
+    content: SideBarContent, campusProgress?: number, compactRoute?: boolean
+}) {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { t } = useTranslation();
@@ -23,12 +26,7 @@ export function SideMenuHeader({ content, campusProgress }: { content: SideBarCo
         </Button>
     </>;
     if (content === SideBarContent.TypeList || content === SideBarContent.PointsList) return <SearchBar />;
-    if (content === SideBarContent.Route) {
-        return <><span className="navigator-heading">{t('Route')}</span>
-            <Button variant="secondary" size="icon-lg" aria-label={t('Close')} onClick={() => dispatch(setContent(window.location.pathname === '/' ? SideBarContent.Institutes : SideBarContent.Empty))}>
-                <img src="/remake/f17f3.svg" alt="" width="20" height="20" />
-            </Button></>;
-    }
+    if (content === SideBarContent.Route) return <RouteHeader compact={compactRoute} />;
     return <>
         <SearchTrigger direction="to" isHomePage />
         <Button variant="secondary" size="icon-lg" aria-label={t(content === SideBarContent.Empty ? 'Campus' : 'Settings')}
