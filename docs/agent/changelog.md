@@ -808,3 +808,9 @@ UrfuNavigator-web: первое системное «Назад» после с�
 
 ### 2026-10-24 — Подготовка коммитов и статус UX маршрута
 Добавлен route-ux.md: UX маршрута явно отмечен как требующий доработки, описаны актуальные состояния, ограничения и сценарии приёмки. Обновлены current-state, design-system и documentation-audit, чтобы отличать последние требования от исторических промежуточных реализаций. Подготовлены отдельные локальные коммиты web и renderer; удалённая публикация не выполняется.
+
+
+### 2026-10-24 — Совместимость исходного серверного запуска
+UrfuNavigator-web: Dockerfile копирует vendor перед frozen install; путь tarball в package.json/lockfile нормализован для Linux. BuildKit NODE_AUTH_TOKEN стал необязательным для текущей vendored-зависимости, но существующая передача секрета сохранена. Исходные nginx:80, SPA fallback, entrypoint config.js и runtime API_BASE сохранены без изменений логики. Локальные env исключены из build context, shell-скрипты закреплены LF через .gitattributes. Сервер использует прежний API_BASE и внешний proxy/CORS, локальный Vite /backend на nginx не переносится. Инструкции добавлены в README.
+
+Validation: actual Linux Docker image built without secret; runtime container passed nginx syntax, root/assets/locales, SPA deep-link fallback and API_BASE/no-store smoke. Temporary container removed. Web: 56 tests, frozen install, build and lint passed. No production publication/deployment.

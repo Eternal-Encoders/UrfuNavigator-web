@@ -29,3 +29,13 @@ See the full [known-limit list](current-state.md). In particular, automated test
 
 ## Current delivery audit
 Both repositories have separate local commits; no push, package publication or deployment is included. Library tests: 45; web tests: 56. Current route rules and superseded historical descriptions are reconciled in route-ux.md and the current-state index. Historical renderer archives and unused 95bdb.svg are retained; only 1.13.0 is active. Android/Safari device acceptance is pending.
+
+
+## 2026-10-24 — Original server deployment compatibility
+
+- Restored Docker packaging for the file-vendored renderer: COPY vendor before pnpm install; slash-normalized package/lockfile path.
+- Retained original node:24-alpine → nginx image stages, runtime API_BASE/config.js contract, nginx port 80, SPA try_files and existing tag publication workflow. Secret-backed installation remains supported; absent/empty token no longer blocks the vendored package.
+- Excluded local .env files from build context; enforced LF for docker shell scripts across Windows checkouts.
+- Actual Docker Linux build passed without NODE_AUTH_TOKEN using pinned pnpm 10.23.0. Started resulting image with API_BASE=https://api.test.how-to-navigate.ru and a temporary loopback-only host port.
+- Container smoke passed: nginx -t, HTTP 200 for root/JS/ru locale, /institute/guk HTML identical to root (SPA fallback), config.js carries runtime API_BASE and Cache-Control: no-store. Temporary container removed.
+- Local frozen install, 56 tests, build and lint/FSD passed. Existing deployment's external proxy/CORS and real API availability are outside this container smoke; no production deployment performed.

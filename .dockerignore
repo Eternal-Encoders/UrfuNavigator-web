@@ -10,3 +10,7 @@ yarn-error.log*
 pnpm-debug.log*
 Dockerfile*
 README.md
+
+# Local development API settings must not enter the production build context.
+.env
+.env.*

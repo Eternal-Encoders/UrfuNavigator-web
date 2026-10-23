@@ -29,7 +29,7 @@ The lint command checks FSD boundaries and ESLint. Tests exercise gestures, hapt
 
 ## Floor-plan dependency
 
-The published floor-plan package requires GitHub Packages authentication. For reproducible local installation, vendor/eternal-encoders-konva-floor-plan-1.6.0.tgz contains the built local renderer from the sibling konva-floor-plan repository. No access token is needed. See vendor/README.md for provenance.
+The published floor-plan package requires GitHub Packages authentication. For reproducible local installation, vendor/eternal-encoders-konva-floor-plan-1.13.0.tgz contains the built local renderer from the sibling konva-floor-plan repository. No access token is needed. See vendor/README.md for provenance.
 
 ## Interface
 
@@ -53,3 +53,30 @@ Development listens on port 3000 and all interfaces by default. From a phone on 
 Read [current state](docs/agent/current-state.md), [map override registry](docs/agent/map-overrides.md) and [documentation audit](docs/agent/documentation-audit.md). The dated changelog and performance report retain historical measurements and superseded intermediate decisions.
 
 The campus map still uses Yandex Maps API 2.1. API 3 migration is pending a configured JavaScript API key and is not included in this implementation. Indoor maps use the local Konva renderer.
+
+
+## Server / Docker deployment
+
+The original deployment contract is preserved: build the root Dockerfile, serve
+static files with nginx on container port 80, and pass the existing API_BASE
+environment variable at container startup. The entrypoint writes config.js;
+its API value takes precedence over build-time VITE_HOST. SPA routes use nginx
+try_files and work on direct page loads.
+
+```sh
+docker build -t urfunavigator-web .
+docker run --rm -p 8080:80 -e API_BASE=https://your-api.example urfunavigator-web
+```
+
+Use the same API_BASE value and external proxy/CORS setup as your existing
+deployment. An absolute API URL must be reachable from the user's browser. A
+relative API_BASE requires your external reverse proxy to route that prefix;
+the bundled nginx does not add a /backend proxy. Local /backend forwarding is
+Vite development configuration only and does not configure production nginx.
+
+The committed vendor archive is copied before frozen dependency installation;
+no sibling renderer checkout or registry publication is needed on the server.
+NODE_AUTH_TOKEN is optional for this vendored dependency. Existing BuildKit
+secret wiring and the tag-based GitHub image publication workflow remain
+supported (PACKAGER is still used for GHCR login/publication). No local .env
+files enter the Docker build context. Shell entrypoints use LF line endings.
