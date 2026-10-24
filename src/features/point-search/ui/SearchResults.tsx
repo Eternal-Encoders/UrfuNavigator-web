@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetBuildingsQuery } from '@/entities/building';
 import { pointNameList } from '@/entities/point';
+import { searchIcon } from '@/shared/assets/icons/common';
 import { ListSkeleton } from '@/shared/ui';
 import { useSearchResults } from '../model/useSearchResults';
 import { useSelectPoint } from '../model/useSelectPoint';
@@ -84,7 +85,7 @@ export function SearchResults() {
                             className="outline-none focus-visible:bg-muted"
                             onClick={() => selectPoint(point)}
                         >
-                            <img src="/remake/7b59f.svg" alt="" width="24" height="24" />
+                            <img src={searchIcon} alt="" width="24" height="24" />
                             <span><strong>
                                 {pointNameList(point).join(', ')}
                             </strong>

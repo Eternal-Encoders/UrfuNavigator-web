@@ -3,6 +3,7 @@ import { pointTitle } from '@/entities/point';
 import { clearRouteEndpoint, selectRoutePoints } from '@/entities/route';
 import { finishRouteSearch, selectPanelState, setContent, setContentNoHistory, SideBarContent } from '@/entities/sidebar';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
+import { closeIcon } from '@/shared/assets/icons/common';
 import { Input } from '@/shared/ui';
 import { selectActiveSearchQuery, selectSearchDirection, setSearchDirection, setSearchName,
     resetSearchQuery, type SearchDirection } from '../model/pointSearchSlice';
@@ -40,6 +41,6 @@ export function RouteSearchField({ direction }: { direction: SearchDirection }) 
         {(editing ? Boolean(name) : Boolean(point)) && <button type="button" className="route-field-clear" aria-label={`${t('ClearSearch')}: ${label}`}
             onClick={() => {
                 activate(); dispatch(clearRouteEndpoint(direction));
-            }}><img src="/remake/f17f3.svg" width="20" height="20" alt="" /></button>}
+            }}><img src={closeIcon} width="20" height="20" alt="" /></button>}
     </div>;
 }

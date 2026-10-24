@@ -4,8 +4,9 @@ import { clearSelectedPoint, QUICK_POINT_TYPES } from '@/entities/point';
 import { clearRoute } from '@/entities/route';
 import { SideBarContent, selectContent, setContentNoHistory } from '@/entities/sidebar';
 import { selectScreenSize } from '@/entities/viewer';
-import { PHONE_BREAKPOINT } from '@/shared/config';
 import { PointTypes } from '@/shared/api';
+import { arrowRightIcon } from '@/shared/assets/icons/common';
+import { PHONE_BREAKPOINT } from '@/shared/config';
 import { useAppDispatch, useAppSelector, useCarouselEndPull } from '@/shared/lib';
 import { setSearchDirection, setSearchType } from '../model/pointSearchSlice';
 
@@ -13,11 +14,6 @@ const primaryTypes = [
     PointTypes.ToiletM, PointTypes.ToiletW, PointTypes.Dinning,
     PointTypes.Coworking, PointTypes.Cafe, PointTypes.Print
 ];
-const remakeIcons: Partial<Record<PointTypes, string>> = {
-    [PointTypes.ToiletM]: 'a9fb4.svg', [PointTypes.ToiletW]: 'ba1a7.svg',
-    [PointTypes.Dinning]: 'b64c0.svg', [PointTypes.Coworking]: 'f0b23.svg',
-    [PointTypes.Cafe]: '821ea.svg', [PointTypes.Print]: 'c128b.svg'
-};
 export function QuickTypes({ expandable = true }: { expandable?: boolean }) {
     const dispatch = useAppDispatch();
     const content = useAppSelector(selectContent);
@@ -51,7 +47,7 @@ export function QuickTypes({ expandable = true }: { expandable?: boolean }) {
                 dispatch(setSearchType({ name: t(title), type: tipType }));
                 dispatch(setContentNoHistory(SideBarContent.PointsList));
             }}>
-                <img src={remakeIcons[tipType] ? `/remake/${remakeIcons[tipType]}` : tipIcon} alt="" width={remakeIcons[tipType] ? 32 : 40} height={remakeIcons[tipType] ? 32 : 40} />
+                <img src={tipIcon} alt="" width={primaryTypes.includes(tipType) ? 32 : 40} height={primaryTypes.includes(tipType) ? 32 : 40} />
                 <span>{t(title)}</span>
             </button>
         </li>)}
@@ -60,7 +56,7 @@ export function QuickTypes({ expandable = true }: { expandable?: boolean }) {
                 <svg className="category-pull-ring" viewBox="0 0 44 44" aria-hidden="true">
                     <circle cx="22" cy="22" r="20" pathLength="1" />
                 </svg>
-                <img src="/remake/28769.svg" alt="" width="20" height="20" />
+                <img src={arrowRightIcon} alt="" width="20" height="20" />
             </span>
             {t(all ? 'FewerCategories' : 'AllCategories')}
         </button></li>}

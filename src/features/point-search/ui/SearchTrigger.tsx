@@ -4,6 +4,7 @@ import { buildingAccent, DEFAULT_BUILDING_ACCENT, matchBuilding, useGetBuildings
 import { clearSelectedPoint, pointNameList } from '@/entities/point';
 import { clearRoute, selectRoutePoints } from '@/entities/route';
 import { SideBarContent, setContent } from '@/entities/sidebar';
+import { searchIcon } from '@/shared/assets/icons/common';
 import { cn, useAppDispatch, useAppSelector } from '@/shared/lib';
 import { resetSearchQuery, setSearchDirection, type SearchDirection } from '../model/pointSearchSlice';
 
@@ -51,7 +52,7 @@ export function SearchTrigger({ direction, isHomePage }: SearchTriggerProps) {
                 'navigator-input cursor-text text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50'
             )}
         >
-            {isHomePage && <img src="/remake/7b59f.svg" alt="" width="24" height="24" />}
+            {isHomePage && <img src={searchIcon} alt="" width="24" height="24" />}
             {!isHomePage &&
                 <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />
             }

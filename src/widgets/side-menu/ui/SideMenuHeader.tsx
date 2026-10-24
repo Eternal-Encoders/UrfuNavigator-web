@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { SideBarContent, setContentNoHistory, setSettingsOpen } from '@/entities/sidebar';
 import { SearchBar, SearchTrigger } from '@/features/point-search';
 import { useAppDispatch } from '@/shared/lib';
+import { closeIcon, homeIcon, listIcon } from '@/shared/assets/icons/common';
 import { Button } from '@/shared/ui';
 import { RouteHeader } from './RouteHeader';
 
@@ -18,10 +19,10 @@ export function SideMenuHeader({ content, campusProgress, compactRoute = false }
             onClick={() => dispatch(campusProgress > 0.5
                 ? setContentNoHistory(SideBarContent.Institutes) : setSettingsOpen(true))}>
             <span className="absolute" style={{ opacity: 1 - campusProgress, transform: `rotate(${campusProgress * 90}deg)` }}>
-                <img src="/remake/ff6fa.svg" alt="" width="20" height="20" />
+                <img src={listIcon} alt="" width="20" height="20" />
             </span>
             <span className="absolute" style={{ opacity: campusProgress, transform: `rotate(${(1 - campusProgress) * -90}deg)` }}>
-                <img src="/remake/f17f3.svg" alt="" width="20" height="20" />
+                <img src={closeIcon} alt="" width="20" height="20" />
             </span>
         </Button>
     </>;
@@ -31,7 +32,7 @@ export function SideMenuHeader({ content, campusProgress, compactRoute = false }
         <SearchTrigger direction="to" isHomePage />
         <Button variant="secondary" size="icon-lg" aria-label={t(content === SideBarContent.Empty ? 'Campus' : 'Settings')}
             onClick={() => content === SideBarContent.Empty ? navigate('/') : dispatch(setSettingsOpen(true))}>
-            <img src={content === SideBarContent.Empty ? '/remake/03b09.svg' : '/remake/ff6fa.svg'} alt="" width="20" height="20" />
+            <img src={content === SideBarContent.Empty ? homeIcon : listIcon} alt="" width="20" height="20" />
         </Button>
     </>;
 }

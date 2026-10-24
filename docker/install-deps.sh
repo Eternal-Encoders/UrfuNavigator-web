@@ -1,15 +1,10 @@
 #!/bin/sh
 set -eu
 
-# File-vendored renderer builds do not need a private registry token.
-# Keep accepting the existing BuildKit secret for registry-backed dependencies.
-token=""
-if [ -r /run/secrets/NODE_AUTH_TOKEN ]; then
-  token=$(tr -d '[:space:]' < /run/secrets/NODE_AUTH_TOKEN)
-fi
+token=$(tr -d '[:space:]' < /run/secrets/NODE_AUTH_TOKEN)
 if [ -z "$token" ]; then
-  pnpm install --frozen-lockfile
-  exit 0
+  echo "NODE_AUTH_TOKEN build secret is empty. The publish workflow reads the PACKAGER repository secret." >&2
+  exit 1
 fi
 
 npmrc_backup=$(mktemp)

@@ -192,11 +192,6 @@
 .building-card > span { @apply flex items-center h-8 py-[0] px-[16px] text-xs whitespace-nowrap overflow-hidden text-ellipsis; }
 .building-photo { @apply relative w-25 h-25 overflow-hidden shrink-0; }
 .building-photo img { @apply absolute w-full h-full max-w-none object-cover; }
-.building-photo.photo-irit img { @apply w-[150%] left-[-47.53%]; }
-.building-photo.photo-fti img { @apply w-[250.98%] left-[-98.11%] top-[-.5%]; }
-.building-photo.photo-isa img { @apply h-[133.33%] top-[-29.18%]; }
-.building-photo.photo-ineu img { @apply w-[133.33%] left-[-4.96%]; }
-.building-photo.photo-ugi img { @apply w-[191.53%] left-[-18.75%]; }
 .category-list { @apply grid grid-cols-[repeat(3,100px)] gap-3 shrink-0; }
 .category-card { @apply flex w-25 h-33 flex-col items-start justify-between rounded-lg p-4 bg-card text-left; box-shadow: 0 0 10px rgb(0 0 0 / 4%); }
 .category-card span { @apply text-xs leading-4; }
@@ -266,13 +261,13 @@
 
 @font-face {
   font-family: 'Golos UI';
-  src: url('/remake/golos-ui.woff2') format('woff2');
+  src: url('/preload_fonts/golos-ui.woff2') format('woff2');
   font-weight: 400 700;
   font-display: swap;
 }
 @font-face {
   font-family: Ruda;
-  src: url('/remake/Ruda.ttf') format('truetype');
+  src: url('../../shared/assets/fonts/Ruda.ttf') format('truetype');
   font-weight: 400 900;
   font-display: swap;
 }
@@ -376,42 +371,6 @@
     visibility: var(--details-visibility);
     transform: translateY(calc(12px * (1 - var(--detail-progress))));
   }
-}
-
-/* Original SVG facades retain their geometry as the cards reveal them. */
-.building-card-illustrated { position: relative; }
-.building-illustration {
-  --facade-progress: var(--campus-progress, 0);
-  position: absolute;
-  inset: 0 0 auto;
-  height: 100px;
-  overflow: hidden;
-  pointer-events: none;
-}
-.building-illustration-art img { position: absolute; top: 0; left: 0; max-width: none; }
-.building-illustration-fade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right,
-    rgb(255 255 255 / .8) 0%,
-    rgb(255 255 255 / 0) calc(50% - 36% * var(--facade-progress)),
-    rgb(255 255 255 / .8) calc(100% - 72% * var(--facade-progress)));
-}
-.building-card-illustrated .building-card-info { z-index: 1; }
-
-.building-illustration-art { position: absolute; inset: 0; overflow: hidden; }
-.building-illustration-irit-rtf .building-illustration-art {
-  width: calc(100px + 40px * var(--facade-progress));
-}
-.building-illustration-irit-rtf .building-illustration-art img {
-  left: -30.99px;
-  top: 21.77985px;
-}
-.building-illustration-irit-rtf .building-illustration-fade {
-  background: linear-gradient(to right,
-    rgb(255 255 255 / .8) 0%,
-    rgb(255 255 255 / 0) calc(50% - 36% * var(--facade-progress)),
-    rgb(255 255 255 / calc(.8 + .1 * var(--facade-progress))) calc(100% - 72% * var(--facade-progress)));
 }
 
 .navigator-panel.is-settings .navigator-body { scrollbar-width: none; }

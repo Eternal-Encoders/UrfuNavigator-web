@@ -4,6 +4,7 @@ import { selectPageReady, selectScreenSize } from '@/entities/viewer';
 import { selectSettingsOpen, setSettingsOpen } from '@/entities/sidebar';
 import { PHONE_BREAKPOINT } from '@/shared/config';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
+import { closeIcon } from '@/shared/assets/icons/common';
 import { Button, ListSkeleton } from '@/shared/ui';
 
 const loadOverlay = () => import('./SettingsOverlay').then(module => ({ default: module.SettingsOverlay }));
@@ -49,7 +50,7 @@ export function SettingsLayer() {
             <div className="navigator-header flex items-end p-4">
                 <Button variant="secondary" size="icon-lg" aria-label={t('Close')}
                     onClick={() => dispatch(setSettingsOpen(false))}>
-                    <img src="/remake/f17f3.svg" width="20" height="20" alt="" />
+                    <img src={closeIcon} width="20" height="20" alt="" />
                 </Button>
             </div>
             <div className="navigator-body"><ListSkeleton label={t('Loading')} /></div>

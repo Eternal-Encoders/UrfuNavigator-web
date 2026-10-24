@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { LanguageSwitcher } from '@/features/change-language';
 import { ThemeSwitch } from '@/features/change-theme';
+import { shareIcon } from '@/shared/assets/icons/common';
 import legal from '@/shared/assets/legal.pdf';
 import { Button } from '@/shared/ui';
 
@@ -31,7 +32,7 @@ export function SettingsPanel() {
                 <div className="settings-links">
                     {group.links.map(link => <Button asChild variant="outline" className="settings-link" key={link.href}>
                         <a href={link.href} target="_blank" rel="noopener noreferrer">
-                            {link.label}<img src="/remake/5c1d5.svg" width="12" height="12" alt="" />
+                            {link.label}<img src={shareIcon} width="12" height="12" alt="" />
                         </a>
                     </Button>)}
                 </div>

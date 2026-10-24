@@ -6,6 +6,7 @@ import { selectRoutePoints, clearRoute } from '@/entities/route';
 import { selectScreenSize } from '@/entities/viewer';
 import { PHONE_BREAKPOINT } from '@/shared/config';
 import { useAppDispatch, useAppSelector, useModalSwipe } from '@/shared/lib';
+import { closeIcon, horizontalLineIcon } from '@/shared/assets/icons/common';
 import { Button } from '@/shared/ui';
 import { RoutePanel } from './RoutePanel';
 import { RouteHeader } from './RouteHeader';
@@ -40,13 +41,13 @@ export function RouteOverlay() {
                 <div className="navigator-header">
                     <div className="navigator-handle"><Dialog.Close asChild>
                         <button type="button" aria-label={t('Close')}>
-                            <img src="/remake/3a06c.svg" width="24" height="4" alt="" />
+                            <img src={horizontalLineIcon} width="24" height="4" alt="" />
                         </button>
                     </Dialog.Close></div>
                     <Dialog.Title className="sr-only">{t('Route')}</Dialog.Title>
                     <RouteHeader />
                     {!isPhone && <Dialog.Close asChild><Button variant="secondary" size="icon-lg" aria-label={t('Close')}>
-                        <img src="/remake/f17f3.svg" width="20" height="20" alt="" />
+                        <img src={closeIcon} width="20" height="20" alt="" />
                     </Button></Dialog.Close>}
                 </div>
                 {!collapsed && <div className="navigator-body">

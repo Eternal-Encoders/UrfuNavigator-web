@@ -5,6 +5,7 @@ import { selectPointPresentation } from '@/entities/point';
 import { SideBarContent, setContent, setCampusOpen, selectPanelState } from '@/entities/sidebar';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
 import { GpsToggle } from '@/features/user-location';
+import { compassIcon, horizontalLineIcon, reloadIcon } from '@/shared/assets/icons/common';
 import { ListSkeleton } from '@/shared/ui';
 import { useSideMenu } from '../model/useSideMenu';
 import { SideMenuBody } from './SideMenuBody';
@@ -38,17 +39,17 @@ export function SideMenu() {
                 pointerEvents: campusProgress > 0.1 ? 'none' : undefined
             } : undefined}>
                 {!intstName && <button type="button" onClick={() => dispatch(setCampusOpen(true))}>
-                    <img src="/remake/ef628.svg" alt="" width="20" height="20" />{t('Campus')}
+                    <img src={reloadIcon} alt="" width="20" height="20" />{t('Campus')}
                 </button>}
                 {intstName && <div data-map-interaction><GpsToggle /></div>}
                 <button type="button" onClick={() => dispatch(setContent(SideBarContent.Route))}>
-                    <img src="/remake/80d8f.svg" alt="" width="20" height="20" />{t('Route')}
+                    <img src={compassIcon} alt="" width="20" height="20" />{t('Route')}
                 </button>
             </div>}
             <div className="navigator-header">
                 {isPhone && <div className="navigator-handle">
                     <button type="button" aria-label={t('TogglePanel')} aria-expanded={expanded && !isCollapsed} onClick={toggleDrawer}>
-                        {isCampus && <img src="/remake/3a06c.svg" width="24" height="4" alt="" />}
+                        {isCampus && <img src={horizontalLineIcon} width="24" height="4" alt="" />}
                     </button>
                 </div>}
                 <div className="navigator-search-row"><SideMenuHeader compactRoute={isCollapsed} campusProgress={isCampus && !routeDocked ? campusProgress : undefined} content={isCollapsed && !routeDocked ? (intstName ? SideBarContent.Empty : SideBarContent.Institutes) : content} /></div>

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { selectScreenSize } from '@/entities/viewer';
 import { PHONE_BREAKPOINT } from '@/shared/config';
 import { useAppSelector } from '@/shared/lib';
+import { closeIcon, horizontalLineIcon } from '@/shared/assets/icons/common';
 import { Button } from '@/shared/ui';
 import { useSettingsSwipe } from '../model/useSettingsSwipe';
 import { SettingsPanel } from './SettingsPanel';
@@ -34,13 +35,13 @@ export function SettingsOverlay() {
                 <div className="navigator-header">
                     <div className="navigator-handle">
                         <Dialog.Close asChild><button type="button" aria-label={t('TogglePanel')}>
-                            <img src="/remake/3a06c.svg" width="24" height="4" alt="" />
+                            <img src={horizontalLineIcon} width="24" height="4" alt="" />
                         </button></Dialog.Close>
                     </div>
                     <div className="navigator-search-row">
                         <Dialog.Title className="navigator-heading">{t('Settings')}</Dialog.Title>
                         <Dialog.Close asChild><Button variant="secondary" size="icon-lg" aria-label={t('Close')}>
-                            <img src="/remake/f17f3.svg" width="20" height="20" alt="" />
+                            <img src={closeIcon} width="20" height="20" alt="" />
                         </Button></Dialog.Close>
                     </div>
                 </div>

@@ -10,6 +10,7 @@ import { useSelectPoint, type SearchDirection } from '@/features/point-search';
 import type { IGraphPoint } from '@/shared/api';
 import { PHONE_BREAKPOINT } from '@/shared/config';
 import { useAppDispatch, useAppSelector, useModalSwipe } from '@/shared/lib';
+import { closeIcon, horizontalLineIcon } from '@/shared/assets/icons/common';
 import { Button, ListSkeleton } from '@/shared/ui';
 
 function DetailsSection({ title, children }: { title: string, children: ReactNode }) {
@@ -78,7 +79,7 @@ export function PointDetails({ pointId }: { pointId?: string }) {
                                 if (previewEnabled) dispatch(setDetailsCollapsed(!collapsed));
                                 else close();
                             }}>
-                            <img src="/remake/3a06c.svg" width="24" height="4" alt="" />
+                            <img src={horizontalLineIcon} width="24" height="4" alt="" />
                         </button>
                     </div>
                     <div className="navigator-search-row">
@@ -86,7 +87,7 @@ export function PointDetails({ pointId }: { pointId?: string }) {
                             {data ? pointTitle(data) || t('RoomDetails') : t('RoomDetails')}
                         </Dialog.Title>
                         <Dialog.Close asChild><Button variant="secondary" size="icon-lg" aria-label={t('Close')}>
-                            <img src="/remake/f17f3.svg" width="20" height="20" alt="" />
+                            <img src={closeIcon} width="20" height="20" alt="" />
                         </Button></Dialog.Close>
                     </div>
                 </div>

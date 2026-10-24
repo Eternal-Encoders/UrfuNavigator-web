@@ -8,8 +8,6 @@ WORKDIR /app
 
 COPY ./package.json ./package.json
 COPY ./pnpm-lock.yaml ./pnpm-lock.yaml
-# The renderer is a committed file dependency, needed before pnpm install.
-COPY ./vendor ./vendor
 COPY ./.npmrc ./.npmrc
 COPY ./docker/install-deps.sh ./docker/install-deps.sh
 

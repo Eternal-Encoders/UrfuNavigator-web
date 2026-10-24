@@ -6,6 +6,7 @@ import { PHONE_BREAKPOINT } from '@/shared/config';
 import { setCampusOpen } from '@/entities/sidebar';
 import { selectCampusState } from '@/entities/campus';
 import { useAppDispatch, useAppSelector, useCarouselEndPull } from '@/shared/lib';
+import { arrowRightIcon } from '@/shared/assets/icons/common';
 import { Skeleton } from '@/shared/ui';
 import { BuildingCard, BuildingLink, buildingPhoto, readBuildingVisits, useGetBuildingsQuery } from '@/entities/building';
 
@@ -73,7 +74,7 @@ export function InstitutesList({ progress: mobileProgress = 0 }: { progress?: nu
                     <svg className="category-pull-ring" viewBox="0 0 44 44" aria-hidden="true">
                         <circle cx="22" cy="22" r="20" pathLength="1" />
                     </svg>
-                    <img src="/remake/28769.svg" alt="" width="20" height="20" />
+                    <img src={arrowRightIcon} alt="" width="20" height="20" />
                 </span>
                 {t('SelectCampus')}
             </button>
