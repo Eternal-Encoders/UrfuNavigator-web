@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { readSearchHistory } from '../lib/searchHistoryStorage';
+import { pointTitle } from '@/entities/point';
+import { readSearchHistory, type RecentPoint } from '../lib/searchHistoryStorage';
 import type { IGraphPoint, PointTypes } from '@/shared/api';
 
 export type SearchDirection = 'from' | 'to';
@@ -15,7 +16,7 @@ interface PointSearchState {
     browse: SearchQuery,
     from: SearchQuery,
     to: SearchQuery,
-    recentPoints: IGraphPoint[]
+    recentPoints: RecentPoint[]
 }
 
 const initialState: PointSearchState = {
@@ -31,8 +32,13 @@ export const pointSearchSlice = createSlice({
     initialState,
     reducers: {
         rememberPoint: (state, action: PayloadAction<IGraphPoint>) => {
-            state.recentPoints = [action.payload, ...state.recentPoints.filter(p => p.id !== action.payload.id)]
-                .slice(0, 5);
+            const recent = {
+                id: action.payload.id, buildingId: action.payload.buildingId, title: pointTitle(action.payload)
+            };
+            state.recentPoints = [recent, ...state.recentPoints.filter(point => point.id !== recent.id)].slice(0, 5);
+        },
+        forgetPoint: (state, action: PayloadAction<string>) => {
+            state.recentPoints = state.recentPoints.filter(point => point.id !== action.payload);
         },
         setSearchDirection: (state, action: PayloadAction<SearchTarget>) => {
             state.direction = action.payload
@@ -59,7 +65,8 @@ export const {
     setSearchName,
     setSearchType,
     resetSearchQuery,
-    rememberPoint
+    rememberPoint,
+    forgetPoint
 } = pointSearchSlice.actions
 
 export const {

@@ -17,7 +17,8 @@ async function moduleFactory(path, bindings, result) {
     return exports[result];
 }
 const search = await moduleFactory('features/point-search/model/pointSearchSlice.ts', {
-    '@reduxjs/toolkit': { createSlice }, '../lib/searchHistoryStorage': { readSearchHistory: () => [] }
+    '@reduxjs/toolkit': { createSlice }, '../lib/searchHistoryStorage': { readSearchHistory: () => [] },
+    '@/entities/point': { pointTitle: point => point.displayableName ?? '' }
 }, 'pointSearchSlice');
 const action = type => payload => ({ type, payload });
 const sidebar = { Empty: 'empty', TypeList: 'typeList', PointsList: 'pointsList', Route: 'route' };
@@ -42,7 +43,9 @@ for (const target of ['browse', 'from', 'to']) {
             '@/entities/floor': { floorSet: action('floor'), selectFloor: () => 'floor1' },
             '@/entities/point': { focusPoint: action('focus') },
             '@/entities/route': { clearRoute: action('clear'), setFromPoint: action('from'), setToPoint: action('to') },
-            '@/entities/sidebar': { SideBarContent: sidebar, selectContent: () => 'pointsList', selectPrevContent: () => 'route', setContent: action('content'), setRouteOpen: action('routeOpen') },
+            '@/entities/sidebar': { SideBarContent: sidebar, selectContent: () => 'pointsList', selectPrevContent: () => 'route',
+                selectPanelState: () => ({ routeOpen: false, routeDocked: false, routeContent: 'route' }),
+                setContent: action('content'), setRouteOpen: action('routeOpen'), finishRouteSearch: action('finish') },
             '@/shared/lib': { useAppDispatch: () => dispatch, useAppSelector: selector => selector() },
             './pointSearchSlice': { ...search.actions, selectSearchDirection: () => target },
             './fillRouteEntrance': { fillRouteEntrance: action('entrance') }
@@ -189,16 +192,16 @@ test('route overlay and endpoint search preserve underlying institute panel', as
     }, 'sidebarSlice');
     let state = slice.reducer(undefined, { type: 'init' });
     const content = state.content;
-    state = slice.reducer(state, slice.actions.setContent('route'));
+    state = slice.reducer(state, slice.actions.setRouteOpen(true));
     assert.equal(state.routeOpen, true); assert.equal(state.content, content);
-    state = slice.reducer(state, slice.actions.setContent('typeList'));
+    state = slice.reducer(state, slice.actions.setRouteContent('typeList'));
     assert.equal(state.routeContent, 'typeList'); assert.equal(state.content, content);
     state = slice.reducer(state, slice.actions.setContentNoHistory('pointsList'));
-    assert.equal(state.routeContent, 'pointsList'); assert.equal(state.content, content);
-    state = slice.reducer(state, slice.actions.setContent('route'));
+    assert.equal(state.content, 'pointsList'); assert.equal(state.routeContent, 'typeList');
+    state = slice.reducer(state, slice.actions.setRouteContent('route'));
     assert.equal(state.routeContent, 'route'); assert.equal(state.routeOpen, true);
     state = slice.reducer(state, slice.actions.setRouteOpen(false));
-    assert.equal(state.routeOpen, false); assert.equal(state.content, content);
+    assert.equal(state.routeOpen, false); assert.equal(state.content, 'pointsList');
     state = slice.reducer(state, slice.actions.restorePanel({ content, prevContent: 'empty',
         settingsOpen: false, campusOpen: false, routeOpen: true, routeContent: 'typeList', restingHeight: 244 }));
     assert.equal(state.routeOpen, true); assert.equal(state.routeContent, 'typeList');
@@ -305,11 +308,12 @@ test('completed route edits endpoints inside the main panel', async () => {
     assert.equal(state.routeOpen, false); assert.equal(state.routeDocked, true);
     assert.equal(slice.getSelectors().selectMainContent(state), 'route');
     assert.equal(state.content, base);
-    state = slice.reducer(state, slice.actions.setContent('typeList'));
+    state = slice.reducer(state, slice.actions.setRouteContent('typeList'));
     assert.equal(state.routeOpen, false); assert.equal(state.routeContent, 'typeList');
-    assert.equal(slice.getSelectors().selectContent(state), 'typeList');
-    state = slice.reducer(state, slice.actions.setContentNoHistory('pointsList'));
+    assert.equal(slice.getSelectors().selectContent(state), base);
+    state = slice.reducer(state, slice.actions.setRouteContent('pointsList'));
     assert.equal(state.routeOpen, false); assert.equal(state.routeContent, 'pointsList');
+    assert.equal(state.content, base);
     state = slice.reducer(state, slice.actions.finishRouteSearch());
     assert.equal(state.routeContent, 'route');
     state = slice.reducer(state, slice.actions.setRouteDocked(false));
@@ -334,7 +338,7 @@ for (const [name, points, panel, expected] of [
             '@/features/point-search': { setSearchDirection: value => `direction:${value}` },
             '@/entities/route': { selectRoutePoints: () => points },
             '@/entities/sidebar': { selectPanelState: () => panel, SideBarContent: { Route: 'route', TypeList: 'typeList', PointsList: 'pointsList' },
-                setContent: value => `content:${value}`, setRouteDocked: value => `dock:${value}`, setRouteOpen: value => `open:${value}` },
+                setRouteContent: value => `content:${value}`, setRouteDocked: value => `dock:${value}`, setRouteOpen: value => `open:${value}` },
             '@/shared/lib': { useAppDispatch: () => value => calls.push(value),
                 useAppSelector: selector => selector() }
         }, 'useRoutePresentation');
@@ -357,6 +361,7 @@ test('route categories cannot expand and preserve route search direction', async
             selectContent: () => 'typeList', setContentNoHistory: action('content') },
         '@/entities/viewer': { selectScreenSize: () => ({ innerWidth: 390 }) },
         '@/shared/config': { PHONE_BREAKPOINT: 1200 }, '@/shared/api': { PointTypes: types },
+        '@/shared/assets/icons/common': { arrowRightIcon: 'arrow' },
         '@/shared/lib': { useAppDispatch: () => value => calls.push(value), useAppSelector: selector => selector(),
             useCarouselEndPull: enabled => { pulls.push(enabled); return { listRef: {}, progress: 0 }; } },
         '../model/pointSearchSlice': { setSearchDirection: action('direction'), setSearchType: action('type') }

@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { selectPointPresentation } from '@/entities/point';
 import { SideBarContent, selectMainContent, setContentNoHistory, setPanelExpanded, selectSettingsOpen, selectCampusOpen,
-    selectPanelState, setRestingHeight } from '@/entities/sidebar';
+    selectPanelState, setRestingHeight, finishRouteSearch } from '@/entities/sidebar';
 import { selectScreenSize } from '@/entities/viewer';
 import { PHONE_BREAKPOINT } from '@/shared/config';
 import { DrawerOrient, useAppDispatch, useAppSelector, useDrawer } from '@/shared/lib';
@@ -161,12 +161,14 @@ export function useSideMenu() {
                 baseState.current = { content: previous, height: targetRef.current };
             }
             animateTo(expandedHeight);
-        } else {
+        } else if (!(routeDocked && content === SideBarContent.Route)) {
             const height = pendingRestingHeight.current
                 ?? BUILDINGS_HEIGHT;
             pendingRestingHeight.current = null;
             baseState.current = { content, height };
             animateTo(height);
+        } else {
+            pendingRestingHeight.current = null;
         }
     // Content changes own their resting position, independently of keyboard/gesture renders.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -209,6 +211,10 @@ export function useSideMenu() {
 
     function returnToBase(height = baseState.current.height) {
         blurSearch();
+        if (routeDocked) {
+            if (routeSearching) dispatch(finishRouteSearch());
+            return;
+        }
         pendingRestingHeight.current = height;
         dispatch(setContentNoHistory(baseState.current.content));
         animateTo(height);
@@ -243,7 +249,7 @@ export function useSideMenu() {
                 animateTo(saved.height);
             }, MAP_RESTORE_DELAY);
         }
-        function collapse(event: Event) {
+        function begin(event: Event) {
             if (focusedRoom || routeDocked) return;
             if (!(event.target instanceof Element) || !event.target.closest('[data-map-interaction]')) return;
             // A manually collapsed panel must stay collapsed, even after map input.
@@ -254,6 +260,14 @@ export function useSideMenu() {
             if (event.type === 'pointerdown') mapPointers.current.add((event as PointerEvent).pointerId);
             if (event.type === 'touchstart') mapTouchActive.current = true;
             gesture.current = null;
+        }
+        function collapse() {
+            if (focusedRoom || routeDocked) return;
+            if (!mapRestore.current || mapPointers.current.size || mapTouchActive.current) return;
+            if (targetRef.current <= searchOnlyHeight) {
+                scheduleRestore();
+                return;
+            }
             setIsDragging(false);
             if (isHeadInDrawer) returnToBase(searchOnlyHeight);
             else {
@@ -265,19 +279,28 @@ export function useSideMenu() {
         function finish(event: Event) {
             if (event instanceof PointerEvent) mapPointers.current.delete(event.pointerId);
             if (event instanceof TouchEvent) mapTouchActive.current = event.touches.length > 0;
-            scheduleRestore();
+            if (event.type === 'pointercancel') mapTouchActive.current = false;
+            // pointerup is dispatched before touchend. Collapsing there re-renders the
+            // floor plan before it can classify the tap.
+            if (mapTouchActive.current && event instanceof PointerEvent && event.type === 'pointerup') return;
+            collapse();
+        }
+        function interact(event: Event) {
+            begin(event);
+            if (event.type === 'pointerdown' || event.type === 'touchstart') return;
+            collapse();
         }
         function panelInteraction(event: Event) {
             if (event.target instanceof Node && panelRef.current?.contains(event.target)) cancelMapRestore();
         }
         const events = ['pointerdown', 'touchstart', 'wheel', 'click', 'keydown'];
         const endEvents = ['pointerup', 'pointercancel', 'touchend', 'touchcancel'];
-        events.forEach(type => document.addEventListener(type, collapse, { capture: true, passive: true }));
+        events.forEach(type => document.addEventListener(type, interact, { capture: true, passive: true }));
         endEvents.forEach(type => document.addEventListener(type, finish, { capture: true, passive: true }));
         const panelEvents = ['pointerdown', 'touchstart', 'click', 'keydown'];
         panelEvents.forEach(type => document.addEventListener(type, panelInteraction, true));
         return () => {
-            events.forEach(type => document.removeEventListener(type, collapse, true));
+            events.forEach(type => document.removeEventListener(type, interact, true));
             endEvents.forEach(type => document.removeEventListener(type, finish, true));
             panelEvents.forEach(type => document.removeEventListener(type, panelInteraction, true));
         };

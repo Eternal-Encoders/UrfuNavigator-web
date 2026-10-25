@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { useMatch } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { selectPointPresentation } from '@/entities/point';
-import { SideBarContent, setContent, setCampusOpen, selectPanelState } from '@/entities/sidebar';
+import { SideBarContent, setRouteOpen, setCampusOpen, selectPanelState } from '@/entities/sidebar';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
 import { GpsToggle } from '@/features/user-location';
 import { compassIcon, horizontalLineIcon, reloadIcon } from '@/shared/assets/icons/common';
@@ -42,7 +42,7 @@ export function SideMenu() {
                     <img src={reloadIcon} alt="" width="20" height="20" />{t('Campus')}
                 </button>}
                 {intstName && <div data-map-interaction><GpsToggle /></div>}
-                <button type="button" onClick={() => dispatch(setContent(SideBarContent.Route))}>
+                <button type="button" onClick={() => dispatch(setRouteOpen(true))}>
                     <img src={compassIcon} alt="" width="20" height="20" />{t('Route')}
                 </button>
             </div>}

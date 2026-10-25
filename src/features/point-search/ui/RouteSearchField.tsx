@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { pointTitle } from '@/entities/point';
 import { clearRouteEndpoint, selectRoutePoints } from '@/entities/route';
-import { finishRouteSearch, selectPanelState, setContent, setContentNoHistory, SideBarContent } from '@/entities/sidebar';
+import { finishRouteSearch, selectPanelState, setRouteContent, SideBarContent } from '@/entities/sidebar';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
 import { closeIcon } from '@/shared/assets/icons/common';
 import { Input } from '@/shared/ui';
@@ -19,7 +19,7 @@ export function RouteSearchField({ direction }: { direction: SearchDirection }) 
     const editing = searching && active === direction;
     function activate() {
         dispatch(setSearchDirection(direction)); dispatch(resetSearchQuery());
-        dispatch(setContent(SideBarContent.TypeList));
+        dispatch(setRouteContent(SideBarContent.TypeList));
     }
     const label = t(direction === 'from' ? 'RouteFrom' : 'To');
     return <div className="navigator-input route-search-field">
@@ -33,7 +33,7 @@ export function RouteSearchField({ direction }: { direction: SearchDirection }) 
                 } }}
                 onChange={event => {
                     dispatch(setSearchName(event.currentTarget.value));
-                    dispatch(setContentNoHistory(event.currentTarget.value
+                    dispatch(setRouteContent(event.currentTarget.value
                         ? SideBarContent.PointsList : SideBarContent.TypeList));
                 }} />
         </span> : <button type="button" className={`route-field-value ${point ? '' : 'is-placeholder'}`}

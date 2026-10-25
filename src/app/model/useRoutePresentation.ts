@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { selectRoutePoints } from '@/entities/route';
-import { selectPanelState, setRouteDocked, setRouteOpen, setContent, SideBarContent } from '@/entities/sidebar';
+import { selectPanelState, setRouteDocked, setRouteOpen, setRouteContent, SideBarContent } from '@/entities/sidebar';
 import { setSearchDirection } from '@/features/point-search';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
 
@@ -15,7 +15,7 @@ export function useRoutePresentation() {
         if (!changed || !from || (!routeOpen && !routeDocked)) return;
         dispatch(setSearchDirection('to'));
         if (!to) {
-            dispatch(setContent(SideBarContent.TypeList));
+            dispatch(setRouteContent(SideBarContent.TypeList));
         }
     }, [dispatch, from, to, routeOpen, routeDocked, routeContent]);
     useEffect(() => {

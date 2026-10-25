@@ -1,4 +1,4 @@
-/** One same-URL browser entry protects the current mobile panel stack. */
+/** One same-URL browser entry protects the current mobile panel stack, including floor changes. */
 export function createPanelHistory<T>(
     browser: Window, key: (value: T) => string, active: (value: T) => boolean,
     restore: (value: T) => void, backOverride?: (value: T, previous: T) => T | undefined,
@@ -39,18 +39,17 @@ export function createPanelHistory<T>(
             return;
         }
         if (!armed || stack.length < 2) return;
-        const saved = browser.history.state?.[marker];
-        if (saved?.path === path && Array.isArray(saved.stack) && saved.stack.length > 1
-            && saved.stack.length < stack.length
-            && key(saved.stack[saved.stack.length - 1]) === key(stack[stack.length - 2])) {
-            stack = saved.stack;
+        const current = stack[stack.length - 1];
+        const below = stack[stack.length - 2];
+        if (checkpoint?.(current, below)) {
+            stack.pop();
             const previous = stack[stack.length - 1];
-            // A floor return consumes the whole floor trail; the next Back exits the route.
+            // One Back returns to the previous floor and drops the rest of that trail.
             let start = stack.length - 1;
             while (start > 0 && checkpoint?.(stack[start], stack[start - 1])) start--;
             if (start < stack.length - 1) stack = [...stack.slice(0, start), previous];
-            armed = true;
-            save();
+            armed = false;
+            if (active(previous)) arm();
             restoring = key(previous);
             restore(previous);
             return;
@@ -92,12 +91,10 @@ export function createPanelHistory<T>(
                 return;
             }
             if (!stack.length) stack.push(base);
-            const previous = stack[stack.length - 1];
-            const addCheckpoint = armed && previous !== undefined && checkpoint?.(value, previous);
             const index = stack.findIndex(item => key(item) === valueKey);
             if (index >= 0) stack = [...stack.slice(0, index), value];
             else stack.push(value);
-            if (!armed || addCheckpoint) arm();
+            if (!armed) arm();
             else save();
         },
         dispose() {

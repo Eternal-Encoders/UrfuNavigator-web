@@ -2,6 +2,7 @@ export {
     sidebarSlice,
     SideBarContent,
     finishRouteSearch,
+    setRouteContent,
     setRouteDocked,
     setMainContent,
     setRouteOpen,

@@ -39,6 +39,13 @@ export const sidebarSlice = createSlice({
             state.restoreVersion++;
         },
         finishRouteSearch: state => { state.routeContent = SideBarContent.Route; },
+        setRouteContent: (state, action: PayloadAction<SideBarContent>) => {
+            state.routeContent = action.payload === SideBarContent.PointsList
+                ? SideBarContent.PointsList
+                : action.payload === SideBarContent.TypeList
+                    ? SideBarContent.TypeList
+                    : SideBarContent.Route;
+        },
         setRouteDocked: (state, action: PayloadAction<boolean>) => {
             state.routeDocked = action.payload;
             if (action.payload) { state.routeOpen = false; state.routeContent = SideBarContent.Route; }
@@ -61,20 +68,10 @@ export const sidebarSlice = createSlice({
             state.content = action.payload;
         },
         setContent: (state, action: PayloadAction<SideBarContent>) => {
-            if (action.payload === SideBarContent.Route) {
-                if (!state.routeDocked) state.routeOpen = true;
-                state.routeContent = SideBarContent.Route; return;
-            }
-            if (state.routeDocked || state.routeOpen) {
-                state.routeContent = [SideBarContent.TypeList, SideBarContent.PointsList].includes(action.payload)
-                    ? action.payload : SideBarContent.Route;
-                return;
-            }
             state.prevContent = state.content
             state.content = action.payload
         },
         setContentNoHistory: (state, action: PayloadAction<SideBarContent>) => {
-            if (state.routeDocked || state.routeOpen) { state.routeContent = action.payload; return; }
             state.content = action.payload
         }
     },
@@ -85,13 +82,14 @@ export const sidebarSlice = createSlice({
         selectSettingsOpen: state => state.settingsOpen,
         selectRouteOpen: state => state.routeOpen,
         selectMainContent: state => state.routeDocked ? SideBarContent.Route : state.content,
-        selectContent: state => state.routeDocked || state.routeOpen ? state.routeContent : state.content,
-        selectPrevContent: state => state.routeDocked || state.routeOpen ? SideBarContent.Route : state.prevContent
+        selectContent: state => state.content,
+        selectPrevContent: state => state.prevContent
     }
 })
 
 export const {
     finishRouteSearch,
+    setRouteContent,
     setRouteDocked,
     setMainContent,
     setRouteOpen,

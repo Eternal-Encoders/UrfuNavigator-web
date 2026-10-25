@@ -15,7 +15,7 @@
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
-    "@eternal-encoders/konva-floor-plan": "^1.14.0",
+    "@eternal-encoders/konva-floor-plan": "^1.14.1",
     "@fontsource-variable/inter": "^5.3.0",
     "@pbe/react-yandex-maps": "1.2.5",
     "@reduxjs/toolkit": "^2.13.0",

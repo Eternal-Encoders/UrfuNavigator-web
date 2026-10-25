@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@eternal-encoders/konva-floor-plan':
-        specifier: ^1.14.0
-        version: 1.14.0(konva@10.7.1)(react-dom@19.3.0(react@19.3.0))(react-konva@19.3.0(@types/react@19.3.0)(konva@10.7.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(use-image@1.1.4(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
+        specifier: ^1.14.1
+        version: 1.14.1(konva@10.7.1)(react-dom@19.3.0(react@19.3.0))(react-konva@19.3.0(@types/react@19.3.0)(konva@10.7.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(use-image@1.1.4(react-dom@19.3.0(react@19.3.0))(react@19.3.0))
       '@fontsource-variable/inter':
         specifier: ^5.3.0
         version: 5.3.0
@@ -368,8 +368,8 @@ packages:
     resolution: {integrity: sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
-  '@eternal-encoders/konva-floor-plan@1.14.0':
-    resolution: {integrity: sha512-OFktBkr33uWqeD2F2HQT259NnjImVqM7roMnvot0XemjtS8uGRJWfk1xep+JGSGRZMRxj0z5SLiLHbjqrIL1jw==, tarball: https://npm.pkg.github.com/download/@eternal-encoders/konva-floor-plan/1.14.0/02c5947fec6abb9d4747c76f208bdfab772c710b}
+  '@eternal-encoders/konva-floor-plan@1.14.1':
+    resolution: {integrity: sha512-ILuGTpM/4ccz4S6d4guFszbRUA1JMBKAORWzo/Zm5T5Axc9cfG3B5AeniNCbuiObNKegJNIRGK6mjZyeZcHcqQ==, tarball: https://npm.pkg.github.com/download/@eternal-encoders/konva-floor-plan/1.14.1/4e3f6962ed75b25d096496cefa8e288f9ea58939}
     peerDependencies:
       konva: ^10.2.5
       react: ^19.2.5
@@ -4343,7 +4343,7 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
-  '@eternal-encoders/konva-floor-plan@1.14.0(konva@10.7.1)(react-dom@19.3.0(react@19.3.0))(react-konva@19.3.0(@types/react@19.3.0)(konva@10.7.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(use-image@1.1.4(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
+  '@eternal-encoders/konva-floor-plan@1.14.1(konva@10.7.1)(react-dom@19.3.0(react@19.3.0))(react-konva@19.3.0(@types/react@19.3.0)(konva@10.7.1)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)(use-image@1.1.4(react-dom@19.3.0(react@19.3.0))(react@19.3.0))':
     dependencies:
       konva: 10.7.1
       react: 19.3.0

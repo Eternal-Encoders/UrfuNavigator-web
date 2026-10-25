@@ -3,7 +3,8 @@ import { instituteRoute, matchBuilding, useGetBuildingsQuery } from '@/entities/
 import { floorSet, selectFloor } from '@/entities/floor';
 import { focusPoint } from '@/entities/point';
 import { clearRoute, setFromPoint, setToPoint } from '@/entities/route';
-import { SideBarContent, selectContent, selectPrevContent, setContent, setRouteOpen } from '@/entities/sidebar';
+import { SideBarContent, finishRouteSearch, selectContent, selectPanelState, selectPrevContent,
+    setContent, setRouteOpen } from '@/entities/sidebar';
 import type { IGraphPoint } from '@/shared/api';
 import { useAppDispatch, useAppSelector } from '@/shared/lib';
 import {
@@ -25,6 +26,8 @@ export function useSelectPoint() {
     const { data: buildings } = useGetBuildingsQuery();
     const content = useAppSelector(selectContent);
     const prevContent = useAppSelector(selectPrevContent);
+    const { routeOpen, routeDocked, routeContent } = useAppSelector(selectPanelState);
+    const routeSearching = (routeOpen || routeDocked) && SEARCH_CONTENT.includes(routeContent);
     const direction = useAppSelector(selectSearchDirection);
     const floor = useAppSelector(selectFloor);
 
@@ -44,7 +47,10 @@ export function useSelectPoint() {
             const source = slug && buildings ? matchBuilding(buildings, slug) : undefined;
             if (target === 'to' && source) void dispatch(fillRouteEntrance(source, point.id));
         }
-        if (SEARCH_CONTENT.includes(content)) {
+        if (routeSearching) {
+            dispatch(finishRouteSearch());
+            dispatch(resetSearchQuery());
+        } else if (SEARCH_CONTENT.includes(content)) {
             dispatch(setContent(target === 'browse' ? SideBarContent.Empty : prevContent));
             dispatch(resetSearchQuery());
         }
