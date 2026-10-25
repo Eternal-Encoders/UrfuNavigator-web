@@ -1,3 +1,4 @@
 import { lazy } from 'react';
 
-export const InstitutePage = lazy(() => import('./ui/InstitutePage'));
+export const preloadInstitutePage = () => import('./ui/InstitutePage');
+export const InstitutePage = lazy(preloadInstitutePage);

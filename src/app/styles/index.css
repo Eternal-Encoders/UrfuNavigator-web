@@ -28,53 +28,44 @@
 :root {
   color-scheme: light;
 
-  --background: #f4f6fb;
-  --foreground: #1f2937;
-  --card: #fcfcfc;
-  --card-foreground: #1f2937;
+  --background: #f4f5f7;
+  --foreground: #262626;
+  --card: #fff;
+  --card-foreground: #262626;
   --popover: #fcfcfc;
   --popover-foreground: #1f2937;
   --primary: #1d4ed8;
   --primary-foreground: #ffffff;
-  --secondary: #eef2f8;
-  --secondary-foreground: #1f2937;
-  --muted: #eef2f8;
-  --muted-foreground: #5b6472;
-  --subtle-foreground: #9aa3b2;
+  --secondary: #f0f2f5;
+  --secondary-foreground: #60636c;
+  --muted: #f0f2f5;
+  --muted-foreground: #60636c;
+  --subtle-foreground: #9d9d9d;
   --accent: #e3e8f2;
   --accent-foreground: #1f2937;
   --destructive: #dc2626;
   --success: #16a34a;
   --warning: #d97706;
   --info: #2563eb;
-  --border: #e2e8f0;
+  --border: #dde1eb;
   --input: #cbd5e1;
   --ring: rgb(59 130 246);
   --route: #95ba9f;
-  --radius: 0.75rem;
+  --radius: 8px;
 
-  --shadow-subtle: 0 3px 10px rgb(15 23 42 / 9%);
-  --shadow-soft: 0 10px 28px rgb(15 23 42 / 12%);
-  --shadow-elevated: 0 18px 42px rgb(15 23 42 / 14%);
+  --shadow-subtle: 0 0 10px rgb(0 0 0 / 10%);
+  --shadow-soft: 0 0 20px rgb(0 0 0 / 4%);
+  --shadow-elevated: 0 0 20px rgb(0 0 0 / 20%);
 
-  --panel-width: clamp(340px, 27vw, 430px);
-  --control-height: 46px;
-  --keyboard-offset: 0px;
+  --panel-width: 356px;
+  --control-height: 40px;
+  --viewport-height: 100%;
+  --visible-viewport-height: 100vh;
+  --viewport-top: 0px;
   --mobile-drawer-offset: 0px;
 }
 
-@media (min-width: 1201px) {
-  :root {
-    --control-height: 44px;
-  }
-}
 
-@media (min-width: 1440px) {
-  :root {
-    --panel-width: clamp(380px, 25vw, 500px);
-    --control-height: 48px;
-  }
-}
 
 .dark {
   color-scheme: dark;
@@ -112,9 +103,10 @@
 }
 
 @theme inline {
-  --font-sans: 'Inter Variable', sans-serif;
+  --font-sans: 'Golos UI', 'Inter Variable', sans-serif;
   --font-heading: var(--font-sans);
   --font-map: Roboto, sans-serif;
+  --font-ruda: Ruda, sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -164,11 +156,12 @@
 
   body {
     @apply min-w-80 overflow-hidden bg-background text-[15px] leading-snug text-foreground desktop:text-base;
-    transition: background-color 0.24s, color 0.24s;
   }
 
   #root {
-    @apply fixed size-full;
+    @apply fixed left-0 w-full;
+    top: var(--viewport-top);
+    height: var(--viewport-height);
   }
 
   img {
@@ -180,3 +173,525 @@
     @apply cursor-pointer;
   }
 }
+
+/* HOW-TO-NAVIGATE: REMAKE */
+.navigator-panel { @apply absolute z-[20] top-0 left-0 bottom-0 w-(--panel-width) flex flex-col bg-background text-muted-foreground shadow-elevated text-sm; }
+.navigator-header { @apply bg-card p-4 shrink-0 rounded-b-lg; }
+.navigator-search-row { @apply flex gap-2 items-center w-full; }
+.navigator-heading { @apply flex-1 text-sm font-medium; }
+.navigator-search-row > button[data-slot=button] { @apply rounded-lg; }
+.navigator-input { @apply flex flex-1 items-center gap-2 min-w-0 h-10 py-[8px] px-[10px] rounded-lg bg-secondary text-sm font-normal; }
+.navigator-input img { @apply shrink-0; }
+.navigator-input input { @apply p-0 h-6 border-0 rounded-none shadow-none outline-none text-base desktop:text-sm font-normal bg-transparent; }
+.navigator-input input:focus-visible { @apply shadow-none ring-0 border-0; }
+.navigator-input:focus-within { @apply outline-offset-[2px]; outline: 2px solid var(--ring); }
+.navigator-body { @apply flex-1 min-h-0 p-4 overflow-y-auto overscroll-contain flex flex-col gap-4; scrollbar-width: thin; }
+.navigator-actions { @apply hidden; }
+.building-list { @apply grid grid-cols-[repeat(3,_100px)] gap-3 content-start; }
+.building-card { @apply flex flex-col w-25 h-33 overflow-hidden rounded-lg bg-card; box-shadow: 0 0 10px rgb(0 0 0 / 4%); }
+.building-card > span { @apply flex items-center h-8 py-[0] px-[16px] text-xs whitespace-nowrap overflow-hidden text-ellipsis; }
+.building-photo { @apply relative w-25 h-25 overflow-hidden shrink-0; }
+.building-photo img { @apply absolute w-full h-full max-w-none object-cover; }
+.category-list { @apply grid grid-cols-[repeat(3,100px)] gap-3 shrink-0; }
+.category-card { @apply flex w-25 h-33 flex-col items-start justify-between rounded-lg p-4 bg-card text-left; box-shadow: 0 0 10px rgb(0 0 0 / 4%); }
+.category-card span { @apply text-xs leading-4; }
+.category-card:hover { box-shadow: 0 2px 14px rgb(0 0 0 / 4%); }
+.building-card:hover { box-shadow: 0 2px 14px rgb(0 0 0 / 4%); }
+.category-card:focus-visible, .building-card:focus-visible { @apply outline-offset-[2px]; outline: 2px solid var(--ring); }
+.all-category-button { @apply flex w-25 h-33 flex-col items-center justify-center gap-3 p-4 text-xs leading-4 text-center; }
+.all-category-button > span {
+  @apply grid place-items-center w-11 h-11 bg-card rounded-full;
+  box-shadow: 0 0 10px rgb(0 0 0 / 4%);
+}
+.point-list { @apply bg-card rounded-lg shadow-soft pt-[8px] pr-[0] pb-[8px] pl-[16px] shrink-0 overflow-hidden; }
+.point-list button { @apply flex items-center gap-3 w-full text-left; }
+.point-list button > img { @apply shrink-0; }
+.point-list button > span { @apply flex-1 pt-[16px] pr-[12px] pb-[16px] pl-[0] flex flex-col gap-[5px] min-w-0; border-bottom: .5px solid var(--border); }
+.point-list li:last-child button > span { @apply border-b-0; }
+.point-list strong { @apply text-sm leading-4 font-normal wrap-anywhere; }
+.point-list small { @apply text-[10px] leading-[10px] text-subtle-foreground; }
+.point-list button:hover { @apply bg-secondary; }
+.history-empty { @apply text-xs text-subtle-foreground py-[0] px-[8px]; }
+.settings-section { @apply flex w-full flex-col; }
+.settings-section-title { @apply flex h-6 items-center px-2 text-xs font-normal leading-4 text-muted-foreground; }
+.language-card { @apply grid h-[188px] grid-rows-4 overflow-hidden bg-card rounded-lg shadow-soft; border: .5px solid rgb(0 0 0 / 20%); }
+.language-card button { @apply relative w-full grid grid-cols-[28px_1fr_auto] items-center gap-3 py-2 px-6 h-full text-xs text-muted-foreground; }
+.language-card button[aria-pressed=true] { @apply bg-secondary text-foreground; }
+.language-card button:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+.language-card button > span:last-child { @apply col-start-3 justify-self-end; }
+.language-name { @apply absolute left-1/2 -translate-x-1/2; }
+.language-flag { @apply text-xl; }
+.language-card button:last-child .language-flag { @apply text-base; }
+.settings-panel { @apply flex w-full min-h-full shrink-0 flex-col justify-between gap-4 pb-4; }
+.settings-sections { @apply flex w-full flex-col gap-4; }
+.theme-options { @apply flex h-[47px] shrink-0 gap-[2px] p-[2px] rounded-lg bg-card shadow-soft; border: .5px solid rgb(0 0 0 / 20%); }
+.theme-options button { @apply h-full min-w-0 flex-1 rounded-[6px] p-[10px] text-xs font-normal text-muted-foreground; }
+.theme-options button[aria-pressed=true] { @apply bg-secondary text-foreground; }
+.settings-links { @apply flex flex-col gap-[6px]; }
+.settings-link { @apply h-[47px] w-full gap-1 rounded-lg bg-card p-1 text-xs font-normal text-muted-foreground shadow-soft whitespace-normal text-center; border: .5px solid rgb(0 0 0 / 20%); }
+.settings-link img { @apply shrink-0; }
+.navigator-footer { @apply mt-auto text-center text-subtle-foreground font-ruda text-xs flex flex-col gap-3; }
+.navigator-footer a { @apply underline; }
+.navigator-message { @apply p-4 bg-card rounded-lg text-sm leading-normal; }
+.navigator-message button { @apply mt-3 underline; }
+.route-panel { @apply flex flex-col gap-4; }
+.route-panel .navigator-input { @apply flex-none; }
+.route-panel p { @apply text-xs; }
+@media (max-width: 1200px) {
+  .navigator-panel { @apply top-auto bottom-0 w-full max-h-[90%] rounded-t-lg transition-none; }
+  .navigator-panel.is-dragging { @apply transition-none; }
+  .navigator-header { @apply pt-[0] px-[16px] pb-[16px] rounded-lg; }
+  .navigator-handle { @apply flex h-6 items-center justify-center touch-none; }
+  .navigator-handle button { @apply relative w-12 h-6; }
+  .navigator-handle button::after { @apply absolute w-6 h-1 bg-secondary top-[10px] left-3; content: ''; border-radius: 2px; }
+  .navigator-actions { @apply absolute left-4 flex gap-2; bottom: calc(100% + 12px); }
+  .navigator-actions button { @apply flex items-center gap-2 h-10 py-[0] px-[10px] bg-card rounded-lg shadow-subtle; }
+  .navigator-body { @apply p-4; }
+  .building-list { @apply flex gap-2 py-[8px] px-[16px] overflow-x-auto overscroll-x-contain; width: calc(100% + 32px); margin: -8px -16px; scrollbar-width: none; }
+  .building-list > li { @apply shrink-0; }
+  .category-list { @apply flex gap-2 py-[8px] px-[16px] overflow-x-auto; width: calc(100% + 32px); margin: -8px -16px; scrollbar-width: none; }
+  .category-list > li { @apply shrink-0; }
+  .category-list.all-categories { @apply flex-wrap; }
+  .is-floor .navigator-body { @apply overflow-y-hidden; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+
+
+@font-face {
+  font-family: 'Golos UI';
+  src: url('/preload_fonts/golos-ui.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: Ruda;
+  src: url('../../shared/assets/fonts/Ruda.ttf') format('truetype');
+  font-weight: 400 900;
+  font-display: swap;
+}
+.floor-switcher { @apply flex flex-col gap-[5px] w-11 p-[5px] rounded-lg bg-card shadow-subtle; }
+.floor-switcher button { @apply w-[34px] h-[34px] text-xs rounded-xl font-ruda font-medium; }
+.floor-switcher-position { @apply absolute z-[20] right-4 overflow-y-auto; bottom: calc(var(--mobile-drawer-offset) + 8px); max-height: calc(100% - var(--mobile-drawer-offset) - 24px); scrollbar-width: none; }
+@media (min-width: 1201px) { .floor-switcher-position { @apply top-6 bottom-auto; max-height: calc(100% - 48px); } }
+@media (max-width: 1200px) {
+  .navigator-panel.is-settings .navigator-header { @apply pb-4 bg-card shadow-soft; }
+  .navigator-panel.is-settings .navigator-search-row { @apply relative h-10 items-center justify-center; }
+  .navigator-panel.is-settings .navigator-heading { @apply flex-none text-sm leading-4; }
+  .navigator-panel.is-settings .navigator-search-row > button { @apply absolute right-0 top-0; }
+  .navigator-panel.is-settings .navigator-handle button { @apply flex items-center justify-center; }
+  .navigator-panel.is-settings .navigator-handle button::after { @apply hidden; }
+}
+@media (min-width: 1201px) {
+  .navigator-panel.is-floor .navigator-actions { @apply flex gap-2 absolute bottom-4 w-max; left: calc(var(--panel-width) + 16px); }
+  .navigator-panel.is-floor .navigator-actions button { @apply flex shrink-0 gap-2 items-center h-10 py-[0] px-[10px] bg-card rounded-lg shadow-subtle whitespace-nowrap; }
+}
+@media (min-width: 1201px) {
+  .category-list:not(.all-categories) > li:nth-child(6) { @apply hidden; }
+}
+
+@media (max-width: 1200px) {
+  .navigator-panel.is-expanded { --navigator-header-height: 80px; }
+  .navigator-panel.is-expanded .navigator-body {
+    max-height: max(0px, calc(var(--visible-viewport-height) - var(--viewport-height) * 0.1 - var(--navigator-header-height)));
+  }
+}
+
+.small-input-frame { @apply flex h-6 min-w-0 flex-1 items-center overflow-hidden; }
+@media (max-width: 1200px) {
+  .navigator-input input.small-input {
+    @apply origin-left text-base;
+    transform: scale(0.875);
+    width: calc(100% / 0.875);
+    height: calc(24px / 0.875);
+    flex-shrink: 0;
+  }
+}
+
+/* The same building links morph from the compact carousel to Figma 2877:2911 rows. */
+.building-card-info { @apply relative flex h-8 w-full shrink-0 flex-col justify-center px-4 text-xs; }
+.building-card-title { @apply block whitespace-nowrap overflow-hidden text-ellipsis; }
+.building-card-extra { @apply hidden; }
+
+.building-card-extra span { @apply whitespace-pre-line; }
+
+/* Every coordinate is a function of the current drawer height, including during reversal. */
+@media (max-width: 1200px) {
+  .navigator-panel.is-campus .navigator-handle button { @apply flex items-center justify-center; }
+  .navigator-panel.is-campus .navigator-handle button::after { @apply hidden; }
+  .building-list.campus-morph {
+    @apply relative block shrink-0 p-0;
+    --carousel-offset: 0px;
+    width: calc(100% + 32px * (1 - var(--campus-progress)));
+    height: calc(148px * (1 - var(--campus-progress)) + (var(--card-count) * 108px - 8px) * var(--campus-progress));
+    margin: calc(-8px * (1 - var(--campus-progress))) calc(-16px * (1 - var(--campus-progress)));
+  }
+  .building-list.campus-morph::after {
+    content: '';
+    position: absolute;
+    left: calc((16px + var(--card-count) * 108px - 8px) * (1 - var(--campus-progress)));
+    width: calc(16px * (1 - var(--campus-progress)));
+    height: 1px;
+  }
+  .building-list.campus-morph > li {
+    @apply absolute;
+    --entry-progress: clamp(0, calc((var(--campus-progress) - var(--card-index) * 0.045) / 0.65), 1);
+    --detail-progress: clamp(0, calc((var(--campus-progress) - 0.38 - var(--card-index) * 0.012) / 0.5), 1);
+    --morph-arc: calc(4 * var(--campus-progress) * (1 - var(--campus-progress)));
+    --row-progress: clamp(0, calc(var(--campus-progress) / 0.55), 1);
+    --content-x: clamp(0, calc(var(--campus-progress) / 0.35), 1);
+    --content-y: clamp(0, calc((var(--campus-progress) - 0.15) / 0.6), 1);
+    width: calc(100px + (100% - 100px) * var(--campus-progress));
+    height: calc(132px - 32px * var(--campus-progress));
+    left: calc((16px + var(--card-index) * 108px - var(--carousel-offset)) * (1 - var(--campus-progress)));
+    top: calc(8px * (1 - var(--campus-progress)) + var(--card-index) * (140px - 32px * var(--campus-progress)) * var(--row-progress));
+    opacity: calc(var(--compact-opacity, 1) + (1 - var(--compact-opacity, 1)) * var(--entry-progress));
+    transform: translateY(calc(12px * (1 - var(--entry-progress)) * (1 - var(--compact-opacity, 1))));
+  }
+  .building-list.campus-morph .building-card {
+    @apply relative block h-full w-full;
+    border-radius: calc(8px + 4px * var(--morph-arc));
+  }
+  .building-list.campus-morph .building-photo { @apply absolute top-0 left-0; }
+  .building-list.campus-morph .building-card-info {
+    @apply absolute block min-w-0 p-0;
+    left: calc(16px + 100px * var(--content-x));
+    top: calc(108px - 96px * var(--content-y));
+    width: calc(100% - 32px - 100px * var(--content-x));
+    height: auto;
+    line-height: normal;
+  }
+  .building-list.campus-morph .building-card-title {
+    opacity: max(clamp(0, calc(1 - var(--campus-progress) / 0.18), 1), clamp(0, calc((var(--campus-progress) - 0.28) / 0.32), 1));
+  }
+  .building-list.campus-morph .building-card-extra {
+    @apply mt-[5px] flex flex-col gap-[5px] text-subtle-foreground;
+    opacity: var(--detail-progress);
+    visibility: var(--details-visibility);
+    transform: translateY(calc(12px * (1 - var(--detail-progress))));
+  }
+}
+
+.navigator-panel.is-settings .navigator-body { scrollbar-width: none; }
+
+/* Settings is a separate modal; the persistent navigator underneath is untouched. */
+.settings-backdrop { @apply fixed inset-0 z-40; }
+.settings-overlay {
+  @apply fixed z-50;
+  transform: translateY(var(--settings-drag, 0px));
+  transition: transform 180ms ease-out;
+}
+.settings-overlay.is-dragging { transition: none; }
+.settings-overlay[data-state=open] { animation: settings-enter 180ms ease-out; }
+.settings-overlay[data-state=closed] { animation: settings-exit 180ms ease-out forwards; }
+@keyframes settings-enter { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes settings-exit { from { transform: translateY(var(--settings-drag, 0px)); } to { transform: translateY(100%); } }
+@media (max-width: 1200px) {
+  .settings-overlay { height: calc(var(--viewport-height) * .9); }
+}
+@media (min-width: 1201px) {
+  .settings-overlay .navigator-handle { display: none; }
+  .settings-overlay .navigator-search-row { @apply relative h-10 items-center justify-center; }
+  .settings-overlay .navigator-heading { @apply flex-none text-sm; }
+  .settings-overlay .navigator-search-row > button { @apply absolute right-0 top-0; }
+  .settings-overlay[data-state=open] { animation-name: settings-enter-desktop; }
+  .settings-overlay[data-state=closed] { animation-name: settings-exit-desktop; }
+}
+@keyframes settings-enter-desktop { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes settings-exit-desktop { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+
+/* Capture the final palette once, then reveal it as one circular surface. */
+html.theme-transition *, html.theme-transition *::before, html.theme-transition *::after {
+  transition: none !important;
+}
+html.theme-transition::view-transition-old(root),
+html.theme-transition::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html.theme-transition::view-transition-old(root) { z-index: 1; }
+html.theme-transition::view-transition-new(root) { z-index: 2; }
+
+/* Slow, shared loading shimmer; no artificial minimum loading time. */
+.skeleton { @apply relative overflow-hidden rounded bg-secondary; isolation: isolate; }
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 15%, color-mix(in srgb, var(--card) 75%, transparent) 50%, transparent 85%);
+  transform: translateX(-100%);
+  animation: skeleton-shimmer 3.2s ease-in-out infinite;
+}
+.map-skeleton { @apply flex size-full min-h-64 items-center justify-center bg-background desktop:pl-(--panel-width); }
+.map-skeleton .skeleton { background: color-mix(in srgb, var(--foreground) 8%, var(--background)); }
+.loading-list { @apply flex w-full flex-col rounded-lg bg-card px-4; }
+.loading-list-row { @apply flex min-h-16 items-center gap-3 py-4; }
+.building-loading { @apply flex gap-2 overflow-hidden; }
+.building-loading-card { @apply flex h-33 w-25 shrink-0 flex-col gap-3 overflow-hidden rounded-lg bg-card pb-3; }
+@keyframes skeleton-shimmer { to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) { .skeleton::after { animation: none; display: none; } }
+
+.building-loading.is-expanded { @apply flex-col; }
+.building-loading.is-expanded .building-loading-card { @apply h-25 w-full flex-row items-center p-0; }
+.building-loading.is-expanded .building-loading-card > .skeleton:first-child { @apply h-25 w-25; }
+
+/* Theme snapshots are decorative: repeated clicks must reach the live dialog. */
+html.theme-transition::view-transition,
+html.theme-transition::view-transition-group(root),
+html.theme-transition::view-transition-image-pair(root),
+html.theme-transition::view-transition-old(root),
+html.theme-transition::view-transition-new(root) {
+  pointer-events: none;
+}
+
+/* App text is not selectable; editable controls retain native text editing. */
+body, body * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+body input, body textarea, body [contenteditable]:not([contenteditable="false"]),
+body [contenteditable]:not([contenteditable="false"]) * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Desktop campus uses the mobile drawer's fully expanded card layout. */
+@media (min-width: 1201px) {
+  .building-list.campus-morph { @apply grid grid-cols-1 gap-2; }
+  .building-list.campus-morph > li { @apply min-w-0; }
+  .building-list.campus-morph .building-card { @apply h-25 w-full flex-row; }
+  .building-list.campus-morph .building-card-info { @apply h-auto min-w-0 flex-1 justify-start py-3; }
+  .building-list.campus-morph .building-card-extra { @apply mt-[5px] flex flex-col gap-[5px] text-subtle-foreground; }
+}
+
+/* Admin-provided building SVGs keep their original proportions, without photo crops. */
+.building-photo.building-icon img {
+  width: 75%;
+  height: 75%;
+  left: 12.5%;
+  top: 12.5%;
+  object-fit: contain;
+}
+
+/* Expanded categories distribute leftover width into the cards, with fixed gaps. */
+.category-list.all-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 100px), 1fr));
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 8px 0;
+  overflow-x: visible;
+}
+
+.category-list.all-categories .category-card,
+.category-list.all-categories .all-category-button { width: 100%; }
+
+.category-pull-indicator { position: relative; }
+.category-pull-ring { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; transform: rotate(-90deg); }
+.category-pull-ring circle {
+  fill: none;
+  stroke: var(--ring);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--category-pull-progress, 0));
+  opacity: min(1, calc(var(--category-pull-progress, 0) * 10));
+}
+@media (max-width: 1200px) {
+  .category-list:not(.all-categories) {
+    overscroll-behavior-x: contain;
+    transform: translateX(var(--category-pull-offset, 0px));
+  }
+}
+
+.campus-picker-button { width: 100%; height: 100%; min-height: 100px; }
+@media (max-width: 1200px) {
+  .campus-picker-list { transform: translateX(var(--category-pull-offset, 0px)); }
+}
+@media (min-width: 1201px) {
+  .campus-picker-list .campus-picker-button { flex-direction: row; }
+}
+
+/* Room details share the independent settings/campus overlay shell. */
+.point-details-overlay { color: var(--foreground); }
+.point-details-body { gap: 16px; }
+.point-details-section { display: flex; flex-direction: column; gap: 6px; }
+.point-details-section h2 { @apply px-2 text-xs font-normal leading-4 text-muted-foreground; }
+.point-details-value { @apply rounded-lg bg-card p-4 text-sm leading-5 text-foreground; overflow-wrap: anywhere; white-space: pre-wrap; }
+.point-details-actions { @apply grid grid-cols-2 gap-2; }
+.point-details-actions button { @apply h-[47px] rounded-lg text-xs font-normal; }
+.point-details-schedule > div { display: flex; justify-content: space-between; gap: 16px; }
+.point-details-schedule dd { text-align: end; }
+
+.point-details-overlay .navigator-heading { max-width: calc(100% - 56px); }
+
+/* Room information can be selected/copied, unlike the surrounding app chrome. */
+.point-details-overlay, .point-details-overlay * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+.point-details-overlay button, .point-details-overlay button * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Search preview fits the heading and route actions without a section teaser. */
+.point-details-overlay.is-preview {
+  top: auto;
+  bottom: 0;
+  /* Header: 40px controls + 32px padding; body: 16px top padding + 47px actions. */
+  height: calc(135px + var(--point-preview-pull, 0px));
+  max-height: 90%;
+}
+.point-details-overlay.is-preview .point-details-body { overflow: hidden; }
+.point-details-overlay { transition: transform 180ms ease-out, height 220ms ease-out; }
+.point-details-overlay.is-dragging { transition: none; }
+@media (min-width: 1201px) {
+  .point-details-overlay.is-preview { bottom: 16px; left: 16px; border-radius: 12px; overflow: hidden; }
+}
+
+@media (max-width: 1200px) {
+  /* Mobile header also includes the shared 24px swipe handle. */
+  .point-details-overlay.is-preview { height: calc(var(--room-preview-height, 159px) + var(--point-preview-pull, 0px)); }
+}
+.point-details-actions { flex-shrink: 0; }
+
+/* The main panel and its action buttons return together beneath the exiting details. */
+.main-navigator-panel {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 180ms ease-out, translate 180ms ease-out, visibility 0s;
+  translate: 0 0;
+}
+.main-navigator-panel.is-room-covered {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  translate: 0 12px;
+  transition: opacity 180ms ease-out, translate 180ms ease-out, visibility 0s 180ms;
+}
+.map-panel-controls { opacity: 1; visibility: visible; transition: opacity 180ms ease-out, visibility 0s; }
+.map-panel-controls.is-hidden {
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 180ms ease-out, visibility 0s 180ms;
+}
+.floor-switcher-position { transition: none; }
+@media (max-width: 1200px) {
+  :root { --room-preview-height: 159px; }
+  .floor-switcher-position.is-room-attached {
+    bottom: calc(var(--room-preview-height) + var(--room-panel-lift, 0px) + 8px);
+    max-height: max(0px, calc(100% - var(--room-preview-height) - var(--room-panel-lift, 0px) - 24px));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .main-navigator-panel, .main-navigator-panel.is-room-covered,
+  .map-panel-controls, .map-panel-controls.is-hidden, .floor-switcher-position { transition: none; }
+}
+
+/* Track the finger directly; animate only settled panel changes. */
+html:has(.point-details-overlay.is-dragging) .floor-switcher-position { transition: none; }
+
+/* Measure the space above the active panel, rather than clipping the floor list. */
+.floor-switcher-position {
+  height: max(0px, calc(100% - var(--mobile-drawer-offset) - 24px));
+  display: flex;
+  align-items: flex-end;
+  overflow: visible;
+  pointer-events: none;
+}
+.floor-switcher-position > .floor-switcher {
+  flex-shrink: 0;
+  pointer-events: auto;
+  opacity: 1;
+  translate: 0 0;
+  visibility: visible;
+  transition: opacity 160ms ease-out, translate 160ms ease-out, visibility 0s;
+}
+.floor-switcher-position.is-overflowing > .floor-switcher {
+  opacity: 0;
+  translate: 0 6px;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 160ms ease-out, translate 160ms ease-out, visibility 0s 160ms;
+}
+@media (max-width: 1200px) {
+  .floor-switcher-position.is-room-attached {
+    height: max(0px, calc(100% - var(--room-preview-height) - var(--room-panel-lift, 0px) - 24px));
+  }
+}
+@media (min-width: 1201px) {
+  .floor-switcher-position { height: calc(100% - 48px); align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .floor-switcher-position > .floor-switcher,
+  .floor-switcher-position.is-overflowing > .floor-switcher { transition: none; }
+}
+
+/* Five total rows: scroll indicators reserve a row each. */
+.floor-switcher-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  height: calc(var(--floor-visible-rows) * 39px - 5px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  scrollbar-width: none;
+  scroll-snap-type: y proximity;
+}
+.floor-switcher-scroll::-webkit-scrollbar { display: none; }
+.floor-switcher-scroll > li { height: 34px; flex-shrink: 0; scroll-snap-align: start; }
+.floor-switcher > button { flex-shrink: 0; }
+
+.campus-selection-list { display: flex; flex-direction: column; gap: 8px; }
+.campus-selection-list .building-card { display: flex; flex-direction: row; width: 100%; height: 100px; text-align: start; }
+.campus-selection-list .building-photo { flex-shrink: 0; }
+.campus-selection-list .building-card-info { flex: 1; height: 100%; min-width: 0; gap: 5px; justify-content: flex-start; padding-block: 12px; }
+.campus-selection-list .building-card:disabled { color: var(--subtle-foreground); cursor: default; }
+.campus-selection-list .building-card:disabled .building-photo { filter: grayscale(1); }
+.campus-unavailable { color: var(--subtle-foreground); font-size: 12px; }
+.campus-selection-list .building-card[aria-pressed=true] { outline: 1px solid var(--border); outline-offset: -1px; }
+
+/* Expanded titles are explicit card metadata, independent of punctuation in names. */
+.building-card-title:has(.building-title-expanded) { display: grid; }
+.building-card-title > span { grid-area: 1 / 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.building-title-expanded { visibility: hidden; }
+@media (max-width: 1200px) {
+  .building-list.campus-morph .building-title-compact { opacity: calc(1 - var(--detail-progress)); }
+  .building-list.campus-morph .building-title-expanded {
+    visibility: var(--details-visibility);
+    opacity: var(--detail-progress);
+    transform: translateY(calc(6px * (1 - var(--detail-progress))));
+  }
+}
+@media (min-width: 1201px) {
+  .building-list.campus-morph .building-title-compact { visibility: hidden; }
+  .building-list.campus-morph .building-title-expanded { visibility: visible; }
+}
+
+.building-card.is-unavailable { color: var(--subtle-foreground); cursor: default; text-align: start; }
+.building-card.is-unavailable .building-icon { filter: grayscale(1); }
+
+/* Route editor: Figma 2900:1776, two fields in the shared white header. */
+.route-fields { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.route-search-field { gap: 8px; width: 100%; }
+.route-field-value { flex: 1; min-width: 0; text-align: start; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.route-field-value.is-placeholder { color: var(--subtle-foreground); }
+.route-field-clear { flex-shrink: 0; width: 20px; height: 20px; }
+.route-editor-overlay .point-list, .is-route-panel .point-list { box-shadow: 0 0 20px rgb(0 0 0 / 4%); }
+@media (max-width: 1200px) {
+  .route-editor-overlay .navigator-header { width: 100%; }
+  .is-route-panel .navigator-header { box-shadow: 0 0 20px rgb(0 0 0 / 4%); }
+}
+
+.route-fields .navigator-input { flex: none; height: 40px; }
+
+/* Empty route starts at its two-field header; focusing a field reveals search. */
+.route-editor-overlay.is-empty-route { height: auto; }
+
+
+.is-route-panel .navigator-search-row { align-items: flex-start; }
+.is-route-panel.is-expanded { --navigator-header-height: 126px; }

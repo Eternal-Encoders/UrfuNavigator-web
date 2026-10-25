@@ -1,0 +1,3 @@
+
+# Container entrypoints must stay executable by /bin/sh after Windows checkouts.
+docker/*.sh text eol=lf

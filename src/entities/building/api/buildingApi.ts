@@ -1,4 +1,4 @@
-import { baseApi, type IBuilding } from '@/shared/api';
+import { baseApi, type IIconUrl, type IBuilding } from '@/shared/api';
 
 export const buildingApi = baseApi.injectEndpoints({
     endpoints: build => ({
@@ -7,6 +7,9 @@ export const buildingApi = baseApi.injectEndpoints({
                 url: '/api/buildings',
                 method: 'GET'
             }),
+        }),
+        getBuildingIcon: build.query<IIconUrl, string>({
+            query: name => ({ url: `/api/icons/${encodeURIComponent(name)}`, method: 'GET' })
         }),
         getBuilding: build.query<IBuilding, string>({
             query: (id) => ({
@@ -19,6 +22,7 @@ export const buildingApi = baseApi.injectEndpoints({
 })
 
 export const {
+    useGetBuildingIconQuery,
     useGetBuildingsQuery,
     useGetBuildingQuery
 } = buildingApi

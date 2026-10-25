@@ -20,6 +20,9 @@ function resolveApiBaseUrl(host: string | undefined): string {
         return defaultApiBaseUrl;
     }
     const trimmed = host.replace(/\/+$/, '');
+    if (trimmed.startsWith('/')) {
+        return trimmed;
+    }
     if (/^https?:\/\//i.test(trimmed)) {
         return trimmed;
     }

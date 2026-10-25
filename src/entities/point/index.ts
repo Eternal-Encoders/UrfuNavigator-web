@@ -9,6 +9,10 @@ export { PointTranslation, QUICK_POINT_TYPES, type QuickPointType } from './lib/
 export {
     selectedPointSlice,
     selectPoint,
+    focusPoint,
+    setDetailsCollapsed,
+    restorePointDetails,
     clearSelectedPoint,
-    selectSelectedPointId
+    selectSelectedPointId,
+    selectPointPresentation
 } from './model/selectedPointSlice';

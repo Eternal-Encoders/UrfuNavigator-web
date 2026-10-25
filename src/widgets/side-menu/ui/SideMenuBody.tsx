@@ -1,19 +1,22 @@
+import { lazy } from 'react';
 import { SideBarContent } from '@/entities/sidebar';
-import { QuickTypes, SearchResults } from '@/features/point-search';
+import { QuickTypes, SearchResults, SearchHistory } from '@/features/point-search';
 import { InstitutesList } from './InstitutesList';
-import { SettingsPanel } from './SettingsPanel';
+const RoutePanel = lazy(() => import('./RoutePanel').then(module => ({ default: module.RoutePanel })));
 
-export function SideMenuBody({ content }: { content: SideBarContent }) {
+export function SideMenuBody({ content, campusProgress = 0 }: { content: SideBarContent, campusProgress?: number }) {
     switch (content) {
     case SideBarContent.Institutes:
-        return <InstitutesList />;
+    case SideBarContent.ExpandedInstitutes:
+        return <InstitutesList progress={campusProgress} />;
     case SideBarContent.PointsList:
         return <SearchResults />;
-    case SideBarContent.Settings:
-        return <SettingsPanel />;
+    case SideBarContent.Route:
+        return <RoutePanel />;
     case SideBarContent.TypeList:
-        return <QuickTypes />;
+        return <><QuickTypes /><SearchHistory /></>;
+    case SideBarContent.Categories:
     case SideBarContent.Empty:
-        return null;
+        return <QuickTypes />;
     }
 }

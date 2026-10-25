@@ -9,3 +9,7 @@ export {
     type UserGPS,
     type UserLocation
 } from './gps';
+
+export { useCarouselEndPull } from './useCarouselEndPull';
+
+export { useModalSwipe } from './useModalSwipe';

@@ -1,8 +1,9 @@
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useEffect, useRef, useState } from 'react';
-import { matchBuilding, sortedFloors, useGetBuildingQuery, useGetBuildingsQuery } from '@/entities/building';
+import { matchBuilding, defaultFloor, useGetBuildingQuery, useGetBuildingsQuery } from '@/entities/building';
 import { floorReset, floorSet } from '@/entities/floor';
 import { selectRoutePoints } from '@/entities/route';
+import { selectPointPresentation } from '@/entities/point';
 import { useUserLocation } from '@/features/user-location';
 import { apiErrorText, type IBuildingGps } from '@/shared/api';
 import { GPS_BUFFER } from '@/shared/config';
@@ -13,6 +14,7 @@ const OBJECT_ID = /^[a-f0-9]{24}$/i;
 export function useInstituteBuilding(slug: string) {
     const dispatch = useAppDispatch()
     const points = useAppSelector(selectRoutePoints)
+    const { focus } = useAppSelector(selectPointPresentation)
     const initializedBuildingId = useRef<string | undefined>(undefined)
     const [mapGps, setMapGps] = useState<IBuildingGps[] | undefined>(undefined)
     const { userLoc, userGPSState } = useUserLocation(GPS_BUFFER)
@@ -30,18 +32,18 @@ export function useInstituteBuilding(slug: string) {
         initializedBuildingId.current = building.id
 
         const floorIds = new Set(building.floors.map((floor) => floor.id))
-        const selected = [points.from, points.to].find((point) =>
+        const selected = [focus, points.from, points.to].find((point) =>
             point && point.buildingId === building.id && floorIds.has(point.floorId)
         )
         if (selected) {
             dispatch(floorSet({ floor: selected.floorId, priority: 1 }))
             return
         }
-        const nextFloor = sortedFloors(building.floors)[0]
+        const nextFloor = defaultFloor(building.floors)
         if (nextFloor) {
             dispatch(floorReset(nextFloor.id))
         }
-    }, [building, dispatch, points.from, points.to])
+    }, [building, dispatch, focus, points.from, points.to])
 
     useEffect(() => {
         if (!building?.gps?.length || !userGPSState) {

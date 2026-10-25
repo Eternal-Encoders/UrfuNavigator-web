@@ -1,0 +1,46 @@
+{
+  "automatic": [
+    {
+      "browser": "en-US,en",
+      "selected": "en"
+    },
+    {
+      "browser": [
+        "zh-CN",
+        "zh"
+      ],
+      "selected": "zh"
+    },
+    {
+      "browser": [
+        "ar-SA",
+        "ar"
+      ],
+      "selected": "ar"
+    },
+    {
+      "browser": [
+        "de-DE",
+        "de"
+      ],
+      "selected": "ru"
+    },
+    {
+      "browser": [
+        "de-DE",
+        "en-US",
+        "en"
+      ],
+      "selected": "en"
+    }
+  ],
+  "manualOverride": {
+    "browser": [
+      "de-DE",
+      "en-US",
+      "en"
+    ],
+    "saved": "ru",
+    "selectedAfterReload": "ru"
+  }
+}

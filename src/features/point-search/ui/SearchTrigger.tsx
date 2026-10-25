@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { buildingAccent, DEFAULT_BUILDING_ACCENT, useGetBuildingsQuery } from '@/entities/building';
-import { pointNameList } from '@/entities/point';
-import { selectRoutePoints } from '@/entities/route';
+import { useMatch } from 'react-router-dom';
+import { buildingAccent, DEFAULT_BUILDING_ACCENT, matchBuilding, useGetBuildingsQuery } from '@/entities/building';
+import { clearSelectedPoint, pointNameList } from '@/entities/point';
+import { clearRoute, selectRoutePoints } from '@/entities/route';
 import { SideBarContent, setContent } from '@/entities/sidebar';
+import { searchIcon } from '@/shared/assets/icons/common';
 import { cn, useAppDispatch, useAppSelector } from '@/shared/lib';
-import { setSearchDirection, type SearchDirection } from '../model/pointSearchSlice';
+import { resetSearchQuery, setSearchDirection, type SearchDirection } from '../model/pointSearchSlice';
 
 interface SearchTriggerProps {
     direction: SearchDirection,
@@ -16,20 +18,29 @@ export function SearchTrigger({ direction, isHomePage }: SearchTriggerProps) {
     const { t } = useTranslation();
     const points = useAppSelector(selectRoutePoints);
     const { data: buildings } = useGetBuildingsQuery();
+    const intstName = useMatch('/institute/:intstName')?.params.intstName;
+    const viewedBuilding = intstName && buildings ? matchBuilding(buildings, intstName) : undefined;
 
-    const currentPoint = direction === 'to' ? points.to : points.from;
+    const currentPoint = isHomePage ? undefined : direction === 'to' ? points.to : points.from;
     const building = buildings?.find((item) => item.id === currentPoint?.buildingId);
     const color = currentPoint ? buildingAccent(building) : DEFAULT_BUILDING_ACCENT;
 
     let placeholder = t('From');
     if (isHomePage) {
-        placeholder = t('SearchForAudiencesAndPlaces');
+        placeholder = viewedBuilding
+            ? t('SearchInBuilding', { name: viewedBuilding.displayableName.split(' (')[0] })
+            : t('SearchForAudiencesAndPlaces');
     } else if (direction === 'to') {
         placeholder = t('To');
     }
 
     function onClickHandler() {
-        dispatch(setSearchDirection(direction));
+        if (isHomePage) {
+            dispatch(clearRoute());
+            dispatch(clearSelectedPoint());
+        }
+        dispatch(setSearchDirection(isHomePage ? 'browse' : direction));
+        dispatch(resetSearchQuery());
         dispatch(setContent(SideBarContent.TypeList));
     }
 
@@ -38,10 +49,10 @@ export function SearchTrigger({ direction, isHomePage }: SearchTriggerProps) {
             type="button"
             onClick={onClickHandler}
             className={cn(
-                'flex h-10 min-w-0 flex-1 cursor-text items-center gap-1.5 rounded-md border bg-secondary px-3',
-                'text-left font-medium outline-none hover:bg-accent focus-visible:ring-3 focus-visible:ring-ring/50'
+                'navigator-input cursor-text text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/50'
             )}
         >
+            {isHomePage && <img src={searchIcon} alt="" width="24" height="24" />}
             {!isHomePage &&
                 <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: color }} />
             }

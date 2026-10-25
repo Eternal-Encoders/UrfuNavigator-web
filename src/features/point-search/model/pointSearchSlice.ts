@@ -1,7 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { PointTypes } from '@/shared/api';
+import { pointTitle } from '@/entities/point';
+import { readSearchHistory, type RecentPoint } from '../lib/searchHistoryStorage';
+import type { IGraphPoint, PointTypes } from '@/shared/api';
 
 export type SearchDirection = 'from' | 'to';
+type SearchTarget = SearchDirection | 'browse';
 
 interface SearchQuery {
     name: string,
@@ -9,22 +12,35 @@ interface SearchQuery {
 }
 
 interface PointSearchState {
-    direction: SearchDirection,
+    direction: SearchTarget,
+    browse: SearchQuery,
     from: SearchQuery,
-    to: SearchQuery
+    to: SearchQuery,
+    recentPoints: RecentPoint[]
 }
 
 const initialState: PointSearchState = {
-    direction: 'from',
+    direction: 'browse',
+    browse: { name: '' },
     from: { name: '' },
-    to: { name: '' }
+    to: { name: '' },
+    recentPoints: readSearchHistory()
 }
 
 export const pointSearchSlice = createSlice({
     name: 'pointSearch',
     initialState,
     reducers: {
-        setSearchDirection: (state, action: PayloadAction<SearchDirection>) => {
+        rememberPoint: (state, action: PayloadAction<IGraphPoint>) => {
+            const recent = {
+                id: action.payload.id, buildingId: action.payload.buildingId, title: pointTitle(action.payload)
+            };
+            state.recentPoints = [recent, ...state.recentPoints.filter(point => point.id !== recent.id)].slice(0, 5);
+        },
+        forgetPoint: (state, action: PayloadAction<string>) => {
+            state.recentPoints = state.recentPoints.filter(point => point.id !== action.payload);
+        },
+        setSearchDirection: (state, action: PayloadAction<SearchTarget>) => {
             state.direction = action.payload
         },
         setSearchName: (state, action: PayloadAction<string>) => {
@@ -38,6 +54,7 @@ export const pointSearchSlice = createSlice({
         }
     },
     selectors: {
+        selectRecentPoints: state => state.recentPoints,
         selectSearchDirection: state => state.direction,
         selectActiveSearchQuery: state => state[state.direction]
     }
@@ -47,10 +64,13 @@ export const {
     setSearchDirection,
     setSearchName,
     setSearchType,
-    resetSearchQuery
+    resetSearchQuery,
+    rememberPoint,
+    forgetPoint
 } = pointSearchSlice.actions
 
 export const {
     selectSearchDirection,
-    selectActiveSearchQuery
+    selectActiveSearchQuery,
+    selectRecentPoints
 } = pointSearchSlice.selectors

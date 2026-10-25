@@ -30,3 +30,8 @@ export function sortedFloors(floors: IFloorSummary[]): IFloorSummary[] {
         return a.displayableName.localeCompare(b.displayableName, 'ru', { numeric: true });
     });
 }
+
+/** Prefer floor 1 on ordinary entry; keep a deterministic fallback for other buildings. */
+export function defaultFloor(floors: IFloorSummary[]): IFloorSummary | undefined {
+    return floors.find(floor => Number(floor.displayableName) === 1) ?? sortedFloors(floors)[0];
+}
